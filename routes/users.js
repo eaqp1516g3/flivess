@@ -108,7 +108,6 @@ module.exports = function (app) {
 
     //endpoints
     app.get('/allusers/',AllUsers);
-    app.get('/alluserswithfriends', AllUsersWithFriends);
     app.post('/user/', addUser);
     app.get('/user/:id', findById);
     app.put('/user/:id', updateUser);
