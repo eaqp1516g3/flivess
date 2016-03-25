@@ -8,7 +8,7 @@ var messageSchema = new Schema({
     subject :  {type: String},
     text :  {type: String},
     createdAt: {type: Date, default: Date.now}
-   // read:  {type: Boolean}
+   
 
 
 });

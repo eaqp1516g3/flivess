@@ -23,10 +23,7 @@ app.all('/*', function(req, res, next) {
 
 
 
-// Configuración (sistema de plantillas, directorio de vistas,...)
-// app.set('views', path.join(__dirname, 'views'));
-// app.set('view engine', 'jade');
-// app.use(logger('dev'));
+
 
 
 app.use(bodyParser.urlencoded({ extended: false }));  
@@ -34,7 +31,7 @@ app.use(bodyParser.json());
 app.use(methodOverride());
 
 
-app.use(express.static(__dirname + "/public")); // aqui es donde tendremos nuestro html y ccs e imagenes. Esta carpeta tiene que estar en la misma carpeta que esta el server.js
+app.use(express.static(__dirname + "/public")); // FRONT-END---> aqui es donde tendremos nuestro html y ccs e imagenes. Esta carpeta tiene que estar en la misma carpeta que esta el server.js
 
 var router = express.Router();
 // API Rutas
@@ -43,7 +40,6 @@ routes = require('./routes/friends')(app);
 routes = require('./routes/messages')(app);
 
 
-var router = express.Router();
 var server = require('http').Server(app);
 
 // Start server

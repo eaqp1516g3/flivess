@@ -2,9 +2,9 @@ module.exports = function (app) {
 
     var User = require('../models/user.js');
     var Message = require('../models/message.js');
-    //var Chat = require('../models/chat.js');
+    
 
-
+    //GET - GET all messages
     allMessages = function (req, res) {
 
         console.log("ok populate");
@@ -40,7 +40,7 @@ module.exports = function (app) {
 
                 message.save(function (err, message) {
                     if (err) return res.send(500, err.message);
-                    res.status(200).jsonp(message);
+                    res.status(200).json(message);
                 });
 
             }
@@ -61,7 +61,8 @@ module.exports = function (app) {
     };
 
 
-        //DELETE - Delete a User with specified ID
+    
+    //DELETE - Delete a User with specified ID
     deleteMessage = function (req, res) {
         return Message.findById(req.params.id, function (err, message) {
             console.log('DELETE usuario');
@@ -76,11 +77,12 @@ module.exports = function (app) {
         });
     };
 
-  app.delete('/message/:id', deleteMessage);
-    //endpoints
+  
+    //Endpoints
     app.get('/allmessages', allMessages);
     app.post('/addmessage', addMessage);
     app.get('/messages/:username', findMessages);
+    app.delete('/message/:id', deleteMessage);
 
 
 }
