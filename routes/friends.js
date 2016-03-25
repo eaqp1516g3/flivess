@@ -20,11 +20,6 @@ module.exports = function (app) {
             }); 
          });
 
-        //ok
-      // Friend.find({}, function(err, friend) {
-      //   console.log(friend);
-      //   res.status(200).send(friend)
-      //   });
     };
 
     //POST - Add Friends
@@ -42,7 +37,7 @@ module.exports = function (app) {
 
         friend.save(function (err, friend) {
             if (err) return res.send(500, err.message);
-            res.status(200).jsonp(friend);
+            res.status(200).json(friend);
         });
 
 
@@ -59,7 +54,8 @@ module.exports = function (app) {
         });
     };
 
-        //DELETE - Delete a User with specified ID
+    
+    //DELETE - Delete a User with specified ID
     deleteFriend = function (req, res) {
         return Friend.findById(req.params.id, function (err, friend) {
             console.log('DELETE usuario');
@@ -74,11 +70,12 @@ module.exports = function (app) {
         });
     }
 
-  app.delete('/friend/:id', deleteFriend);
+    
 
     //endpoints
     app.get('/allfriends', allFriends);
     app.get('/friends/:username', findFriends);
     app.post('/addfriend', addFriend);
+    app.delete('/friend/:id', deleteFriend);
 
 }

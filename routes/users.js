@@ -2,13 +2,7 @@ module.exports = function (app) {
     var mongoose = require('mongoose');
     var User = require('../models/user.js');
 
-// app.post('/contactList', function(req,res){
-//  console.log(req.body);
-//  db.contactList.insert(req.body, function (err, doc){
-//      res.json(doc);
-//  });
 
-// });
 
 
     //GET - GET All Users By Into DB
@@ -17,10 +11,11 @@ module.exports = function (app) {
             if (err) res.send(500, err.message);
 
             console.log('GET /users')
-            res.status(200).jsonp(users);
+            res.status(200).json(users);
         });
     };
 
+    //GET - GET All Users With Friends
     AllUsersWithFriends = function (req, res) {
         User.find({})
                .populate('friend')
@@ -28,8 +23,7 @@ module.exports = function (app) {
                 console.log(JSON.stringify(users, null, "\t"));
                })
 
-               
-};
+    };
 
     //GET - Return a User with specified ID
     findById = function (req, res) {
@@ -37,7 +31,7 @@ module.exports = function (app) {
             if (err) return res.send(500, err.message);
 
             console.log('GET /user/' + req.params.id);
-            res.status(200).jsonp(users);
+            res.status(200).json(users);
         });
     };
 
@@ -60,7 +54,7 @@ module.exports = function (app) {
 
             users.save(function (err, users) {
                 if (err) return res.send(500, err.message);
-                res.status(200).jsonp(users);
+                res.status(200).json(users);
 
             });
     };
@@ -85,7 +79,7 @@ module.exports = function (app) {
 
             users.save(function (err) {
                 if (err) return res.send(500, err.message);
-                res.status(200).jsonp(users);
+                res.status(200).json(users);
             });
         });
     };
