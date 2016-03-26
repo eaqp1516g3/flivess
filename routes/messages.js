@@ -33,7 +33,6 @@ module.exports = function (app) {
                 var message = new Message({
                     reciver: req.body.reciver,
                     sender: req.body.sender,
-                    subject: req.body.subject,
                     text: req.body.text,
 
                 })
