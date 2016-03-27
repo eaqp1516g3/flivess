@@ -10,13 +10,29 @@
     <title>MESSAGES</title>
 </head>
 <body>
+<div class="btn-group">
+    <button type="button" class="btn btn-default dropdown-toggle"
+            data-toggle="dropdown">
+        MENÚ <span class="caret"></span>
+    </button>
+
+    <ul class="dropdown-menu" role="menu">
+        <li><a href="index.html">INDEX</a></li>
+        <li class="divider"></li>
+        <li><a href="friends.html">AMIGOS</a></li>
+        <li class="divider"></li>
+        <li><a href="messages.html">MENSAJES</a></li>
+    </ul>
+</div>
+
+
 <div class="container" ng-controller="controller1">
     <h1>MESSAGES</h1>
 
     <table class="table">
         <thead>
         <tr>
-            <th>AQUI VA EL USUARIO CON EL QUE TIENES EL FLUJO DE MENSAGES</th>
+            <th>AQUI VA EL USUARIO CON EL QUE TIENES EL FLUJO DE MENSAJES</th>
         </tr>
         </thead>
         <tbody>
@@ -44,6 +60,15 @@
     </table>
 
 </div>
+
+
+
+
+<!-- Librería jQuery requerida por los plugins de JavaScript -->
+<script src="http://code.jquery.com/jquery.js"></script>
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
 <!-- <script src="../node_modules/angular/angular.min.js"></script> -->
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
 <script src="js/messages.js"></script>
