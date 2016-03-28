@@ -53,7 +53,7 @@ module.exports = function (app) {
     findMessages = function (req, res) {
         console.log (req.params.username);
         Message.find({reciver: req.params.username}, function (err, message) {
-            User.populate(message, {path: "sender"}, function (err, message) {
+            User.populate(message, {path: "sender"}, function (err, m) {
                 res.status(200).send(message);
             });
         });

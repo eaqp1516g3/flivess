@@ -28,6 +28,7 @@ module.exports = function (app) {
         console.log(req.body);
         console.log(req.body.username);
         console.log(req.body.friend);
+        console.log('test');
 
         var friend = new Friend({
             username: req.body.username,
