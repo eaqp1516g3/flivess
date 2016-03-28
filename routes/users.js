@@ -2,9 +2,6 @@ module.exports = function (app) {
     var mongoose = require('mongoose');
     var User = require('../models/user.js');
 
-
-
-
     //GET - GET All Users By Into DB
     AllUsers = function (req, res) {
         User.find(function (err, users) {
@@ -49,13 +46,12 @@ module.exports = function (app) {
         console.log('POST');
         console.log(req.body);
 
-
           var users = new User({
                     username: req.body.username,
                     fullname: req.body.fullname,
                     email: req.body.email,
                     level: req.body.level,
-                    ege: req.body.ege,
+                    age: req.body.age,
                     sex:req.body.sex,
                     weight:req.body.weight,
                     height:req.body.height,
@@ -81,7 +77,7 @@ module.exports = function (app) {
             users.fullname = req.body.fullname;
             users.email = req.body.email;
             users.level= req.body.level;
-            users.ege = req.body.ege;
+            users.age = req.body.age;
             users.sex = req.body.sex;
             users.weight = req.body.weight;
             users.height = req.body.height;

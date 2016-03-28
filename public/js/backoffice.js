@@ -8,7 +8,11 @@ App.controller('boController', ['$scope', '$http', function($scope, $http) {
 
 
 
+<<<<<<< HEAD
     $http.get('http://localhost:3000/user/56f984eb71f1040d1b1de8c3').success(function(response){
+=======
+    $http.get('http://localhost:3000/user/56f95d8b8658a89020893579').success(function(response){
+>>>>>>> origin/master
         console.log("He obtenido lo que pedia");
         $scope.user = response;
         $scope.contact = "";

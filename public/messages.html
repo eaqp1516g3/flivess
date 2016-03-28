@@ -47,7 +47,8 @@
         </thead>
         <tbody>
         <tr ng-repeat="message in messages">
-            <td>{{message.text}}</td>
+            <td>{{message.sender.username}}</td>
+            <td> {{message.text}}</td>
         </tr>
         </tbody>
     </table>
@@ -61,7 +62,7 @@
         </thead>
         <tbody>
         <tr>
-            <td><input class="form-control" ng-model="message.reciver"></td>
+            <td><input class="form-control" ng-model="message.receiver"></td>
             <td><input class="form-control" ng-model="message.sender"></td>
             <td><input class="form-control" ng-model="message.text"></td>
             <td><button class="btn btn-primary" ng-click="sendMessage()">Send</button></td>
