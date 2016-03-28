@@ -51,6 +51,7 @@ module.exports = function (app) {
         Friend.find({username: req.params.username}, function (err, friend) {
             User.populate(friend, {path: "friend"}, function (err, friend) {
                 res.status(200).send(friend);
+                console.log(friend);
             });
         });
     };

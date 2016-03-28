@@ -29,17 +29,29 @@ module.exports = function (app) {
             if (err) {
                 res.send(401, err.message);
             }
+
+            
             else {
-                var message = new Message({
-                    reciver: req.body.reciver,
-                    sender: req.body.sender,
-                    text: req.body.text,
 
-                })
+                User.findOne({username: req.body.sender}, function (err, data) {
+                    var id_sender= data._id;
+                    console.log(id_sender);
+                
 
-                message.save(function (err, message) {
-                    if (err) return res.send(500, err.message);
-                    res.status(200).json(message);
+                
+                    var message = new Message({
+                        receiver: req.body.receiver,
+                        sender: id_sender,
+                        text: req.body.text,
+
+                    })
+
+                    message.save(function (err, message) {
+                        if (err) return res.send(500, err.message);
+                        res.status(200).json(message);
+                    });
+
+
                 });
 
             }
@@ -48,13 +60,13 @@ module.exports = function (app) {
 
     };
 
-
     //GET - GET All Messages by Username
     findMessages = function (req, res) {
         console.log (req.params.username);
-        Message.find({reciver: req.params.username}, function (err, message) {
-            User.populate(message, {path: "sender"}, function (err, m) {
+        Message.find({receiver: req.params.username}, function (err, message) {
+             User.populate(message, {path: "sender"}, function (err, m) {
                 res.status(200).send(message);
+                console.log(m);
             });
         });
     };

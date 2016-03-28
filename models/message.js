@@ -1,14 +1,14 @@
-var mongoose = require('mongoose');
+var mongoose = require('mongoose'),
     Schema   = mongoose.Schema;
     var User = mongoose.model('User');
 
 var messageSchema = new Schema({
-    reciver:    { type: String},
-    sender: { type: Schema.ObjectId, ref: "User" },
+	
+    receiver:    { type: String},
     text :  {type: String},
-    createdAt: {type: Date, default: Date.now}
-   
-
-
+    createdAt: {type: Date, default: Date.now},
+    sender: { type: Schema.ObjectId, ref: "User" },
+     }, {
+    versionKey: false // You should be aware of the outcome after set to false (elimina __V)
 });
-module.exports = mongoose.model('Message', messageSchema);
+module.exports = mongoose.model("Message", messageSchema);
