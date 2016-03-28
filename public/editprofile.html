@@ -13,13 +13,35 @@
 </head>
 <body>
 
+<div class="btn-group">
+    <button type="button" class="btn btn-default dropdown-toggle"
+            data-toggle="dropdown">
+        MENU <span class="caret"></span>
+    </button>
+
+    <ul class="dropdown-menu" role="menu">
+        <li><a href="index.html">MAIN PAGE</a></li>
+        <li class="divider"></li>
+        <li><a href="friends.html">FRIENDS</a></li>
+        <li class="divider"></li>
+        <li><a href="messages.html">MESSAGES</a></li>
+
+    </ul>
+</div>
+
+<button type="button"  onclick="window.location.href='editprofile.html'" class="btn btn-info pull-right">
+    <span class="glyphicon glyphicon-user"></span> My Profile
+</button>
+
 <div class="jumbotron" ng-controller="boController">
     <div class="container">
-        <h1>Edit profile</h1>
-        <h2>Level {{user.level}}</h2>
+        <h1>Edit your profile</h1>
+        <h2>Your level is {{user.level}}</h2>
 
     </div>
 </div>
+
+
 
     <div class="container" ng-controller="boController">
         <div class="input-group">
@@ -70,9 +92,10 @@
 
 
 
-
-
-
+<!-- Librería jQuery requerida por los plugins de JavaScript -->
+<script src="http://code.jquery.com/jquery.js"></script>
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
 <script src="js/backoffice.js"></script>

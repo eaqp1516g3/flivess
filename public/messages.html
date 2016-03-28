@@ -13,26 +13,36 @@
 <div class="btn-group">
     <button type="button" class="btn btn-default dropdown-toggle"
             data-toggle="dropdown">
-        MENÚ <span class="caret"></span>
+        MENU <span class="caret"></span>
     </button>
 
     <ul class="dropdown-menu" role="menu">
-        <li><a href="index.html">INDEX</a></li>
+        <li><a href="index.html">MAIN PAGE</a></li>
         <li class="divider"></li>
-        <li><a href="friends.html">AMIGOS</a></li>
+        <li><a href="friends.html">FRIENDS</a></li>
         <li class="divider"></li>
-        <li><a href="messages.html">MENSAJES</a></li>
+        <li><a href="messages.html">MESSAGES</a></li>
+
     </ul>
 </div>
 
+<button type="button"  onclick="window.location.href='editprofile.html'" class="btn btn-info pull-right">
+    <span class="glyphicon glyphicon-user"></span> My Profile
+</button>
 
+<div class="jumbotron" ng-controller="boController">
+    <div class="container">
+        <h1>Messages</h1>
+
+
+    </div>
+</div>
 <div class="container" ng-controller="controller1">
-    <h1>MESSAGES</h1>
 
     <table class="table">
         <thead>
         <tr>
-            <th>AQUI VA EL USUARIO CON EL QUE TIENES EL FLUJO DE MENSAJES</th>
+            <th>USER IN CONVERSATION</th>
         </tr>
         </thead>
         <tbody>
@@ -44,7 +54,7 @@
     <table class="table">
         <thead>
         <tr>
-            <th>Reciver</th>
+            <th>Receiver</th>
             <th>Sender</th>
             <th>Text</th>
         </tr>
@@ -54,7 +64,7 @@
             <td><input class="form-control" ng-model="message.reciver"></td>
             <td><input class="form-control" ng-model="message.sender"></td>
             <td><input class="form-control" ng-model="message.text"></td>
-            <td><button class="btn btn-primary" ng-click="sendMessage()">SEND</button></td>
+            <td><button class="btn btn-primary" ng-click="sendMessage()">Send</button></td>
         </tr>
         </tbody>
     </table>
