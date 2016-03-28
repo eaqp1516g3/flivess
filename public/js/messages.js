@@ -22,6 +22,7 @@ App.controller('controller1', ['$scope', '$http', function($scope, $http) {
             console.log($scope.message);
             console.log("RESPUESTA");
             console.log(response);
+            $scope.message="";
             refresh();
         });
     };
