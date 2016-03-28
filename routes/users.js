@@ -35,6 +35,15 @@ module.exports = function (app) {
         });
     };
 
+    //GET - Return a user with a specified name
+    findbyName = function (req,res) {
+        User.find({username:req.params.username}, function (err,user){
+            if (err) return res.send(500, err.message);
+            console.log("busco a"+ req.params.username);
+            res.status(200).json(user);
+        })
+    }
+
     //POST - Add User in DB
     addUser = function (req, res) {
         console.log('POST');
@@ -104,6 +113,7 @@ module.exports = function (app) {
     app.get('/allusers/',AllUsers);
     app.post('/user/', addUser);
     app.get('/user/:id', findById);
+    app.get('/users/user/:username',findbyName);
     app.put('/user/:id', updateUser);
     app.delete('/user/:id', deleteUser);
 }

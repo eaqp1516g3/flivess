@@ -6,7 +6,7 @@ App.controller('controller1', ['$scope', '$http', function($scope, $http) {
 
 
     var refresh = function() {
-        $http.get('http://localhost:3000/messages/Erik').success(function (response) {
+        $http.get('http://localhost:3000/messages/pepe').success(function (response) {
             console.log("Acabo de recibir los msg");
             console.log(response);
             $scope.messages = response;
