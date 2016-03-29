@@ -1,6 +1,9 @@
 
 var App = angular.module('friends', ['ngCookies']);
 
+var base_url_prod="http://147.83.7.157:8080"
+
+
 
 
 App.controller('controller1', ['$scope', '$http', '$cookies', function($scope, $http, $cookies) {
@@ -9,8 +12,9 @@ App.controller('controller1', ['$scope', '$http', '$cookies', function($scope, $
     console.log(userLogged.username);
 
     var refresh = function() {
-        $http.get('http://localhost:3000/friends/' + userLogged.username).success(function (response) {
-        //$http.get('http://localhost:3000/friends/Aitor').success(function (response) {
+
+        $http.get(base_url_prod + '/friends/' + userLogged.username).success(function (response) {
+
             console.log("Acabo de recibir los amigos");
             console.log(response);
             $scope.friends = response;

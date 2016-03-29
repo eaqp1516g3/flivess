@@ -50,7 +50,8 @@ module.exports = function (app) {
                     username: req.body.username,
                     fullname: req.body.fullname,
                     email: req.body.email,
-                    level: req.body.level,
+                    password: req.body.password,
+                    level: 0,
                     age: req.body.age,
                     sex:req.body.sex,
                     weight:req.body.weight,
@@ -76,6 +77,7 @@ module.exports = function (app) {
             users.username = req.body.username;
             users.fullname = req.body.fullname;
             users.email = req.body.email;
+            users.password = req.body.password;
             users.level= req.body.level;
             users.age = req.body.age;
             users.sex = req.body.sex;

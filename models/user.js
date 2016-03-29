@@ -8,6 +8,7 @@ var userSchema = new Schema({
     username: {type : String},
     fullname:    { type: String },
     email:   { type: String},
+    password: {type: String},
     level: {type: String},
     age:   { type: String },
     sex:   { type: String },
