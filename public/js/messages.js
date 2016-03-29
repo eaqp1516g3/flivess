@@ -1,12 +1,13 @@
-var App = angular.module('messages', []);
+var App = angular.module('messages', ['ngCookies']);
 
 
+App.controller('controller1', ['$scope', '$http','$cookies', function($scope, $http, $cookies) {
 
-App.controller('controller1', ['$scope', '$http', function($scope, $http) {
-
+    var userLogged = $cookies.getObject('user');
+    console.log(userLogged.username);
 
     var refresh = function() {
-        $http.get('http://localhost:3000/messages/carlos').success(function (response) {
+        $http.get('http://localhost:3000/messages/' + userLogged.username).success(function (response) {
             console.log("Acabo de recibir los msg");
             console.log(response);
             $scope.messages = response;
@@ -15,11 +16,12 @@ App.controller('controller1', ['$scope', '$http', function($scope, $http) {
     refresh();
 
     $scope.sendMessage = function() {
-        console.log("ANTES DE ENVIARLO AL SERVIDOR;")
+        console.log("Before sending")
         console.log($scope.message);
+        $scope.message.sender = userLogged.username;
         $http.post('http://localhost:3000/addmessage', $scope.message).success(function(response) {
             console.log($scope.message);
-            console.log("RESPUESTA");
+            console.log("Response");
             console.log(response);
             refresh();
         });

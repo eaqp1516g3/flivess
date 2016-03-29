@@ -56,14 +56,12 @@
         <thead>
         <tr>
             <th>Receiver</th>
-            <th>Sender</th>
             <th>Text</th>
         </tr>
         </thead>
         <tbody>
         <tr>
             <td><input class="form-control" ng-model="message.receiver"></td>
-            <td><input class="form-control" ng-model="message.sender"></td>
             <td><input class="form-control" ng-model="message.text"></td>
             <td><button class="btn btn-primary" ng-click="sendMessage()">Send</button></td>
         </tr>
@@ -83,5 +81,7 @@
 <!-- <script src="../node_modules/angular/angular.min.js"></script> -->
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
 <script src="js/messages.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-cookies.js"></script>
+<script src="https://code.angularjs.org/1.5.0/angular-route.js"></script>
 </body>
 </html>
