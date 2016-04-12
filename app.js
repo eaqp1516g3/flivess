@@ -9,7 +9,7 @@ var mongoose=require("mongoose");
 require('mongoose-middleware').initialize(mongoose);
 mongoose.connect('mongodb://localhost/flivess', function(err, res) {
     if(err) throw err;
-    console.log('Conectado con éxito a la Base de Datos');
+    console.log('Conectados con éxito a la Base de Datos');
 });
 
 var app = express ();
