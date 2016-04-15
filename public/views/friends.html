@@ -1,0 +1,35 @@
+
+<head>
+    <title>Friends</title>
+</head>
+<body>
+
+
+<div class="jumbotron">
+    <div class="container">
+        <h1>Friends</h1>
+
+
+    </div>
+</div>
+<div class="container">
+
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="friend in friends">
+            <td>{{friend.friend.username}}</td>
+            <td><button class="btn btn-danger" ng-click="remove(friend._id)">Remove</button></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+{{hello}}
+</body>
+</html>

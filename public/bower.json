@@ -1,0 +1,13 @@
+{
+  "name": "Flivess",
+  "homepage": "https://github.com/eaqp1516g3/flivess",
+  "authors": [
+    "M A J S"
+  ],
+  "description": "Educational project",
+  "main": "app.js",
+  "license": "MIT",
+  "resolutions": {
+    "angular": "1.5.3"
+  }
+}

@@ -1,7 +1,7 @@
 
 var App = angular.module('messages', ['ngCookies']);
 
-var base_url_prod="http://147.83.7.157:8080"
+var base_url_prod="http://localhost:3000"
 
 
 App.controller('controller1', ['$scope', '$http','$cookies', function($scope, $http, $cookies) {

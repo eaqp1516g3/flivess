@@ -1,7 +1,7 @@
 /**
  * Created by irkalla on 25.03.16.
  */
-var base_url_prod="http://147.83.7.157:8080"
+var base_url_prod="http://localhost:3000"
 var App = angular.module('backoffice', ['ngCookies']);
 
 App.controller('boController', ['$scope', '$http', '$cookies', function($scope, $http, $cookies) {

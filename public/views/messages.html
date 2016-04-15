@@ -1,0 +1,51 @@
+
+<html>
+<head>
+    <title>Messages</title>
+</head>
+<body>
+
+
+<div class="jumbotron">
+    <div class="container">
+        <h1>Messages</h1>
+
+
+    </div>
+</div>
+<div class="container">
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>USER IN CONVERSATION</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="message in messages">
+            <td>{{message.sender.username}}</td>
+            <td> {{message.text}}</td>
+        </tr>
+        </tbody>
+    </table>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Receiver</th>
+            <th>Text</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td><input class="form-control" ng-model="message.receiver"></td>
+            <td><input class="form-control" ng-model="message.text"></td>
+            <td><button class="btn btn-primary" ng-click="sendMessage()">Send</button></td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+
+{{hello}}
+</body>
+</html>
