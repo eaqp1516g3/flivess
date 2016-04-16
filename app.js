@@ -38,6 +38,7 @@ var router = express.Router();
 routes = require('./routes/users')(app);
 routes = require('./routes/friends')(app);
 routes = require('./routes/messages')(app);
+routes = require('./routes/login')(app);
 
 
 var server = require('http').Server(app);

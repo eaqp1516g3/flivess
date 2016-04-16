@@ -2,6 +2,27 @@ module.exports = function (app) {
 
     var User = require('../models/user.js');
     var Message = require('../models/message.js');
+
+    getMessagesByUser = function(req,res) {
+
+        var id_sender="";
+
+        console.log("getuserbymessage\n");
+        console.log(req.params.username);
+        console.log(req.params.sender);
+        User.findOne({username: req.params.sender}, function (err, data) {
+            console.log(data._id);
+            id_sender = data._id;
+            console.log(id_sender);
+            Message.find({receiver: req.params.username,sender: id_sender},function(err,message){
+                console.log(message);
+                res.status(200).send(message);
+            });
+        });
+
+
+
+    };
     
 
     //GET - GET all messages
@@ -34,6 +55,7 @@ module.exports = function (app) {
             else {
 
                 User.findOne({username: req.body.sender}, function (err, data) {
+                    console.log(data._id);
                     var id_sender= data._id;
                     console.log(id_sender);
                 
@@ -60,12 +82,12 @@ module.exports = function (app) {
 
     };
 
-    //GET - GET All Messages by Username
+    //GET - get users that wrotes a determinate user
     findMessages = function (req, res) {
         console.log (req.params.username);
-        Message.find({receiver: req.params.username}, function (err, message) {
-             User.populate(message, {path: "sender"}, function (err, m) {
-                res.status(200).send(message);
+        Message.find({receiver: req.params.username}).distinct("sender", function (err, message) {
+             User.find({_id: {$in: message}}, function (err, m) {
+                res.status(200).send(m);
                 console.log(m);
             });
         });
@@ -91,8 +113,9 @@ module.exports = function (app) {
   
     //Endpoints
     app.get('/allmessages', allMessages);
+    app.get('/messages/:username/:sender',getMessagesByUser);
     app.post('/addmessage', addMessage);
-    app.get('/messages/:username', findMessages);
+    app.get('/messages/', findMessages);
     app.delete('/message/:id', deleteMessage);
 
 
