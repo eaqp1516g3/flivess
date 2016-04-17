@@ -13,5 +13,11 @@
   "moduleType": [],
   "resolutions": {
     "angular": "1.5.3"
+  },
+  "dependencies": {
+    "angular": "^1.5.4",
+    "angular-route": "^1.5.3",
+    "bootstrap": "^3.3.6",
+    "angular-cookies": "^1.5.3"
   }
 }
