@@ -29,16 +29,21 @@ module.exports = function (app) {
         console.log(req.body.username);
         console.log(req.body.friend);
         console.log('test');
+        User.findOne({username: req.body.friend}, function (err, data) {
+            console.log(data._id);
+            var id_friend = data._id;
+            console.log(id_friend);
 
-        var friend = new Friend({
-            username: req.body.username,
-            friend: req.body.friend,
+            var friend = new Friend({
+                username: req.body.username,
+                friend: id_friend,
 
-        })
+            });
 
-        friend.save(function (err, friend) {
-            if (err) return res.send(500, err.message);
-            res.status(200).json(friend);
+            friend.save(function (err, friend) {
+                if (err) return res.send(500, err.message);
+                res.status(200).json(friend);
+            });
         });
 
 
