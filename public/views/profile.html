@@ -1,69 +1,73 @@
-<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
 <div class="container">
+    <h1 class="page-header">Edit Profile</h1>
     <div class="row">
-        <div class="col-md-12 col-md-12 col-md-7 well well-sm">
-            <div class="well profile">
-                <div class="col-sm-12">
-                    <div class="col-xs-12 col-sm-8">
-                        <h3>Pepe Lopez</h3>
-                        <p><strong>About: </strong> Web Designer / UI. </p>
-                        <p><strong>Hobbies: </strong> Read, out with friends, listen to music, draw and learn new things. </p>
-                        <p><strong>Skills: </strong>
-                            <span class="tags">html5</span>
-                            <span class="tags">css3</span>
-                            <span class="tags">jquery</span>
-                            <span class="tags">bootstrap3</span>
-                        </p>
-                    </div>
-                    <div class="col-xs-12 col-sm-4 text-center">
-                        <figure>
-                            <!--<img src="http://www.localcrimenews.com/wp-content/uploads/2013/07/default-user-icon-profile.png" alt="" class="img-circle img-responsive">-->
-                            <figcaption class="ratings">
-                                <p>Level
-                                    <a href="#">
-                                        <span class="fa fa-star"></span>
-                                    </a>
-                                    <a href="#">
-                                        <span class="fa fa-star"></span>
-                                    </a>
-                                    <a href="#">
-                                        <span class="fa fa-star"></span>
-                                    </a>
-                                    <a href="#">
-                                        <span class="fa fa-star"></span>
-                                    </a>
-                                    <a href="#">
-                                        <span class="fa fa-star-o"></span>
-                                    </a>
-                                </p>
-                            </figcaption>
-                        </figure>
-                    </div>
-                </div>
-                <div class="col-xs-12 divider text-center">
-                    <div class="col-xs-12 col-sm-4 emphasis">
-                        <h2><strong> 20,7K </strong></h2>
-                        <p><small>Friends</small></p>
-                        <button class="btn btn-success btn-block"><span class="fa fa-plus-circle"></span> Add as a friend </button>
-                    </div>
-                    <div class="col-xs-12 col-sm-4 emphasis">
-                        <h2><strong>43</strong></h2>
-                        <p><small>Snippets</small></p>
-                        <div class="btn-group dropup btn-block">
-                            <button type="button" class="btn btn-primary"><span class="fa fa-gear"></span> Options </button>
-                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                                <span class="caret"></span>
-                                <span class="sr-only">Toggle Dropdown</span>
-                            </button>
-                            <ul class="dropdown-menu text-left" role="menu">
-                                <li><a href="#"><span class="fa fa-envelope pull-right"></span> Send an email </a></li>
-                                <li class="divider"></li>
-                                <li><a href="#" class="btn disabled" role="button"> Unfriend </a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+        <!-- left column -->
+        <div class="col-md-4 col-sm-6 col-xs-12">
+            <div class="text-center">
+                <img src="http://lorempixel.com/200/200/people/9/" class="avatar img-circle img-thumbnail" alt="avatar">
+                <h6>Upload a different photo...</h6>
+                <input type="file" class="text-center center-block well well-sm">
             </div>
+        </div>
+
+        <!-- edit form column -->
+        <div class="col-md-8 col-sm-6 col-xs-12 personal-info">
+            <h3>Personal info</h3>
+            <form class="form-horizontal" role="form">
+                <div class="form-group">
+                    <label class="col-lg-3 control-label">Username:</label>
+                    <div class="col-lg-8">
+                        <input class="form-control" ng-model="user.username" type="text">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-3 control-label">Full name:</label>
+                    <div class="col-lg-8">
+                        <input class="form-control" ng-model="user.fullname" type="text">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-3 control-label">Email:</label>
+                    <div class="col-lg-8">
+                        <input class="form-control" ng-model="user.email" type="text">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-3 control-label">Age:</label>
+                    <div class="col-lg-8">
+                        <input class="form-control" ng-model="user.age" type="text">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label">Weight:</label>
+                    <div class="col-md-8">
+                        <input class="form-control" ng-model="user.weight" type="text">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label">Height:</label>
+                    <div class="col-md-8">
+                        <input class="form-control" ng-model="user.height" type="text">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label">Password:</label>
+                    <div class="col-md-8">
+                        <input class="form-control" ng-model="user.password" type="password">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label">Confirm password:</label>
+                    <div class="col-md-8">
+                        <input class="form-control" ng-model="user.password" type="password">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label"></label>
+                        <a ng-click="updateUser()" class="btn btn-primary"  type="button"> Save Changes</a>
+                        <a href="#/home" class="btn btn-default" type="button"> Cancel</a>
+                </div>
+            </form>
         </div>
     </div>
 </div>

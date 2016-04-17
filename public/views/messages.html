@@ -16,24 +16,24 @@
     </table>
 
     <div class="col-md-3">
-
-        <ul class="nav nav-pills nav-stacked" ng-repeat="user in users">
-            <li><button class="btn btn-info btn-block" ng-click="conversacion(user.username)"> {{user.username}}</button></li>
-        </ul>
+        <div class="list-group">
+            <a ng-click="conversacion(user.username)" class="list-group-item"  ng-repeat="user in users"> {{user.fullname}}</a>
+        </div>
     </div>
     <div class="col-md-9">
-        <table class="table">
-            <thead>
-            <tr>
-                <th>{{usuarioC}}</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr class="list-group" ng-repeat="msg in msgs">
-                <td class="list-group-item">{{msg.sender.username}} : {{msg.text}}</td>
-            </tr>
-            </tbody>
-        </table>
+        <h1 class="text-center"><strong>{{usuarioC}}</strong></h1>
+        <div class="media msg" ng-repeat="msg in msgs">
+            <a class="pull-left" href="#">
+                <img class="media-object" data-src="" alt="64x64" style="width: 32px; height: 32px;" src="">
+            </a>
+            <div class="media-body">
+                <small class="pull-right time"><i class="fa fa-clock-o"></i> {{msg.createdAt}}</small>
+
+                <h5 class="media-heading">{{msg.sender.username}}</h5>
+                <small class="col-lg-10">{{msg.text}}</small>
+            </div>
+        </div>
+
 
         <table class="table">
             <thead>
