@@ -1,38 +1,12 @@
+
+
+
 <!DOCTYPE html>
-<html lang="en" ng-app="backoffice">
+<html lang="en">
 <head>
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-
-    <!-- Optional theme -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
-
-    <meta charset="UTF-8">
-    <meta charset="UTF-8">
     <title>Register</title>
 </head>
 <body>
-<div class="btn-group">
-    <button type="button" class="btn btn-default dropdown-toggle"
-            data-toggle="dropdown">
-        MENU <span class="caret"></span>
-    </button>
-
-    <ul class="dropdown-menu" role="menu">
-        <li><a href="index.html">MAIN PAGE</a></li>
-        <li class="divider"></li>
-        <li><a href="friends.html">FRIENDS</a></li>
-        <li class="divider"></li>
-        <li><a href="messages.html">MESSAGES</a></li>
-        <li class="divider"></li>
-        <li><a href="register.html">REGISTER</a></li>
-
-    </ul>
-</div>
-
-<button type="button"  onclick="window.location.href='editprofile.html'" class="btn btn-info pull-right">
-    <span class="glyphicon glyphicon-user"></span> My Profile
-</button>
 
 <div class="jumbotron">
     <div class="container">
@@ -42,7 +16,7 @@
     </div>
 </div>
 
-<div class="container" ng-controller="registerController">
+<div class="container">
     <div class="input-group">
         <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
         <input type="text" ng-model="user.username" class="form-control" placeholder="Username" aria-describedby="basic-addon1" style="width:200px;" >
@@ -89,20 +63,8 @@
 
     <button class="btn btn-info" ng-click="registerUser()">Register</button>&nbsp;&nbsp;
 
-
+    {{hello}}
 
 </div>
-
-
-<!-- Librería jQuery requerida por los plugins de JavaScript -->
-<script src="http://code.jquery.com/jquery.js"></script>
-<!-- Latest compiled and minified JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
-<script src="js/backoffice.js"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-cookies.js"></script>
-<script src="https://code.angularjs.org/1.5.0/angular-route.js"></script>
-
 </body>
 </html>

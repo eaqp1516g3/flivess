@@ -1,10 +1,9 @@
 /**
- * Created by irkalla on 25.03.16.
+ * Created by irkalla on 14.04.16.
  */
-var base_url_prod="http://147.83.7.157:8080"
-var App = angular.module('backoffice', ['ngCookies']);
+var base_url_prod="http://localhost:3000"
 
-App.controller('boController', ['$scope', '$http', '$cookies', function($scope, $http, $cookies) {
+angular.module('Flivess').controller('backOfficeCtl', ['$scope', '$http', '$cookies', function($scope, $http, $cookies) {
 
 
     var userLogged = $cookies.getObject('user');
@@ -25,9 +24,14 @@ App.controller('boController', ['$scope', '$http', '$cookies', function($scope, 
 
     };
 
-
 }]);
 
+
+
+
+
+//No descomentar esta parte. Old
+/*
 App.controller('registerController', ['$scope', '$http','$cookies', function($scope, $http, $cookies){
 
     $scope.registerUser = function(){
@@ -41,3 +45,4 @@ App.controller('registerController', ['$scope', '$http','$cookies', function($sc
     };
 
 }]);
+    */

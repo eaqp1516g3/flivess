@@ -1,13 +1,9 @@
+/**
+ * Created by irkalla on 14.04.16.
+ */
 
-var App = angular.module('friends', ['ngCookies']);
-
-var base_url_prod="http://147.83.7.157:8080"
-
-
-
-
-App.controller('controller1', ['$scope', '$http', '$cookies', function($scope, $http, $cookies) {
-
+angular.module('Flivess').controller('friendsCtl', ['$scope', '$http', '$cookies', function($scope, $http, $cookies) {
+    var base_url_prod="http://localhost:3000"
     var userLogged = $cookies.getObject('user');
     console.log(userLogged.username);
 
@@ -18,7 +14,7 @@ App.controller('controller1', ['$scope', '$http', '$cookies', function($scope, $
             console.log("Acabo de recibir los amigos");
             console.log(response);
             $scope.friends = response;
-            
+
         });
     }
     refresh();
