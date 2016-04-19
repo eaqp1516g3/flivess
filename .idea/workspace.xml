@@ -1,14 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="7a152241-f0ac-474b-bc56-8a5dbfa34643" name="Default" comment="Merge remote-tracking branch 'origin/master'&#10;&#10;Conflicts:&#10;&#9;public/js/backoffice.js&#10;&#9;public/js/friends.js&#10;&#9;public/js/messages.js&#10;">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/controllers/register.js" afterPath="$PROJECT_DIR$/public/controllers/register.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/home.html" afterPath="$PROJECT_DIR$/public/home.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/index.html" afterPath="$PROJECT_DIR$/public/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/routes.js" afterPath="$PROJECT_DIR$/public/routes.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/views/register.html" afterPath="$PROJECT_DIR$/public/views/register.html" />
-    </list>
+    <list default="true" id="7a152241-f0ac-474b-bc56-8a5dbfa34643" name="Default" comment="Merge remote-tracking branch 'origin/master'&#10;&#10;Conflicts:&#10;&#9;public/js/backoffice.js&#10;&#9;public/js/friends.js&#10;&#9;public/js/messages.js&#10;" />
     <ignored path="flivess.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -399,7 +392,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="53" y="-4" width="1313" height="772" extended-state="6" />
+    <frame x="53" y="-4" width="1313" height="772" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2498096" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
