@@ -1,3 +1,78 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Sign-Up</title>
+    <link rel="stylesheet" href="css_login/normalize.css">
+    <link rel="stylesheet" href="css_login/style.css">
+
+</head>
+
+<body>
+
+<div class="form">
+
+    <ul class="tab-group">
+        <li class="tab"><a href="#/">Log In</a></li>
+        <li class="tab active"><a href="#register">Sign Up</a></li>
+    </ul>
+
+    <div id="register">
+        <h1>Sign Up</h1>
+
+    <form>
+            <div class="field-wrap">
+                <input  placeholder="Username *" ng-model="user.username" type="text" required="required"/>
+            </div>
+
+            <div class="field-wrap">
+
+                <input type="text" placeholder="Fullname" required ng-model="user.fullname"   />
+
+            </div>
+
+            <div class="field-wrap">
+
+                <input placeholder="Email *" required ng-model="user.email" type="text"  />
+            </div>
+
+            <div class="field-wrap" ng-init="user.password=''">
+
+                <input placeholder="Password *" ng-model="user.password" type="password" required pattern=".{5,}" />
+
+            </div>
+
+            <div class="field-wrap">
+
+
+            <input placeholder="Re-enter password*" ng-init="reenterpass=''" ng-model="reenterpass" type="password" required autocomplete="off" />
+
+
+            </div>
+
+
+            <div ng-show="alertReg" ng-init="alert.message=''" ng-class="{'alert-danger': true, 'alert-dismissable': closeable}">
+            <a class="close" ng-click="closeAlert()">&times;</a>
+            <p>{{alert.message}}</p>
+            </div>
+
+
+
+            <button class="button button-block" ng-click="registerUser()"/>Get Started</button>
+
+    </form>
+
+</div>
+</div>
+</body>
+
+
+</html>
+
+
+<!--
+
 <div class="container">
     <div class="row">
         <div class="col-md-offset-2 col-md-6 col-lg-offset-3 col-lg-6">
@@ -52,10 +127,7 @@
     </div>
 </div>
 
-
-
-
-
+-->
 
 
 

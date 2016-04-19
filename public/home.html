@@ -3,7 +3,7 @@
 <html >
 <head>
     <meta charset="UTF-8">
-    <title>Sign-Up/Login Form</title>
+    <title>Login</title>
     <link rel="stylesheet" href="css_login/normalize.css">
     <link rel="stylesheet" href="css_login/style.css">
 
@@ -12,14 +12,20 @@
 <body>
 <div class="form">
 
-    <div>
+    <ul class="tab-group">
+        <li class="tab active"><a href="#/">Log In</a></li>
+        <li class="tab"><a href="#register">Sign Up</a></li>
+    </ul>
+
+
+    <div id="login">
         <h1>Login</h1>
         <form>
             <div class="field-wrap">
-                <input type="text" placeholder="Username*" ng-model="user.username">
+                <input type="text" placeholder="Username*" required ng-model="user.username">
             </div>
             <div class="field-wrap">
-                <input type="text" placeholder="Password*" ng-model="user.password"/>
+                <input type="password" placeholder="Password*" required pattern=".{2,}" ng-model="user.password"/>
             </div>
 
             <p class="forgot"><a href="#">Forgot Password?</a></p>
@@ -51,6 +57,7 @@
                 </div>
             </div>
         </div>
+        <!--
         <div class="or-box row-block">
             <div class="row">
                 <div class="col-md-12 row-block">
@@ -58,6 +65,7 @@
                 </div>
             </div>
         </div>
+        -->
     </div>
 </div>
 </body>
