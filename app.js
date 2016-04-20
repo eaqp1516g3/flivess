@@ -3,7 +3,7 @@ var mongojs= require("mongojs");
 var methodOverride  = require("method-override");
 var mongoose = require('mongoose');
 var bodyParser=require('body-parser');
-var mongoose=require("mongoose");
+
 
 
 require('mongoose-middleware').initialize(mongoose);
@@ -31,7 +31,7 @@ app.use(bodyParser.json());
 app.use(methodOverride());
 
 
-app.use(express.static(__dirname + "/public")); // FRONT-END---> aqui es donde tendremos nuestro html y ccs e imagenes. Esta carpeta tiene que estar en la misma carpeta que esta el server.js
+app.use(express.static(__dirname + "/public")); // FRONT-END---> aqui es donde tendremos nuestro html y ccs e imagenes.
 
 var router = express.Router();
 // API Rutas
