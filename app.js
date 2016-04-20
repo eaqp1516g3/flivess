@@ -3,7 +3,7 @@ var mongojs= require("mongojs");
 var methodOverride  = require("method-override");
 var mongoose = require('mongoose');
 var bodyParser=require('body-parser');
-var mongoose=require("mongoose");
+
 
 
 require('mongoose-middleware').initialize(mongoose);
