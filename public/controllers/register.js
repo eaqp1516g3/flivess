@@ -5,6 +5,11 @@ var base_url_prod="http://localhost:3000"
 
 angular.module('Flivess').controller('registerCtl', ['$scope', '$http', '$cookies','$window', function($scope, $http, $cookies,$window) {
 
+
+
+
+
+
     $scope.registerUser = function(){
         console.log("USUARIO: " + $scope.user);
         if($scope.user.password == $scope.reenterpass && $scope.user.username!='' && $scope.user.email!='' && $scope.user.password!=''){
@@ -22,12 +27,19 @@ angular.module('Flivess').controller('registerCtl', ['$scope', '$http', '$cookie
 
         }
 
+        if($scope.user.password == $scope.reenterpass){
+            $scope.alertReg = false;
+            $scope.alert.message="";
+        }
+
         else{
             $scope.alertReg=true;
             $scope.alert.message="Passwords  dont match";
             //$window.alert("Passwords don't match");
         }
     };
+
+
 
 
     $scope.closeAlert=function(){

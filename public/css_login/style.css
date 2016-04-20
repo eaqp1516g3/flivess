@@ -43,6 +43,8 @@ a:hover {
   display: table;
   clear: both;
 }
+
+
 .tab-group li a {
   display: block;
   text-decoration: none;
@@ -273,4 +275,10 @@ opacity:0.9;
     text-align: right;
     margin-top:10px;
   }
+  .registration {
+    font-size: 18px;
+  }
+
+
+
 }
