@@ -39,7 +39,7 @@
 
             <div class="field-wrap" ng-init="user.password=''">
 
-                <input placeholder="Password *" ng-model="user.password" type="password" required pattern=".{5,}" />
+                <input placeholder="Password *" ng-init="user.password=''" ng-model="user.password" type="password" required pattern=".{5,}" />
 
             </div>
 
