@@ -22,7 +22,7 @@ angular.module('Flivess').controller('registerCtl', ['$scope', '$http', '$cookie
             })
         }
         if($scope.user.username=='' || $scope.user.email=='' || $scope.user.password==''){
-            $scope.alertReg=true;
+            $scope.alertReg = true;
             $scope.alert.message="The fields with * are mandatory";
 
         }

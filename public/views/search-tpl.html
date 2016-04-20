@@ -1,10 +1,9 @@
 <a><div>
-    <span style="display:block;" class="registration" bind-html-unsafe="match.user.use
-
-
-
-
-
+    <span style="display:block;" class="registration" bind-html-unsafe="match.model.username | typeaheadHighlight:query"></span>
+    <span bind-html-unsafe="match.model.fullname | typeaheadHighlight:query"></span> &middot;
+    <span bind-html-unsafe="match.model.email | typeaheadHighlight:query"></span>
+    <span bind-html-unsafe="match.model.level | typeaheadHighlight:query"></span>
+</div></a>
 
 
 
