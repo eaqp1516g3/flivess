@@ -1,73 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile</title>
+    <link rel="stylesheet" href="../css/profileEdit/style.css">
+</head>
+<body>
 <div class="container">
-    <h1 class="page-header">Edit Profile</h1>
     <div class="row">
-        <!-- left column -->
-        <div class="col-md-4 col-sm-6 col-xs-12">
-            <div class="text-center">
-                <img src="http://lorempixel.com/200/200/people/9/" class="avatar img-circle img-thumbnail" alt="avatar">
-                <h6>Upload a different photo...</h6>
-                <input type="file" class="text-center center-block well well-sm">
-            </div>
-        </div>
 
-        <!-- edit form column -->
-        <div class="col-md-8 col-sm-6 col-xs-12 personal-info">
-            <h3>Personal info</h3>
-            <form class="form-horizontal" role="form">
-                <div class="form-group">
-                    <label class="col-lg-3 control-label">Username:</label>
-                    <div class="col-lg-8">
-                        <input class="form-control" ng-model="user.username" type="text">
-                    </div>
+        <div class="row">
+            <div class="col-md-9"><h1>Sheena Kristin A.Eschor</h1></div>
+            <div class="col-md-3">
+                <br>
+                <a data-toggle="tooltip" type="button" class="btn btn-lg btn-primary">Send <i class="glyphicon glyphicon-envelope"></i></a>
+                <button data-toggle="tooltip" type="button" class="btn btn-lg btn-warning" ng-click="addFriend()">Add <span class="glyphicon glyphicon-user"></span></button>
+          </div>
+        </div>
+        <div>
+            <div class="row">
+                <div class="col-md-3" align="center">
+                    <img alt="User Pic" src="http://babyinfoforyou.com/wp-content/uploads/2014/10/avatar-300x300.png" class="img-circle img-responsive">
                 </div>
-                <div class="form-group">
-                    <label class="col-lg-3 control-label">Full name:</label>
-                    <div class="col-lg-8">
-                        <input class="form-control" ng-model="user.fullname" type="text">
-                    </div>
+
+                <div class=" col-md-6">
+                    <table class="table table-user-information">
+                        <tbody>
+                        <tr>
+                            <td>Username</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Full name</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Email</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Age</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Weight</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Height</td>
+                            <td></td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
-                <div class="form-group">
-                    <label class="col-lg-3 control-label">Email:</label>
-                    <div class="col-lg-8">
-                        <input class="form-control" ng-model="user.email" type="text">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-lg-3 control-label">Age:</label>
-                    <div class="col-lg-8">
-                        <input class="form-control" ng-model="user.age" type="text">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-md-3 control-label">Weight:</label>
-                    <div class="col-md-8">
-                        <input class="form-control" ng-model="user.weight" type="text">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-md-3 control-label">Height:</label>
-                    <div class="col-md-8">
-                        <input class="form-control" ng-model="user.height" type="text">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-md-3 control-label">Password:</label>
-                    <div class="col-md-8">
-                        <input class="form-control" ng-model="user.password" type="password">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-md-3 control-label">Confirm password:</label>
-                    <div class="col-md-8">
-                        <input class="form-control" ng-model="user.password" type="password">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-md-3 control-label"></label>
-                        <a ng-click="updateUser()" class="btn btn-primary"  type="button"> Save Changes</a>
-                        <a href="#/home" class="btn btn-default" type="button"> Cancel</a>
-                </div>
-            </form>
+                <div class=" col-md-3">
+            </div>
         </div>
     </div>
 </div>
+
+</div>
+</body>
+</html>

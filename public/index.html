@@ -6,37 +6,51 @@
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="css/nav/style.css">
     
     <title>Flivess</title>
 </head>
 <body>
 
-<nav class="navbar navbar-inverse">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="#/">Flivess</a>
+    <nav class="navbar transparent navbar-inverse" ng-show="true">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand">Flivess</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li><a href="#/home" ><span class="glyphicon glyphicon-home"></span> Home</a></li>
+                <li><a href="#/friends" ><span class="glyphicons glyphicons-group"></span> Friends</a></li>
+                <li><a href="#/messages" ><span class="glyphicon glyphicon-envelope"></span> Messages</a></li>
+
+                <form class="navbar-form navbar-left" role="search" >
+                    <div class="form-group">
+                        <input type="text" ng-model="selectedUser" typeahead="user as user.username for user in users | filter:$viewValue | limitTo:3" class="form-control" placeholder="Search friends..." typeahead-template-url="views/search-tpl.html">
+                    </div>
+                    <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                </form>
+
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#/editprofile"><span class="glyphicon glyphicon-user"></span> Profile</a></li>
+                <li><a href="#/"><span class="glyphicon glyphicon-log-in"></span> Log Out</a></li>
+            </ul>
         </div>
-        <ul class="nav navbar-nav">
-            <li><a href="#/home" class="glyphicon glyphicon-home"> Home</a></li>
-            <li><a href="#/friends">Friends</a></li>
-            <li><a href="#/messages">Messages</a></li>
+    </nav>
 
-            <form class="navbar-form navbar-left" role="search" >
-                <div class="form-group">
-                    <input type="text" ng-model="selectedUser" typeahead="user as user.username for user in users | filter:$viewValue | limitTo:3" class="form-control" placeholder="Search friends..." typeahead-template-url="views/search-tpl.html">
-                </div>
-                <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
-            </form>
 
-        </ul>
-        <ul class="nav navbar-nav navbar-right">
-            <li><a href="#/profile"><span class="glyphicon glyphicon-user"></span> Profile</a></li>
-            <li><a href="#/"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
-        </ul>
-    </div>
-</nav>
+    <nav class="navbar transparent navbar-inverse" ng-show="false">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#/">Flivess</a>
+            </div>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#/about" ><span class=""></span> About</a></li>
+                <li><a href="#/contact" ><span class=""></span> Contact</a></li>
+            </ul>
+        </div>
+    </nav>
 
-<div ng-view></div>
+    <div ng-view></div>
 
 
 <script src="bower_components/angular/angular.min.js"></script>
@@ -47,18 +61,14 @@
 <script src="bower_components/angular-bootstrap/ui-bootstrap.js"></script>
 
 <script src="routes.js"></script>
-<script src="controllers/register.js"></script>
+<script src="controllers/registerCtl.js"></script>
+<script src="controllers/loginCtl.js"></script>
 <script src="controllers/homeCtl.js"></script>
 <script src="controllers/messagesCtl.js"></script>
 <script src="controllers/friendsCtl.js"></script>
 <script src="controllers/profileCtl.js"></script>
-<script src="controllers/backOfficeCtl.js"></script>
-<script src="controllers/loginCtl.js"></script>
-
-
-
+<script src="controllers/profileEditCtl.js"></script>
 
 
 </body>
-
 </html>

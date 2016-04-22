@@ -1,25 +1,21 @@
 /**
- * Created by irkalla on 14.04.16.
+ * Created by aitor on 19/4/16.
  */
-
 angular.module('Flivess').controller('profileCtl', ['$scope', '$http', '$cookies', function($scope, $http, $cookies) {
-
-
+    console.log("DEONTRO DE CONTROLOADOR de profile.html");
+    var base_url_prod="http://localhost:3000"
     var userLogged = $cookies.getObject('user');
     console.log(userLogged.username);
 
-    $http.get(base_url_prod + '/user/' + userLogged._id).success(function(response){
-        console.log("He obtenido lo que pedia");
-        $scope.user = response;
-        $scope.contact = "";
-    });
 
-    $scope.updateUser = function() {
 
-        console.log($scope.user._id);
-        $http.put(base_url_prod+'/user/' + $scope.user._id, $scope.user).success(function (response) {
-            window.alert("Changes saved");
-        })
-
-    };
+    $scope.addFriend = function () {
+        console.log("Dentro de addFriend");
+        var amigos = new Object();
+        amigos.username = userLogged.username;
+        amigos.friend = "pepe";
+        $http.post(base_url_prod+'/addfriend', amigos).success(function(response) {
+            console.log(response);
+        });
+    }
 }]);
