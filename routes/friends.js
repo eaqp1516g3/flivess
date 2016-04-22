@@ -22,6 +22,21 @@ module.exports = function (app) {
 
     };
 
+    isFriend = function(req,res) {
+        console.log("isFRiend");
+        User.findOne({username: req.params.friend}, function (err, data) {
+            console.log(data._id);
+            var id_friend = data._id;
+            console.log(id_friend);
+            Friend.findOne({username: req.params.username,friend: id_friend}, function(err,data){
+                if(data==null){
+                    res.send(false);
+                }
+                else res.send(true);
+            });
+        });
+    }
+
     //POST - Add Friends
     addFriend = function (req, res) {
         console.log('POST');
@@ -82,6 +97,7 @@ module.exports = function (app) {
     //endpoints
     app.get('/allfriends', allFriends);
     app.get('/friends/:username', findFriends);
+    app.get('/friends/:username/:friend',isFriend);
     app.post('/addfriend', addFriend);
     app.delete('/friend/:id', deleteFriend);
 
