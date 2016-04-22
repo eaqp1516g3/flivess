@@ -8,9 +8,10 @@ angular.module('Flivess', ['ngRoute', 'ngCookies','ui.bootstrap']).config(functi
 
     // route for the home page
         .when('/', {
-            templateUrl : 'home.html',
+            templateUrl : 'views/login.html',
             controller  : 'loginCtl'
         })
+
         .when('/friends', {
             templateUrl : 'views/friends.html',
             controller  : 'friendsCtl'
@@ -20,10 +21,17 @@ angular.module('Flivess', ['ngRoute', 'ngCookies','ui.bootstrap']).config(functi
             templateUrl : 'views/messages.html',
             controller  : 'messagesCtl'
         })
+
+        .when('/editprofile', {
+            templateUrl : 'views/profileEdit.html',
+            controller  : 'profileEditCtl'
+        })
+
         .when('/profile', {
             templateUrl : 'views/profile.html',
             controller  : 'profileCtl'
         })
+
         .when('/register', {
             templateUrl : 'views/register.html',
             controller  : 'registerCtl'
@@ -32,5 +40,13 @@ angular.module('Flivess', ['ngRoute', 'ngCookies','ui.bootstrap']).config(functi
         .when('/home', {
             templateUrl : 'views/home.html',
             controller  : 'homeCtl'
+        })
+
+        .when('/contact', {
+            templateUrl : 'views/contact.html'
+        })
+
+        .when('/about', {
+            templateUrl : 'views/about.html'
         })
 });

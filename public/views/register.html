@@ -4,9 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Sign-Up</title>
-    <link rel="stylesheet" href="css_login/normalize.css">
-    <link rel="stylesheet" href="css_login/style.css">
-
+    <link rel="stylesheet" href="../css/login/normalize.css">
+    <link rel="stylesheet" href="../css/login/style.css">
 </head>
 
 <body>
@@ -21,116 +20,38 @@
     <div id="register">
         <h1>Sign Up</h1>
 
-    <form>
-            <div class="field-wrap">
-                <input  placeholder="Username *" ng-model="user.username" type="text" required="required"/>
-            </div>
+        <form>
+                <div class="field-wrap">
+                    <input  placeholder="Username *" ng-model="user.username" type="text" required="required"/>
+                </div>
 
-            <div class="field-wrap">
+                <div class="field-wrap">
+                    <input type="text" placeholder="Fullname" required ng-model="user.fullname"   />
+                </div>
 
-                <input type="text" placeholder="Fullname" required ng-model="user.fullname"   />
+                <div class="field-wrap">
+                    <input placeholder="Email *" required ng-model="user.email" type="text"  />
+                </div>
 
-            </div>
+                <div class="field-wrap" ng-init="user.password=''">
+                    <input placeholder="Password *" ng-init="user.password=''" ng-model="user.password" type="password" required pattern=".{5,}" />
+                </div>
 
-            <div class="field-wrap">
+                <div class="field-wrap">
+                    <input placeholder="Re-enter password*" ng-init="reenterpass=''" ng-model="reenterpass" type="password" required autocomplete="off" />
+                </div>
 
-                <input placeholder="Email *" required ng-model="user.email" type="text"  />
-            </div>
+                <div ng-show="alertReg" ng-init="alert.message=''" ng-class="{'alert-danger': true, 'alert-dismissable': closeable}">
+                    <a class="close" ng-click="closeAlert()">&times;</a>
+                    <p>{{alert.message}}</p>
+                </div>
 
-            <div class="field-wrap" ng-init="user.password=''">
+                <button class="button button-block" ng-click="registerUser()"/>Get Started</button>
+        </form>
 
-                <input placeholder="Password *" ng-init="user.password=''" ng-model="user.password" type="password" required pattern=".{5,}" />
-
-            </div>
-
-            <div class="field-wrap">
-
-
-            <input placeholder="Re-enter password*" ng-init="reenterpass=''" ng-model="reenterpass" type="password" required autocomplete="off" />
-
-
-            </div>
-
-
-            <div ng-show="alertReg" ng-init="alert.message=''" ng-class="{'alert-danger': true, 'alert-dismissable': closeable}">
-            <a class="close" ng-click="closeAlert()">&times;</a>
-            <p>{{alert.message}}</p>
-            </div>
-
-
-
-            <button class="button button-block" ng-click="registerUser()"/>Get Started</button>
-
-    </form>
-
-</div>
+    </div>
 </div>
 </body>
 
 
 </html>
-
-
-<!--
-
-<div class="container">
-    <div class="row">
-        <div class="col-md-offset-2 col-md-6 col-lg-offset-3 col-lg-6">
-            <legend><a href="http://www.jquery2dotnet.com"><i class="glyphicon glyphicon-globe"></i></a> Sign up!</legend>
-            <form action="#" method="post" class="form" role="form">
-                <div class="row">
-                    <div class="col-xs-6 col-md-6">
-                        <input class="form-control" name="firstname" placeholder="First Name" type="text"
-                               ng-model="use.name" required autofocus />
-                        <input class="form-control" name="username" placeholder="Username" type="text" />
-                    </div>
-                    <div class="col-xs-6 col-md-6">
-                        <input class="form-control" name="lastname" placeholder="Last Name" type="text" required />
-                    </div>
-                </div>
-                <input class="form-control" name="youremail" placeholder="Email" type="email" />
-                <input class="form-control" name="password" placeholder="Password" type="password" />
-                <input class="form-control" name="reenterpassword" placeholder="Re-enter-Password" type="password" />
-                <label>
-                    Birth Date</label>
-                <div class="row">
-                    <div class="col-xs-4 col-md-4">
-                        <select class="form-control">
-                            <option value="Month">Month</option>
-                        </select>
-                    </div>
-                    <div class="col-xs-4 col-md-4">
-                        <select class="form-control">
-                            <option value="Day">Day</option>
-                        </select>
-                    </div>
-                    <div class="col-xs-4 col-md-4">
-                        <select class="form-control">
-                            <option value="Year">Year</option>
-                        </select>
-                    </div>
-                </div>
-                <label class="radio-inline">
-                    <input type="radio" name="sex" id="inlineCheckbox1" value="male" />
-                    Male
-                </label>
-                <label class="radio-inline">
-                    <input type="radio" name="sex" id="inlineCheckbox2" value="female" />
-                    Female
-                </label>
-                <br />
-                <br />
-                <button class="btn btn-lg btn-primary btn-block" type="submit">
-                    Sign up</button>
-            </form>
-        </div>
-    </div>
-</div>
-
--->
-
-
-
-
-
-
