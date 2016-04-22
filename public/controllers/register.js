@@ -16,7 +16,7 @@ angular.module('Flivess').controller('registerCtl', ['$scope', '$http', '$cookie
             $http.post(base_url_prod+'/user', $scope.user).success(function (response){
                 $cookies.putObject('user',response);
                 $scope.alert.message="";
-                window.location.href = "index.html";
+                window.location.href = "#/home";
 
 
             })
@@ -37,6 +37,7 @@ angular.module('Flivess').controller('registerCtl', ['$scope', '$http', '$cookie
             $scope.alert.message="Passwords  dont match";
             //$window.alert("Passwords don't match");
         }
+
     };
 
 
