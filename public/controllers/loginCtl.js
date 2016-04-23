@@ -12,6 +12,10 @@ angular.module('Flivess').controller('loginCtl', ['$scope', '$http', '$cookies',
             console.log(response);
             $cookies.putObject('user',response);
             window.location.href = "#/home";
-        })
+        }).error(function (response) {
+                     $scope.alertReg = true;
+                     $scope.alert.message="Username or Password are incorrect";
+       
+                });
     }
 }]);
