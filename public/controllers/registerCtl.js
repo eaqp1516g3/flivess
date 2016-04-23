@@ -19,7 +19,13 @@ angular.module('Flivess').controller('registerCtl', ['$scope', '$http', '$cookie
                 window.location.href = "index.html";
 
 
-            })
+            }).error(function (response) {
+
+
+                     $scope.alertReg = true;
+                     $scope.alert.message="Username already exists";
+       
+                });
         }
         if($scope.user.username=='' || $scope.user.email=='' || $scope.user.password==''){
             $scope.alertReg = true;

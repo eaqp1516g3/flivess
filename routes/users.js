@@ -41,29 +41,73 @@ module.exports = function (app) {
         })
     }
 
-    //POST - Add User in DB
-    addUser = function (req, res) {
+    //POST - Add User 
+        addUser = function (req, res) {
         console.log('POST');
         console.log(req.body);
+        result = res;
+        request = req;
 
-          var users = new User({
-                    username: req.body.username,
-                    fullname: req.body.fullname,
-                    email: req.body.email,
-                    password: req.body.password,
+        var u = [];
+        var u1;
+        var u2;
+
+
+       var username = req.body.username;
+
+        
+        User.find({username: username}, function (err, user) {
+            console.log (user);
+
+
+            if (user == "") {
+                u1 = '"' + req.body.username + '"';
+                console.log(u1 + u2 );
+                checkregister(u1, u2);
+            }
+            else {
+                var user = JSON.stringify(user);
+                var res = user.split(",");
+                console.log("aqui el res esta con el split"+res);
+
+                u = res[1].split(":");
+                u2 = u[1];
+                u1 = '"' + req.body.username + '"';
+                checkregister(u1, u2);
+            }
+            
+
+        });
+
+    };
+
+    function checkregister(u1, u2) {
+
+        if (u1 == u2) {
+            return result.status(409).json("usuario " + u1 + " ya existe");
+        }
+        else {
+                var users = new User({
+                    username: request.body.username,
+                    fullname: request.body.fullname,
+                    email: request.body.email,
+                    password: request.body.password,
                     level: 0,
-                    age: req.body.age,
-                    sex:req.body.sex,
-                    weight:req.body.weight,
-                    height:req.body.height,
+                    age: request.body.age,
+                    sex:request.body.sex,
+                    weight:request.body.weight,
+                    height:request.body.height,
                 })
 
             users.save(function (err, users) {
-                if (err) return res.send(500, err.message);
-                res.status(200).json(users);
+                if (err) 
+                return result.send(500, err.message);
+                result.status(200).json(users);
 
             });
+        }
     };
+
 
 
     //PUT - Update a register already exists
