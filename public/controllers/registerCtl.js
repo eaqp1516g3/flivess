@@ -7,47 +7,42 @@ angular.module('Flivess').controller('registerCtl', ['$scope', '$http', '$cookie
 
 
 
-
-
-
     $scope.registerUser = function(){
+
+        $scope.alert.message="";
+
         console.log("USUARIO: " + $scope.user);
-        if($scope.user.password == $scope.reenterpass && $scope.user.username!='' && $scope.user.email!='' && $scope.user.password!=''){
-            $http.post(base_url_prod+'/user', $scope.user).success(function (response){
+        if($scope.user.password == $scope.reenterpass && !angular.isUndefined($scope.user.username) && !angular.isUndefined($scope.user.email) && !angular.isUndefined($scope.user.password)){
+            $http.post(base_url_prod+'/user', $scope.user).success(function(response){
+                console.log($scope.user.username);
                 $cookies.putObject('user',response);
                 $scope.alert.message="";
-                window.location.href = "index.html";
+                window.location.href = "#/home";
+            }).error(function (response) {
+                     $scope.alertReg = true;
+                     $scope.alert.message="Username already exists";
+       
+                });
 
-
-            })
         }
-        if($scope.user.username=='' || $scope.user.email=='' || $scope.user.password==''){
+       if(angular.isUndefined($scope.user.username)||angular.isUndefined($scope.user.email) || angular.isUndefined($scope.user.password)){
             $scope.alertReg = true;
-            $scope.alert.message="The fields with * are mandatory";
+            $scope.alert.message= "Fields uncomplete";
 
-        }
-
-        if($scope.user.password == $scope.reenterpass){
-            $scope.alertReg = false;
-            $scope.alert.message="";
         }
 
         else{
             $scope.alertReg=true;
-            $scope.alert.message="Passwords  dont match";
-            //$window.alert("Passwords don't match");
+            $scope.alert.message="Passwords dont match";
         }
+
     };
-
-
 
 
     $scope.closeAlert=function(){
         $scope.alertReg=false;
         $scope.alert.message="";
     }
-
-
 
 
 }]);
