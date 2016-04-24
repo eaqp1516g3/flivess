@@ -79,15 +79,24 @@ module.exports = function (app) {
     
     //DELETE - Delete a User with specified ID
     deleteFriend = function (req, res) {
-        return Friend.findById(req.params.id, function (err, friend) {
-            console.log('DELETE usuario');
-            return friend.remove(function (err) {
-                if (!err) {
-                    console.log("usuario eliminado");
-                    return res.send('');
-                } else {
-                    console.log(err);
-                }
+
+        User.findOne({username: req.params.friend}, function (err, data) {
+            console.log(data._id);
+            var id_friend = data._id;
+            console.log(id_friend);
+
+            Friend.findOne({username: req.params.username, friend:id_friend}, function (err, friend) {
+                console.log('DELETE usuario');
+                console.log(friend);
+                friend.remove(function (err) {
+                    if (!err) {
+                        console.log("usuario eliminado");
+                        return res.send('');
+                    } else {
+                        console.log(err);
+                    }
+                });
+
             });
         });
     }
@@ -99,6 +108,6 @@ module.exports = function (app) {
     app.get('/friends/:username', findFriends);
     app.get('/friends/:username/:friend',isFriend);
     app.post('/addfriend', addFriend);
-    app.delete('/friend/:id', deleteFriend);
+    app.delete('/friend/:username/:friend', deleteFriend);
 
 }
