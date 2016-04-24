@@ -41,13 +41,15 @@ angular.module('Flivess').controller('indexCtl', ['$scope', '$http', '$cookies',
 
     $scope.selected = undefined;
 
-    $scope.ngModelOptionsSelected = function(value) {
-        if (arguments.length) {
-            _selected = value.username;
-        } else {
-            return _selected;
+    $scope.onSelect = function ($item, $model, $label) {
 
-        }
+        window.location.href = "#/profile/" + $model.username;
+        $scope.$item = $item;
+        $scope.$model = $model;
+        $scope.$label = $label;
+        console.log($model);
+        $scope.userSelected = $model.username;
+
     };
 
     $scope.modelOptions = {
