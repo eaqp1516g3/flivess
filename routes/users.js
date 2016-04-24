@@ -138,7 +138,7 @@ module.exports = function (app) {
 
     //DELETE - Delete a User with specified ID
     deleteUser = function (req, res) {
-        return User.findById(req.params.id, function (err, users) {
+        return User.findOne(req.params.username, function (err, users) {
             console.log('DELETE usuario');
             return users.remove(function (err) {
                 if (!err) {
@@ -157,5 +157,5 @@ module.exports = function (app) {
     app.get('/user/:id', findById);
     app.get('/users/user/:username',findbyName);
     app.put('/user/:id', updateUser);
-    app.delete('/user/:id', deleteUser);
+    app.delete('/user/:username', deleteUser);
 }
