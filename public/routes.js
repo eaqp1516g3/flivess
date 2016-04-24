@@ -2,7 +2,7 @@
  * Created by irkalla on 14.04.16.
  */
 // configure our routes
-angular.module('Flivess', ['ngRoute', 'ngCookies','ui.bootstrap']).config(function($routeProvider) {
+angular.module('Flivess', ['ngRoute', 'ngCookies','ui.bootstrap','angularModalService', 'ngAnimate']).config(function($routeProvider) {
     console.log("EN ROUTES.JS");
     $routeProvider
 
