@@ -1,0 +1,16 @@
+<ion-view view-title="Mensajes">
+  <ion-content>
+    <ion-list>
+      <ion-item name="message-detail" class="item-remove-animate item-avatar item-icon-right" ng-repeat="user in users" type="item-text-wrap" href="#/tab/messages/{{user.username}}">
+        <img ng-src="https://pbs.twimg.com/profile_images/452381666649313280/1Y_pVkyh.jpeg">
+        <h2>{{user.username}}</h2>
+        <p>{{user.email}}</p>
+        <i class="icon ion-chevron-right icon-accessory"></i>
+
+        <ion-option-button class="button-assertive" ng-click="remove(chat)">
+          Delete
+        </ion-option-button>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>
