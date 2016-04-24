@@ -28,6 +28,7 @@ angular.module('Flivess').controller('indexCtl', ['$scope', '$http', '$cookies',
     $scope.checkNavBar();
 
     $scope.logOut = function() {
+        console.log("DENTRO DEL LOGOUT");
         $cookies.remove('user');
     };
 //Search functions

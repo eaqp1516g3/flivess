@@ -4,16 +4,14 @@
 </head>
 <body>
 
-
-<div class="jumbotron">
-    <div class="container">
-        <h1>Friends</h1>
-
-
-    </div>
-</div>
 <div class="container">
-
+    <table class="table">
+        <thead>
+        <tr>
+            <th>FRIENDS</th>
+        </tr>
+        </thead>
+    </table>
 
     <table class="table">
         <thead>
@@ -23,13 +21,16 @@
         </tr>
         </thead>
         <tbody>
+
         <tr ng-repeat="friend in friends">
-            <td>{{friend.friend.username}}</td>
-            <td><button class="btn btn-danger" ng-click="remove(friend._id)">Remove</button></td>
+            <td class="list-group">
+                <a ng-click="profile(friend.friend.username)" class="list-group-item"  > {{friend.friend.username}}</a>
+            </td>
+            <td><button class="btn btn-danger" ng-click="remove(friend.friend.username)">Remove</button></td>
         </tr>
         </tbody>
     </table>
 </div>
-{{hello}}
 </body>
 </html>
+

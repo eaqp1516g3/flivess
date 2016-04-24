@@ -1,26 +1,24 @@
 /**
  * Created by aitor on 19/4/16.
  */
-angular.module('Flivess').controller('profileCtl', ['$scope', '$http', '$cookies', 'ModalService', function($scope, $http, $cookies, ModalService) {
+angular.module('Flivess').controller('profileCtl', ['$scope', '$http', '$cookies', 'ModalService', '$routeParams', function($scope, $http, $cookies, ModalService, $routeParams) {
     console.log("DENTRO DE CONTROLOADOR de profile.html");
     var base_url_prod="http://localhost:3000"
     var userLogged = $cookies.getObject('user');
     console.log(userLogged.username);
-    var friend="pepe1";
+    var friend= new Object();
+
+
 
     var refresh = function() {
-        $http.get(base_url_prod+ '/friends/' + userLogged.username + "/" + friend).success(function (response) {
-            console.log(response);
-            if(response==true){
-                $scope.show=false;
-                console.log("EL SHOW:" + $scope.show);
-            }
-            else{
-                $scope.show=true;
-                console.log("EL SHOW:" + $scope.show);
-            }
+        $http.get(base_url_prod+ '/users/user/' + $routeParams.friend).success(function (response) {
+
+            friend = response[0];
+            $scope.friend= friend;
+            isFriend();
 
         });
+
     }
     refresh();
 
@@ -29,19 +27,15 @@ angular.module('Flivess').controller('profileCtl', ['$scope', '$http', '$cookies
         console.log("Dentro de addFriend");
         var amigos = new Object();
         amigos.username = userLogged.username;
-        amigos.friend = friend;
+        amigos.friend = friend.username;
         $http.post(base_url_prod+'/addfriend', amigos).success(function(response) {
-            console.log(response);
-            $scope.show=false;
-            console.log("EL SHOW:" + $scope.show);
+            isFriend();
         });
     }
 
     $scope.removeFriend = function () {
-        console.log(id);
-        $http.delete('/friend/' + id).success(function () {
-            $scope.show=true;
-            console.log("EL SHOW:" + $scope.show);
+        $http.delete('/friend/' + userLogged.username + "/" + friend.username).success(function () {
+            isFriend();
         });
     };
 
@@ -52,7 +46,7 @@ angular.module('Flivess').controller('profileCtl', ['$scope', '$http', '$cookies
             controller: "modalMessageCtl",
             backdrop: true,
             inputs: {
-                friend: friend
+                friend: friend.fullname
             }
         }).then(function(modal) {
             modal.element.modal();
@@ -69,6 +63,22 @@ angular.module('Flivess').controller('profileCtl', ['$scope', '$http', '$cookies
         message.sender = userLogged.username;
         message.receiver = friend;
         $http.post(base_url_prod+'/addmessage', message).success(function() {
+        });
+    }
+
+
+    var isFriend = function () {
+        $http.get(base_url_prod+ '/friends/' + userLogged.username + "/" + friend.username).success(function (response) {
+            console.log(response);
+            if(response==true){
+                $scope.show=false;
+                console.log("EL SHOW:" + $scope.show);
+            }
+            else{
+                $scope.show=true;
+                console.log("EL SHOW:" + $scope.show);
+            }
+
         });
     }
 }]);

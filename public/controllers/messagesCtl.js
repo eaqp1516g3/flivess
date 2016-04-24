@@ -3,7 +3,7 @@
  */
 
 
-angular.module('Flivess').controller('messagesCtl', ['$scope', '$http','$cookies', function($scope, $http, $cookies) {
+angular.module('Flivess').controller('messagesCtl', ['$scope', '$http','$cookies', '$location', function($scope, $http, $cookies, $location) {
 
     var base_url_prod="http://localhost:3000"
     var userLogged = $cookies.getObject('user');
@@ -46,5 +46,9 @@ angular.module('Flivess').controller('messagesCtl', ['$scope', '$http','$cookies
             });
         });
     };
+
+    $scope.profile = function (name) {
+        $location.path('/profile/' + name);
+    }
 
 }]);

@@ -20,8 +20,13 @@
             <a ng-click="conversacion(user.username)" class="list-group-item"  ng-repeat="user in users"> {{user.fullname}}</a>
         </div>
     </div>
+
     <div class="col-md-9">
-        <h1 class="text-center"><strong>{{usuarioC}}</strong></h1>
+        <tr>
+            <td class="list-group">
+                <a ng-click="profile(usuarioC)" class="list-group-item text-center"><h1>{{usuarioC}}</h1></a>
+            </td>
+        </tr>
         <div class="media msg" ng-repeat="msg in msgs">
             <a class="pull-left" href="#">
                 <img class="media-object" data-src="" alt="64x64" style="width: 32px; height: 32px;" src="">

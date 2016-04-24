@@ -27,7 +27,7 @@ angular.module('Flivess', ['ngRoute', 'ngCookies','ui.bootstrap','angularModalSe
             controller  : 'profileEditCtl'
         })
 
-        .when('/profile', {
+        .when('/profile/:friend', {
             templateUrl : 'views/profile.html',
             controller  : 'profileCtl'
         })
