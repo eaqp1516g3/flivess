@@ -1,10 +1,13 @@
 /**
  * Created by irkalla on 20.04.16.
  */
+angular.module('Flivess').controller('indexCtl', ['$scope', '$http', '$cookies', '$location', '$location',  function($scope, $http,$cookies,$location) {
+    var base_url_prod="http://localhost:3000"
+    //var base_url_prod = "http://147.83.7.157:8080";
 
-
-var base_url_prod="http://localhost:3000"
-angular.module('Flivess').controller('indexCtl', ['$scope', '$http', '$cookies',  function($scope, $http,$cookies) {
+    $scope.perfil = function () {
+        $location.path('/profile/miperfil');
+    }
 
 
     //Nav controller
@@ -15,7 +18,7 @@ angular.module('Flivess').controller('indexCtl', ['$scope', '$http', '$cookies',
             $scope.navLogged = true;
             $scope.navInit = false;
             console.log('1');
-
+            $location.path('/home');
         }
         else{
             $scope.navInit = true;

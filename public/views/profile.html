@@ -11,12 +11,16 @@
 
         <div class="row">
             <div class="col-md-9"><h1>{{friend.fullname}}</h1></div>
-            <div class="col-md-3">
+            <div class="col-md-3" ng-show="myprofile">
                 <br>
                 <a data-toggle="tooltip modal" type="button" class="btn btn-lg btn-primary" ng-click="showModel()">Send <i class="glyphicon glyphicon-envelope"></i></a>
                 <button data-toggle="tooltip" type="button" class="btn btn-lg btn-warning" ng-click="addFriend()" ng-show="show">Add <span class="glyphicon glyphicon-user"></span></button>
                 <button data-toggle="tooltip" type="button" class="btn btn-lg btn-danger" ng-click="removeFriend()" ng-show="!show">Remove <span class="glyphicon glyphicon-user"></span></button>
-          </div>
+            </div>
+            <div class="col-md-3" ng-show="!myprofile">
+                <br>
+                <a data-toggle="tooltip modal" type="button" class="btn btn-lg btn-warning" href="#/editprofile">Edit <i class="glyphicon glyphicon-user"></i></a>
+            </div>
         </div>
         <div>
             <div class="row">
