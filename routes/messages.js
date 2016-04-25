@@ -5,30 +5,26 @@ module.exports = function (app) {
 
     getMessagesByUser = function(req,res) {
 
-        var id_sender="";
-        var id_user="";
 
         console.log("getuserbymessage\n");
         console.log(req.params.username);
         console.log(req.params.sender);
-        User.findOne({username: req.params.sender}, function (err, data) {
-            console.log(data._id);
-            id_sender = data._id;
-            User.findOne({username: req.params.username}, function (err, data2) {
-                console.log(data2._id);
-                id_user = data2._id;
 
-            console.log("IDS GET");
-            Message.find({$or:[{receiver: req.params.username,sender: id_sender},{receiver: req.params.sender,sender: id_user}]},function(err,message){
-                console.log(message);
-                User.populate(message,{path:"sender"},function(err,m){
-                    res.status(200).send(message);
-                });
 
+        console.log("IDS GET");
+        Message.find({
+            $or: [{receiver: req.params.username, sender: req.params.sender}, {
+                receiver: req.params.sender,
+                sender: req.params.username
+            }]
+        }, function (err, message) {
+            console.log(message);
+            User.populate(message, {path: "sender"}, function (err, m) {
+                res.status(200).send(message);
             });
-            });
+
+
         });
-
 
 
     };
@@ -63,16 +59,13 @@ module.exports = function (app) {
             
             else {
 
-                User.findOne({username: req.body.sender}, function (err, data) {
-                    console.log(data._id);
-                    var id_sender= data._id;
-                    console.log(id_sender);
+
                 
 
                 
                     var message = new Message({
                         receiver: req.body.receiver,
-                        sender: id_sender,
+                        sender: req.body.sender,
                         text: req.body.text,
 
                     })
@@ -83,7 +76,7 @@ module.exports = function (app) {
                     });
 
 
-                });
+
 
             }
 
@@ -93,14 +86,38 @@ module.exports = function (app) {
 
     //GET - get users that wrotes a determinate user
     findMessages = function (req, res) {
-        console.log (req.params.username);
+        var arr1;
+        var arr2;
+        console.log(req.params.username);
         Message.find({receiver: req.params.username}).distinct("sender", function (err, message) {
-             User.find({_id: {$in: message}}, function (err, m) {
-                res.status(200).send(m);
-                console.log(m);
-            });
+
+                arr1 = message;
+                //res.status(200).send(m);
+                console.log(arr1);
+
+
+
+                    Message.find({sender: req.params.username}).distinct("receiver", function (err, message2) {
+                        console.log("MENSAJE2:"+message2);
+
+                            arr2= message2;
+                            var result = arr1.concat(arr2);
+                            console.log(result);
+                            var mySet = new Set(result);
+                            var final = Array.from(mySet);
+                            console.log(final);
+                            console.log(mySet);
+                            User.find({username: {$in:final }}, function(err,users){
+                                console.log("USUARIOS:"+users);
+                                res.status(200).send(users);
+                            });
+
+
+                    });
+
         });
-    };
+
+};
 
 
     

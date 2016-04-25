@@ -7,7 +7,7 @@ var messageSchema = new Schema({
     receiver:    { type: String},
     text :  {type: String},
     createdAt: {type: Date, default: Date.now},
-    sender: { type: Schema.ObjectId, ref: "User" },
+    sender: { type: String },
      }, {
     versionKey: false // You should be aware of the outcome after set to false (elimina __V)
 });
