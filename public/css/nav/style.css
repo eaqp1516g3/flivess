@@ -1,6 +1,7 @@
 .transparent {
     background: rgba(19, 35, 47, 0.9);
-    opacity:0.9
+    opacity:0.9;
+    z-index: 2050;
 }
 
 
@@ -21,7 +22,7 @@
 }
 
 .typeahead-demo .custom-popup-wrapper > .dropdown-menu {
-    position: static;
+    position: relative;
     float: none;
     display: block;
     min-width: 160px;
@@ -29,8 +30,7 @@
     border: none;
     border-radius: 0;
     box-shadow: none;
+    z-index: -1;
+
 }
 
-.registration {
-    font-size: 18px;
-}
