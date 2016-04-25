@@ -2,8 +2,8 @@
  * Created by aitor on 19/4/16.
  */
 angular.module('Flivess').controller('profileCtl', ['$scope', '$http', '$cookies', 'ModalService', '$routeParams', function($scope, $http, $cookies, ModalService, $routeParams) {
-    var base_url_prod="http://localhost:3000"
-    //var base_url_prod = "http://147.83.7.157:8080";
+    //var base_url_prod="http://localhost:3000"
+    var base_url_prod = "http://147.83.7.157:8080";
 
 
     console.log("DENTRO DE CONTROLOADOR de profile.html");

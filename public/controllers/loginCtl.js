@@ -4,8 +4,8 @@
 
 angular.module('Flivess').controller('loginCtl', ['$scope', '$http', '$cookies', function($scope, $http, $cookies)  {
     console.log("DENTRO DE loginCtl");
-    var base_url_prod="http://localhost:3000"
-    //var base_url_prod = "http://147.83.7.157:8080";
+    //var base_url_prod="http://localhost:3000"
+    var base_url_prod = "http://147.83.7.157:8080";
 
 
     $scope.login = function () {
