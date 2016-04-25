@@ -43,7 +43,7 @@ angular.module('Flivess').controller('profileCtl', ['$scope', '$http', '$cookies
     }
 
     $scope.removeFriend = function () {
-        $http.delete('/friend/' + userLogged.username + "/" + friend.username).success(function () {
+        $http.delete(base_url_prod+'/friend/' + userLogged.username + "/" + friend.username).success(function () {
             isFriend();
         });
     };
