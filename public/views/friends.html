@@ -24,7 +24,7 @@
 
         <tr ng-repeat="friend in friends">
             <td class="list-group">
-                <a ng-click="profile(friend.friend.username)" class="list-group-item"  > {{friend.friend.username}}</a>
+                <a href=""  ng-click="profile(friend.friend.username)" class="list-group-item"  > {{friend.friend.username}}</a>
             </td>
             <td><button class="btn btn-danger" ng-click="remove(friend.friend.username)">Remove</button></td>
         </tr>

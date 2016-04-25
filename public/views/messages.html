@@ -24,7 +24,7 @@
     <div class="col-md-9">
         <tr>
             <td class="list-group">
-                <a ng-click="profile(usuarioC)" class="list-group-item text-center"><h1>{{usuarioC}}</h1></a>
+                <a href="" ng-click="profile(usuarioC)" class="list-group-item text-center "><h1>{{usuarioC}}</h1></a>
             </td>
         </tr>
         <div class="media msg" ng-repeat="msg in msgs">
@@ -34,7 +34,7 @@
             <div class="media-body">
                 <small class="pull-right time"><i class="fa fa-clock-o"></i> {{msg.createdAt}}</small>
 
-                <h5 class="media-heading">{{msg.sender.username}}</h5>
+                <h5 class="media-heading">{{msg.sender}}</h5>
                 <small class="col-lg-10">{{msg.text}}</small>
             </div>
         </div>
