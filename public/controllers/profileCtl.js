@@ -51,7 +51,9 @@ angular.module('Flivess').controller('profileCtl', ['$scope', '$http', '$cookies
         }).then(function(modal) {
             modal.element.modal();
             modal.close.then(function(result) {
-                sendMessage(result.message);
+                if(result.message!=null){
+                    sendMessage(result.message);
+                }
             });
         });
 
@@ -61,7 +63,7 @@ angular.module('Flivess').controller('profileCtl', ['$scope', '$http', '$cookies
         var message = new Object();
         message.text = msg;
         message.sender = userLogged.username;
-        message.receiver = friend;
+        message.receiver = friend.username;
         $http.post(base_url_prod+'/addmessage', message).success(function() {
         });
     }
