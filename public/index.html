@@ -12,7 +12,7 @@
 </head>
 <body ng-controller="indexCtl">
 
-    <nav class="navbar transparent navbar-inverse" ng-show="navLogged">
+    <nav class="navbar navbar-default navbar-fixed-top transparent navbar-inverse" ng-show="isLogged">
         <div class="container-fluid">
             <div class="navbar-header">
                 <a class="navbar-brand">Flivess</a>
@@ -42,20 +42,17 @@
     </nav>
 
 
-    <nav class="navbar transparent navbar-inverse" ng-show="navInit">
+    <nav class="navbar transparent2 navbar-inverse navbar-fixed-bottom" ng-show="!isLogged">
         <div class="container-fluid">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="#/">Flivess</a>
-            </div>
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="#/about" ><span class=""></span> About</a></li>
                 <li><a href="#/contact" ><span class=""></span> Contact</a></li>
             </ul>
         </div>
     </nav>
-
-    <div ng-view></div>
-
+    <div style="margin-top: 70px;">
+        <div ng-view></div>
+    </div>
 
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
     <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>

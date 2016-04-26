@@ -49,4 +49,12 @@ angular.module('Flivess', ['ngRoute', 'ngCookies','ui.bootstrap','angularModalSe
         .when('/about', {
             templateUrl : 'views/about.html'
         })
-});
+})
+    .run(function ($rootScope, $cookies) {
+        if(angular.isUndefined($cookies.getObject('user'))){
+            $rootScope.isLogged=false;
+        }
+        else{
+            $rootScope.isLogged=true;
+        }
+    });

@@ -1,9 +1,13 @@
 .transparent {
     background: rgba(19, 35, 47, 0.9);
-    opacity:0.9;
+    opacity: 0.9;
     z-index: 2050;
 }
-
+.transparent2 {
+    background: rgba(19, 35, 47, 0.9);
+    opacity: 0.9;
+    z-index: 2050;
+}
 
 
 .typeahead-demo .custom-popup-wrapper {
