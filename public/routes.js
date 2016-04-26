@@ -13,7 +13,7 @@ angular.module('Flivess', ['ngRoute', 'ngCookies','ui.bootstrap','angularModalSe
         })
 
         .when('/friends', {
-            templateUrl : 'views/friends.html',
+            templateUrl : 'views/following.html',
             controller  : 'friendsCtl'
         })
 

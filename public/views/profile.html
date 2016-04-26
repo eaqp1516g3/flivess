@@ -14,8 +14,8 @@
             <div class="col-md-3" ng-show="myprofile">
                 <br>
                 <a data-toggle="tooltip modal" type="button" class="btn btn-lg btn-primary" ng-click="showModel()">Send <i class="glyphicon glyphicon-envelope"></i></a>
-                <button data-toggle="tooltip" type="button" class="btn btn-lg btn-warning" ng-click="addFriend()" ng-show="show">Add <span class="glyphicon glyphicon-user"></span></button>
-                <button data-toggle="tooltip" type="button" class="btn btn-lg btn-danger" ng-click="removeFriend()" ng-show="!show">Remove <span class="glyphicon glyphicon-user"></span></button>
+                <button data-toggle="tooltip" type="button" class="btn btn-lg btn-warning" ng-click="addFriend()" ng-show="show">Follow <span class="glyphicon glyphicon-user"></span></button>
+                <button data-toggle="tooltip" type="button" class="btn btn-lg btn-danger" ng-click="removeFriend()" ng-show="!show">Unfollow <span class="glyphicon glyphicon-user"></span></button>
             </div>
             <div class="col-md-3" ng-show="!myprofile">
                 <br>
@@ -32,27 +32,27 @@
                     <table class="table table-user-information">
                         <tbody>
                         <tr>
-                            <td>Username</td>
+                            <td><strong>Username</strong> </td>
                             <td>{{friend.username}}</td>
                         </tr>
                         <tr>
-                            <td>Full name</td>
+                            <td><strong>Full name</strong></td>
                             <td>{{friend.fullname}}</td>
                         </tr>
                         <tr>
-                            <td>Email</td>
+                            <td><strong>Email</strong></td>
                             <td>{{friend.email}}</td>
                         </tr>
                         <tr>
-                            <td>Age</td>
+                            <td><strong>Age</strong></td>
                             <td>{{friend.age}}</td>
                         </tr>
                         <tr>
-                            <td>Weight</td>
+                            <td><strong>Weight</strong></td>
                             <td>{{friend.weight}}</td>
                         </tr>
                         <tr>
-                            <td>Height</td>
+                            <td><strong>Height</strong></td>
                             <td>{{friend.height}}</td>
                         </tr>
                         </tbody>
