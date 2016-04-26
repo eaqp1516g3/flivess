@@ -44,8 +44,8 @@ routes = require('./routes/login')(app);
 var server = require('http').Server(app);
 
 // Start server
-server.listen(3000, function() {
-    console.log("Node server running on http://localhost:3000");
+server.listen(8080, function() {
+    console.log("Node server running on http://localhost:8080");
 });
 
 
