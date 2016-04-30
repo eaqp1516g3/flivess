@@ -9,22 +9,9 @@
 
     <table class="table">
         <thead>
-        <tr>
-            <th><h1>Messages</h1></th>
-        </tr>
+            <th><h1>Conversations</h1></th>
         </thead>
     </table>
-
-    <table class="table">
-
-        <thead>
-            <tr>
-                <th>Conversations</th>
-            </tr>
-        </thead>
-
-    </table>
-
 
     <div class="col-md-3">
         <div class="list-group">
@@ -32,41 +19,47 @@
         </div>
     </div>
 
-    <div class="col-md-9">
-        <tr>
-            <td class="list-group">
-                <a href="" ng-click="profile(usuarioC)" class="list-group-item text-center "><h1>{{usuarioC}}</h1></a>
-            </td>
-        </tr>
-        <div class="media msg" ng-repeat="msg in msgs">
-            <a class="pull-left" href="#">
-                <img class="media-object" data-src="" alt="64x64" style="width: 32px; height: 32px;" src="">
-            </a>
-            <div class="media-body">
-                <small class="pull-right time"><i class="fa fa-clock-o"></i> {{msg.createdAt}}</small>
+    <div class="col-md-9" ng-show="conv">
+        <div>
+                <a href="" ng-click="profile(usuarioC)" class="list-group-item text-center "><h4>{{usuarioC}}</h4></a>
+        </div >
 
-                <h5 class="media-heading">{{msg.sender}}</h5>
-                <small class="col-lg-10">{{msg.text}}</small>
+        <div style="position: absolute;
+    top: 80px;
+    bottom: -270px;
+    right: 0;
+    overflow-y: scroll;">
+            <div class="media msg" ng-repeat="msg in msgs">
+                <a class="pull-left" href="#">
+                    <img class="media-object" data-src="" alt="64x64" style="width: 32px; height: 32px;" src="">
+                </a>
+                <div class="media-body">
+                    <small class="pull-right time"><i class="fa fa-clock-o"></i> {{msg.createdAt}}</small>
+
+                    <h5 class="media-heading">{{msg.sender}}</h5>
+                    <small class="col-lg-10">{{msg.text}}</small>
+                </div>
             </div>
         </div>
+        <br>
+        <br>
 
-        <br>
-        <br>
-        <table class="table">
-            <thead>
-            <tr>
-                <th>Write a message...</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td><input class="form-control" ng-model="message.text"></td>
-                <td><button class="btn btn-primary" ng-click="sendMessage(usuarioC)">Send</button></td>
-            </tr>
-            </tbody>
-        </table>
+        <div style="position: fixed; bottom: 0; width: 75%;">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Write a message...</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><input class="form-control" ng-model="message.text"></td>
+                    <td><button class="btn btn-primary" ng-click="sendMessage(usuarioC)">Send</button></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
-
 </div>
 
 </body>

@@ -22,6 +22,7 @@ angular.module('Flivess').controller('messagesCtl', ['$scope', '$http','$cookies
 
     $scope.conversacion = function (user) {
         $http.get(base_url_prod+ '/messages/' + userLogged.username +'/' + user).success(function (response) {
+            $scope.conv = true;
             console.log("Messages received");
             console.log(response);
             $scope.usuarioC = user;
