@@ -96,6 +96,7 @@ module.exports = function (app) {
             return result.status(409).json("usuario " + u1 + " ya existe");
         }
         else {
+            console.log("he comprobado que no existe")
                 var users = new User({
                     username: request.body.username,
                     fullname: request.body.fullname,
@@ -106,11 +107,18 @@ module.exports = function (app) {
                     sex:request.body.sex,
                     weight:request.body.weight,
                     height:request.body.height,
+                    facebook_id:'',
+                    token:'',
                 })
+            console.log(users);
 
             users.save(function (err, users) {
-                if (err) 
-                return result.send(500, err.message);
+                if (err) {
+                    console.log('ERROR');
+                    console.log(err);
+                    return result.send(500, err.message);
+                }
+
                 result.status(200).json(users);
 
             });
