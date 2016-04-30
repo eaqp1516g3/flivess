@@ -6,7 +6,7 @@ angular.module('Flivess').controller('profileEditCtl', ['$scope', '$http', '$coo
     var base_url_prod="http://localhost:8080"
     //var base_url_prod = "http://147.83.7.157:8080";
 
-    var userLogged = $cookies.getObject('user');2
+    var userLogged = $cookies.getObject('user');
     console.log(userLogged.username);
 
     $http.get(base_url_prod + '/user/' + userLogged._id).success(function(response){
