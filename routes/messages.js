@@ -22,11 +22,7 @@ module.exports = function (app) {
             User.populate(message, {path: "sender"}, function (err, m) {
                 res.status(200).send(message);
             });
-
-
         });
-
-
     };
     
 
@@ -55,33 +51,18 @@ module.exports = function (app) {
             if (err) {
                 res.send(401, err.message);
             }
-
-            
             else {
-
-
-                
-
-                
                     var message = new Message({
                         receiver: req.body.receiver,
                         sender: req.body.sender,
                         text: req.body.text,
-
-                    })
-
+                    });
                     message.save(function (err, message) {
                         if (err) return res.send(500, err.message);
                         res.status(200).json(message);
                     });
-
-
-
-
             }
-
         });
-
     };
 
     //GET - get users that wrotes a determinate user

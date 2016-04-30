@@ -41,6 +41,15 @@ module.exports = function (app) {
         })
     }
 
+    //GET - Return a user with a specified facebook_id
+    findbyFacebookid = function (req,res) {
+        User.find({facebook_id: req.params.facebook_id}, function (err,user){
+            if (err) return res.send(500, err.message);
+            console.log("busco a"+ req.params.facebook_id);
+            res.status(200).json(user);
+        })
+    }
+
     //POST - Add User 
         addUser = function (req, res) {
         console.log('POST');
@@ -156,6 +165,7 @@ module.exports = function (app) {
     app.post('/user/', addUser);
     app.get('/user/:id', findById);
     app.get('/users/user/:username',findbyName);
+    app.get('/users/user/facebook/:facebook_id',findbyFacebookid);
     app.put('/user/:id', updateUser);
     app.delete('/user/:username', deleteUser);
 }

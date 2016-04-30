@@ -1,10 +1,12 @@
 var express = require("express");
-var mongojs= require("mongojs");
 var methodOverride  = require("method-override");
 var mongoose = require('mongoose');
 var bodyParser=require('body-parser');
+var session = require("express-session");
+var passport = require('passport');
 
 
+require('./config/passport')(passport); // pass passport for configuration
 
 require('mongoose-middleware').initialize(mongoose);
 mongoose.connect('mongodb://localhost/flivess', function(err, res) {
@@ -15,15 +17,25 @@ mongoose.connect('mongodb://localhost/flivess', function(err, res) {
 var app = express ();
 app.all('/*', function(req, res, next) {
     // CORS headers
-    res.header("Access-Control-Allow-Origin", "*"); // restrict it to the required domain
+    res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With, Access-Control-Allow-Origin');
+    res.header("Access-Control-Max-Age", "86400"); // 24 hours
+
+    // intercept OPTIONS method
+    if ('OPTIONS' == req.method) {
+        res.send(200);
+    }
+    else {
+        next();
+    }
 });
 
-
-
-
+//configure passport object through config/passport.js
+app.use(session({ secret: 'zasentodalaboca' })); // session secret
+app.use(passport.initialize());
+app.use(passport.session()); // persistent login sessions
+//This goes before the routes are called
 
 
 app.use(bodyParser.urlencoded({ extended: false }));  
@@ -39,6 +51,7 @@ routes = require('./routes/users')(app);
 routes = require('./routes/friends')(app);
 routes = require('./routes/messages')(app);
 routes = require('./routes/login')(app);
+routes = require('./routes/facebook')(app,passport);
 
 
 var server = require('http').Server(app);
@@ -47,6 +60,3 @@ var server = require('http').Server(app);
 server.listen(8080, function() {
     console.log("Node server running on http://localhost:8080");
 });
-
-
-

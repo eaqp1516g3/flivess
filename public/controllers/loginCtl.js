@@ -11,8 +11,8 @@ angular.module('Flivess').controller('loginCtl', ['$scope', '$http', '$cookies',
     checkLogged();
 
     console.log("DENTRO DE loginCtl");
-    //var base_url_prod="http://localhost:3000"
-    var base_url_prod = "http://147.83.7.157:8080";
+    var base_url_prod="http://localhost:8080"
+    //var base_url_prod = "http://147.83.7.157:8080";
     $rootScope.isLogged=false;
 
     $scope.login = function () {
@@ -25,7 +25,6 @@ angular.module('Flivess').controller('loginCtl', ['$scope', '$http', '$cookies',
         }).error(function (response) {
                      $scope.alertReg = true;
                      $scope.alert.message="Username or Password are incorrect";
-       
                 });
     }
 }]);

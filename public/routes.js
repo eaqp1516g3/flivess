@@ -42,6 +42,11 @@ angular.module('Flivess', ['ngRoute', 'ngCookies','ui.bootstrap','angularModalSe
             controller  : 'homeCtl'
         })
 
+        .when('/home/:facebook_id', {
+            templateUrl : 'views/home.html',
+            controller  : 'homeFacebookCtl'
+        })
+
         .when('/contact', {
             templateUrl : 'views/contact.html'
         })
