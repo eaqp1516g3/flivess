@@ -5,7 +5,6 @@
 angular.module('Flivess', ['ngRoute', 'ngCookies','ui.bootstrap','angularModalService', 'ngAnimate']).config(function($routeProvider) {
     console.log("EN ROUTES.JS");
     $routeProvider
-
     // route for the home page
         .when('/', {
             templateUrl : 'views/login.html',

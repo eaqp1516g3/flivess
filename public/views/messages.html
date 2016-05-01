@@ -6,29 +6,18 @@
 <body>
 
 <div class="container">
-
-    <table class="table">
-        <thead>
-            <th><h1>Conversations</h1></th>
-        </thead>
-    </table>
-
     <div class="col-md-3">
         <div class="list-group">
             <a href="" ng-click="conversacion(user.username)" class="list-group-item"  ng-repeat="user in users"> {{user.fullname}}</a>
         </div>
     </div>
+    <div class="col-md-1"></div>
+    <div class="col-md-8" ng-show="conv">
 
-    <div class="col-md-9" ng-show="conv">
-        <div>
-                <a href="" ng-click="profile(usuarioC)" class="list-group-item text-center "><h4>{{usuarioC}}</h4></a>
-        </div >
+        <a style="border: 1px solid grey; border-radius: 10px;" href="" ng-click="profile(usuarioC)" class="list-group-item text-center "><h4>{{usuarioC}}</h4></a>
 
-        <div style="position: absolute;
-    top: 80px;
-    bottom: -270px;
-    right: 0;
-    overflow-y: scroll;">
+
+        <div style="position: absolute; top: 70px; bottom: -430px; right: 12px; left: 12px; overflow-y: scroll; border: 1px solid grey; border-radius: 10px;">
             <div class="media msg" ng-repeat="msg in msgs">
                 <a class="pull-left" href="#">
                     <img class="media-object" data-src="" alt="64x64" style="width: 32px; height: 32px;" src="">
