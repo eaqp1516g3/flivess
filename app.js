@@ -4,6 +4,8 @@ var mongoose = require('mongoose');
 var bodyParser=require('body-parser');
 var session = require("express-session");
 var passport = require('passport');
+var formidable = require('formidable');
+var path = require("path");
 
 
 require('./config/passport')(passport); // pass passport for configuration
@@ -37,10 +39,16 @@ app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 //This goes before the routes are called
 
-
-app.use(bodyParser.urlencoded({ extended: false }));  
-app.use(bodyParser.json());  
+app.use(bodyParser());
+app.use(bodyParser({uploadDir:'./img'}));
+app.use(bodyParser.json({limit: '5mb'}));
+app.use(bodyParser.urlencoded({limit: '5mb'}));
+//app.use(bodyParser.urlencoded({ extended: false }));  
+//app.use(bodyParser.json());  
 app.use(methodOverride());
+
+
+
 
 
 app.use(express.static(__dirname + "/public")); // FRONT-END---> aqui es donde tendremos nuestro html y ccs e imagenes.
