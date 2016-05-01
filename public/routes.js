@@ -2,7 +2,7 @@
  * Created by irkalla on 14.04.16.
  */
 // configure our routes
-angular.module('Flivess', ['ngRoute', 'ngCookies','ui.bootstrap','angularModalService', 'ngAnimate']).config(function($routeProvider) {
+angular.module('Flivess', ['ngRoute', 'ngCookies','ui.bootstrap','angularModalService', 'ngAnimate', 'googlechart']).config(function($routeProvider) {
     console.log("EN ROUTES.JS");
     $routeProvider
     // route for the home page
@@ -52,6 +52,11 @@ angular.module('Flivess', ['ngRoute', 'ngCookies','ui.bootstrap','angularModalSe
 
         .when('/about', {
             templateUrl : 'views/about.html'
+        })
+
+        .when('/details/:id', {
+            templateUrl : 'views/raceDetails.html',
+            controller  : 'raceDetailsCtl'
         })
 })
     .run(function ($rootScope, $cookies) {

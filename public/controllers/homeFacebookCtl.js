@@ -1,7 +1,7 @@
 /**
  * Created by aitor on 30/4/16.
  */
-angular.module('Flivess').controller('homeFacebookCtl', ['$scope', '$http', '$cookies', '$routeParams', '$rootScope', function($scope, $http, $cookies, $routeParams, $rootScope) {
+angular.module('Flivess').controller('homeFacebookCtl', ['$scope', '$http', '$cookies', '$routeParams', '$rootScope', '$location', function($scope, $http, $cookies, $routeParams, $rootScope, $location) {
     var base_url_prod="http://localhost:8080"
     //var base_url_prod = "http://147.83.7.157:8080";
     $rootScope.isLogged=true;
@@ -13,6 +13,7 @@ angular.module('Flivess').controller('homeFacebookCtl', ['$scope', '$http', '$co
             console.log(response[0]);
             $cookies.putObject('user',response[0]);
         });
+        $location.path('/home');
     }
     loadUser();
 }]);

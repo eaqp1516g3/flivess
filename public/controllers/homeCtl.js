@@ -24,19 +24,25 @@ angular.module('Flivess').controller('homeCtl', ['$scope', '$http', '$rootScope'
                 {
                     path: route,
                     strokeColor: "#FF0000",
-                    strokeOpacity: 1.0,
-                    strokeWeight: 2
+                    strokeOpacity: 0.7,
+                    strokeWeight: 3
                 });
             path.setMap(map);
 
             var marker=new google.maps.Marker({
                 position:new google.maps.LatLng(data[0].coords.latitude,data[0].coords.longitude),
+                label: 'START'
             });
 
             marker.setMap(map);
 
+            var icon = {
+                url: "css/maps/flag2.png", // url
+                scaledSize: new google.maps.Size(50, 50), // scaled size
+            };
             var marker2=new google.maps.Marker({
                 position:new google.maps.LatLng(data[data.length-1].coords.latitude,data[data.length-1].coords.longitude),
+                icon: icon
             });
 
             marker2.setMap(map);
