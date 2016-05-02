@@ -23,7 +23,7 @@
                     <img class="media-object" data-src="" alt="64x64" style="width: 32px; height: 32px;" src="">
                 </a>
                 <div class="media-body">
-                    <small class="pull-right time"><i class="fa fa-clock-o"></i> {{msg.createdAt}}</small>
+                    <small class="pull-right time"><i class="fa fa-clock-o"></i> {{msg.createdAt|date:"dd/MM/yyyy 'at' h:mma"}}</small>
 
                     <h5 class="media-heading">{{msg.sender}}</h5>
                     <small class="col-lg-10">{{msg.text}}</small>

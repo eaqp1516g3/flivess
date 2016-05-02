@@ -1,4 +1,96 @@
 
+<i class="glyphicon glyphicon-refresh glyphicon-refresh-animate" id="loader"></i>
+<div class="container">
+    <link rel="stylesheet" href="../css/following/style.css">
+    <h1>Following</h1>
+    <hr>
+    <div class="row" id="userList">
+        <table class="table-responsive">
+            <thead>
+
+            </thead>
+            <tbody>
+            <tr style="cursor:pointer;" ng-repeat-start="u in users" ng-click="showDetail(u)" ng-class-odd="'alt'">
+                <td class="col-xs-1"><img title="{{u.friend.fullname}}" src="http://www.bedri.es/Rarezas_chorradas_y_curiosidades/Frases_historicas/Caretos/Mariano_Rajoy_Brey.jpg" class="img-thumbnail img-responsive img-circle"></td>
+                <td class="col-xs-2 cap">{{u.friend.username}}</td>
+                <td class="col-xs-2 cap">{{u.user.name.first}}</td>
+                <td class="col-xs-2 strong">{{u.user.username}}</td>
+                <td class="col-xs-2">{{u.user.phone}}</td>
+                <td class="col-xs-2">{{u.user.location.state}}</td>
+
+                <td class="col-xs-1"><a href=""><i class="glyphicon glyphicon-plus"></i></a></td>
+            </tr>
+
+            <tr ng-repeat-end="" ng-show="active==u" ng-class-odd="'alt'">
+                <td></td>
+                <td colspan="6">
+                    <div class="row">
+                        <div class="col-xs-12"><h2 class="cap">{{u.friend.fullname}} <i ng-show="u.friend.sex=='female'" class="glyphicons glyphicons-woman"></i><i ng-show="u.friend.sex=='male'" class="glyphicons glyphicons-user"></i></h2></div>
+                        <div class="col-md-3 col-xs-6 small">
+                            <label>Username</label> {{u.friend.username}}<br>
+                            <label>Registered</label> {{u.friend.created | date:'MM/dd/yyyy'}}<br>
+                            <label>Email</label> {{u.friend.email}}
+                        </div>
+                        <div class="col-md-3 col-xs-6 small">
+                            <label>Address</label> {{u.user.location.street}}<br>
+                            <label>City</label> {{u.user.location.city}}<br>
+                            <label>Zip Code</label> {{u.user.location.zip}}<br>
+                        </div>
+                        <div class="col-md-3 col-xs-6 small">
+                            <label>Birthday</label> {{u.user.dob | date:'MM/dd/yyyy'}}<br>
+                            <label>Phone</label> {{u.user.phone}}<br>
+                            <label>Cell</label> {{u.user.cell}}<br>
+                        </div>
+                        <div class="col-md-2 col-xs-12 text-center">
+                            <button class="btn btn-danger" ng-click="remove(u.friend.username)"><span></span>Unfollow</button>
+                        </div>
+                        <div class="col-xs-12"><hr></div>
+
+
+
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+    </div><!--/row-->
+
+    <div class="row">
+
+
+        <hr>
+
+    </div>
+
+
+</div><!--/container-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
 <head>
     <title>Friends</title>
 </head>
@@ -33,4 +125,5 @@
 </div>
 </body>
 </html>
+-->
 
