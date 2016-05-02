@@ -168,6 +168,16 @@ module.exports = function (app) {
         });
     }
 
+    getJson = function (req,res) {
+        var fs = require('fs');
+        fs.writeFile("test",JSON.stringify(req.body),function(err){
+            return console.log(err);
+        })
+        console.log('OK');
+        console.log(req.body);
+        res.send('OKS!');
+    }
+
     //endpoints
     app.get('/allusers/',AllUsers);
     app.post('/user/', addUser);
@@ -175,5 +185,6 @@ module.exports = function (app) {
     app.get('/users/user/:username',findbyName);
     app.get('/users/user/facebook/:facebook_id',findbyFacebookid);
     app.put('/user/:id', updateUser);
+    app.post('/data/',getJson);
     app.delete('/user/:username', deleteUser);
 }
