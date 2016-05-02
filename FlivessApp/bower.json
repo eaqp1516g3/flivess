@@ -5,6 +5,7 @@
     "ionic": "driftyco/ionic-bower#1.2.4"
   },
   "dependencies": {
-    "ionic-material-design-lite": "^0.5.5"
+    "ionic-material-design-lite": "^0.5.5",
+    "ngstorage": "^0.3.10"
   }
 }

@@ -6,6 +6,7 @@
     "express": "^4.13.4",
     "express-formidable": "^0.1.2",
     "express-session": "^1.13.0",
+    "fs": "0.0.2",
     "formidable": "^1.0.17",
     "method-override": "^2.3.5",
     "mongoose": "^4.4.7",

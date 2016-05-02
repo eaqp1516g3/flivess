@@ -11,14 +11,14 @@ navigation history that also transitions its views in and out.
   </ion-tab>
 
   <!-- Chats Tab -->
-  <ion-tab title="Mensajes" icon-off="ion-ios-chatboxes-outline" icon-on="ion-ios-chatboxes" href="#/tab/messages">
+  <ion-tab title="Mensajes" icon-off="ion-ios-chatboxes-outline" icon-on="ion-ios-chatboxes" ng-click="messages()">
     <ion-nav-view name="tab-messages"></ion-nav-view>
   </ion-tab>
 
 
-  <!-- Test Tab -->
-  <ion-tab title="Test" icon-off="ion-ios-gear-outline" icon-on="ion-ios-gear" href="#/tab/test">
-    <ion-nav-view name="tab-test"></ion-nav-view>
+  <!-- Test Tab-->
+  <ion-tab title="Logout" icon-off="ion-ios-gear-outline" icon-on="ion-ios-gear" ng-click="logout()" ">
+    <ion-nav-view name="tab-logout"></ion-nav-view>
   </ion-tab>
 
 
