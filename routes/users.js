@@ -103,6 +103,7 @@ module.exports = function (app) {
                     email: request.body.email,
                     password: request.body.password,
                     level: 0,
+                    imgurl: '',
                     age: request.body.age,
                     sex:request.body.sex,
                     weight:request.body.weight,
@@ -168,6 +169,7 @@ module.exports = function (app) {
         });
     }
 
+
     getJson = function (req,res) {
         var fs = require('fs');
         fs.writeFile("test",JSON.stringify(req.body),function(err){
@@ -178,9 +180,77 @@ module.exports = function (app) {
         res.send('OKS!');
     }
 
+    var username;
+    var fs = require('fs');// file system module help to add file at server.
+    // path = require("path");
+    var formidable = require('formidable');
+    var filename;
+    var imagen;
+    var base_url_prod="http://localhost:8080"
+
+    //PUT- upload img
+    addImg = function (req, res) {
+
+        var form = new formidable.IncomingForm();
+
+        form.parse(req, function (err, fields, files) {
+            var tmp_path = files.file.path; // file is the name html input that contain us route img
+            var tipo = files.file.type; // type file
+
+            if (tipo == 'image/png' || tipo == 'image/jpg' || tipo == 'image/jpeg') {
+                // if you want to add others file type just tipo == 'image/jpeg' change for example .pdf   application/pdf
+                // you will find all mimes here http://www.marcelopedra.com.ar/blog/2011/05/12/listado-de-tipos-mime/
+
+                var aleatorio = Math.floor((Math.random() * 9999) + 1);//random  variable
+                filename = aleatorio + "" + files.file.name;//name file and random variable
+
+                var target_path = './public/img/' + filename;// route to add us file and concatenate filename
+                fs.rename(tmp_path, target_path, function (err) {//we write the file
+                    fs.unlink(tmp_path, function (err) {
+
+
+                        console.log("antes de enviar la confirmacion al cliente");
+
+                        console.log('<p>added photo </p></br><img  src="./img/' + filename + '"/>'); // responde to costomer
+                    });
+
+                });
+
+                var usern = req.params.username;
+                User.findOne({username: usern}, function (err, user) {
+                    imagen = base_url_prod+"/img/" + filename;
+                    console.log ("user: " + user);
+                    user.imgurl = imagen;
+
+                    user.save(function (err) {
+                        if (err) return res.send(500, err.message);
+                        res.status(200).jsonp(user);
+                    });
+                });
+
+            } else {
+                console.log('file format is not allow');
+            }
+
+            if (err) {
+                console.error(err.message);
+
+                return;
+            }
+
+
+        });
+
+    };
+
+
+
+
+
     //endpoints
     app.get('/allusers/',AllUsers);
     app.post('/user/', addUser);
+    app.put('/addimg/:username', addImg);
     app.get('/user/:id', findById);
     app.get('/users/user/:username',findbyName);
     app.get('/users/user/facebook/:facebook_id',findbyFacebookid);
