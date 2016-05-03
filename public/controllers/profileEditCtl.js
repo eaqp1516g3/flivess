@@ -20,6 +20,32 @@ angular.module('Flivess').controller('profileEditCtl', ['$scope', '$http', '$coo
         console.log($scope.user._id);
         $http.put(base_url_prod+'/user/' + $scope.user._id, $scope.user).success(function (response) {
             $cookies.putObject('user',response);
+
+
+                var formData = new FormData();
+                var username = $scope.user.username;
+                console.log("tenemos el username " +username);
+                var file = $scope.file;
+
+                console.log("tenemos el file " + file);
+                formData.append("file", file);
+
+
+                if ($scope.file) {
+                    $http.put('/addimg/' + username, formData, {
+                            headers: {
+                                "Content-type": undefined
+                            },
+                            transformRequest: angular.identity
+                        }
+                    ).success(function (data) {
+                        }).error(function (data) {
+                            console.log('Error: ' + data);
+                        });
+                }
+
+
+
             $location.path('/profile/' + response.username);
         })
 

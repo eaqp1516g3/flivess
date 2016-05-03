@@ -145,6 +145,7 @@ module.exports = function (app) {
             users.sex = req.body.sex;
             users.weight = req.body.weight;
             users.height = req.body.height;
+            users.imgurl= req.body.imgurl;
 
             users.save(function (err) {
                 if (err) return res.send(500, err.message);
