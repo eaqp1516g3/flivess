@@ -64,7 +64,9 @@ angular.module('Flivess', ['ngRoute', 'ngCookies','ui.bootstrap','angularModalSe
             $rootScope.isLogged=false;
         }
         else{
+            $rootScope.userlog = $cookies.getObject('user');
             $rootScope.isLogged=true;
+            console.log("Holiii" +$rootScope.userlog.username);
         }
     })
 

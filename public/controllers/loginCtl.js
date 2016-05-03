@@ -21,6 +21,7 @@ angular.module('Flivess').controller('loginCtl', ['$scope', '$http', '$cookies',
         $http.post(base_url_prod+'/login', $scope.user).success(function (response) {
             console.log(response);
             $cookies.putObject('user',response);
+            $rootScope.userlog = $cookies.getObject('user');
             window.location.href = "#/home";
         }).error(function (response) {
                      $scope.alertReg = true;
