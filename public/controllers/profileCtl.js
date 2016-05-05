@@ -11,12 +11,29 @@ angular.module('Flivess').controller('profileCtl', ['$scope', '$http', '$cookies
     console.log(userLogged.username);
     var friend= new Object();
 
+    var getOwnProfile = function(){
+
+
+
+        $http.get(base_url_prod + '/users/user/' + userLogged.username).success(function (response) {
+        console.log("Get own profile");
+            console.log("Entro");
+            console.log(response[0]);
+            $scope.friend = response[0];
+
+        });
+
+
+
+    }
+
     var refresh = function() {
         console.log("USER: " +userLogged.username + " FRIEND: " + $routeParams.friend);
         if (userLogged.username==$routeParams.friend || $routeParams.friend=="miperfil"){
             $scope.myprofile=false;
             console.log("MY PROFILE:" + $scope.myprofile);
-            $scope.friend = userLogged;
+            getOwnProfile();
+            console.log("Esto se guarda: " + $scope.friend);
         }
         else {
             $scope.myprofile=true;
@@ -29,7 +46,10 @@ angular.module('Flivess').controller('profileCtl', ['$scope', '$http', '$cookies
             });
         }
     };
+
     refresh();
+
+
 
 
     $scope.addFriend = function () {

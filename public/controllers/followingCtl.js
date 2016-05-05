@@ -2,7 +2,7 @@
  * Created by irkalla on 14.04.16.
  */
 
-angular.module('Flivess').controller('friendsCtl', ['$scope', '$http', '$cookies', '$location', function($scope, $http, $cookies, $location) {
+angular.module('Flivess').controller('friendsCtl', ['$scope', '$http', '$cookies', '$location','$uibModal', function($scope, $http, $cookies, $location) {
     var base_url_prod="http://localhost:8080"
     //var base_url_prod = "http://147.83.7.157:8080";
 
@@ -12,7 +12,6 @@ angular.module('Flivess').controller('friendsCtl', ['$scope', '$http', '$cookies
     var refresh = function() {
         $http.get(base_url_prod + '/friends/' + userLogged.username).success(function (data) {
             $scope.users = data;
-            $('#loader').hide();
             $('#userList').show();
         }).error(function (data, status) {
             alert('get data error!');
@@ -21,11 +20,10 @@ angular.module('Flivess').controller('friendsCtl', ['$scope', '$http', '$cookies
 
     refresh();
 
-    $scope.showDetail = function (u) {
-            $scope.active = u;
-    };
+
 
     $scope.remove = function (friend) {
+
         $http.delete('/friend/' + userLogged.username + "/" + friend).success(function () {
             refresh();
         });

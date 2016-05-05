@@ -2,7 +2,7 @@
  * Created by irkalla on 14.04.16.
  */
 // configure our routes
-angular.module('Flivess', ['ngRoute', 'ngCookies','ui.bootstrap','angularModalService', 'ngAnimate', 'googlechart']).config(function($routeProvider) {
+angular.module('Flivess', ['ngRoute', 'ngCookies','ui.bootstrap','angularModalService', 'ngAnimate', 'googlechart','angular-confirm']).config(function($routeProvider) {
     console.log("EN ROUTES.JS");
     $routeProvider
     // route for the home page
