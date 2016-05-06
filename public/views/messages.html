@@ -5,7 +5,9 @@
 </head>
 <body>
 
+
 <div class="container">
+    <label ng-show="noMessages">There are no recent conversations...</label>
     <div class="col-md-3">
         <div class="list-group">
             <a href="" ng-click="conversacion(user.username)" class="list-group-item"  ng-repeat="user in users"> {{user.fullname}}</a>

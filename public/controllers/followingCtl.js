@@ -2,16 +2,22 @@
  * Created by irkalla on 14.04.16.
  */
 
-angular.module('Flivess').controller('friendsCtl', ['$scope', '$http', '$cookies', '$location','$uibModal', function($scope, $http, $cookies, $location) {
+angular.module('Flivess').controller('friendsCtl', ['$scope', '$http', '$cookies', '$location','$uibModal', function($scope, $http, $cookies, $location,$confirm) {
     var base_url_prod="http://localhost:8080"
     //var base_url_prod = "http://147.83.7.157:8080";
 
-    var userLogged = $cookies.getObject('user');
 
+    var userLogged = $cookies.getObject('user');
+    $scope.userlogged = userLogged;
+    $scope.noFollowing = false;
 
     var refresh = function() {
         $http.get(base_url_prod + '/friends/' + userLogged.username).success(function (data) {
             $scope.users = data;
+                if($scope.users == '')
+                    $scope.noFollowing = true;
+                else $scope.noFollowing = false;
+
             $('#userList').show();
         }).error(function (data, status) {
             alert('get data error!');
@@ -19,6 +25,8 @@ angular.module('Flivess').controller('friendsCtl', ['$scope', '$http', '$cookies
     }
 
     refresh();
+
+
 
 
 

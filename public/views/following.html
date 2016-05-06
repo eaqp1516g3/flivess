@@ -1,15 +1,16 @@
 
-
+<body>
 <div class="container">
     <link rel="stylesheet" href="../css/following/style.css">
     <h1>Following</h1>
-    <hr>
+
+    <label ng-show="noFollowing">Follow users to see their activities...</label>
     <div class="row" id="userList">
         <table class="table table-hover">
             <thead>
 
             </thead>
-            <tbody  >
+            <tbody>
 
             <tr ng-repeat="u in users"  ng-class-odd="'alt'">
                 <td></td>
@@ -54,8 +55,9 @@
                                     <span class="caret"></span>
                                 </button>
                                 <ul style="cursor:pointer" class="dropdown-menu">
-                                    <li><a><button type=button class="btn btn-default btn-circle"   ng-click="remove(u.friend.username)"  ng-confirm-click="Hello" >Unfollow</button></a></li>
-                                    <li><a href="#">Message</a></li>
+                                    <li><a href="" ng-click="profile(u.friend.username)">See profile</a></li>
+                                    <li><a><button type=button class="btn btn-danger"  confirm="Unfollow {{u.friend.username}}?" confirm-title="Please, verify {{userlogged.fullname}}" confirm-settings="{size: 'sm'}" ng-click="remove(u.friend.username)">Unfollow</button></a></li>
+
                                 </ul>
                             </div>
                             <!--<button class="btn btn-danger" ng-click="remove(u.friend.username)"><span></span>Unfollow</button>-->
@@ -78,29 +80,7 @@
 
 
 </div><!--/container-->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+</body>
 
 
 

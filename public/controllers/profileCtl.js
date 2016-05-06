@@ -1,13 +1,14 @@
 /**
  * Created by aitor on 19/4/16.
  */
-angular.module('Flivess').controller('profileCtl', ['$scope', '$http', '$cookies', 'ModalService', '$routeParams', function($scope, $http, $cookies, ModalService, $routeParams) {
+angular.module('Flivess').controller('profileCtl', ['$scope', '$http', '$cookies', 'ModalService', '$routeParams', function($scope, $http, $cookies, ModalService, $routeParams,$mdDialog) {
     var base_url_prod="http://localhost:8080"
     //var base_url_prod = "http://147.83.7.157:8080";
 
 
     console.log("DENTRO DE CONTROLOADOR de profile.html");
     var userLogged = $cookies.getObject('user');
+    $scope.userlogged = userLogged;
     console.log(userLogged.username);
     var friend= new Object();
 
@@ -48,8 +49,6 @@ angular.module('Flivess').controller('profileCtl', ['$scope', '$http', '$cookies
     };
 
     refresh();
-
-
 
 
     $scope.addFriend = function () {
@@ -112,4 +111,29 @@ angular.module('Flivess').controller('profileCtl', ['$scope', '$http', '$cookies
 
         });
     }
+
+
+    $scope.showConfirm = function(ev) {
+        // Appending dialog to document.body to cover sidenav in docs app
+        var confirm = $mdDialog.confirm()
+            .title('Would you like to delete your debt?')
+            .textContent('All of the banks have agreed to forgive you your debts.')
+            .ariaLabel('Lucky day')
+            .targetEvent(ev)
+            .ok('Please do it!')
+            .cancel('Sounds like a scam');
+        $mdDialog.show(confirm).then(function() {
+            $scope.status = 'You decided to get rid of your debt.';
+        }, function() {
+            $scope.status = 'You decided to keep your debt.';
+        });
+    };
+
+
+
+
+
+
+
+
 }]);

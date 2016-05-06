@@ -4,8 +4,13 @@
     <meta charset="UTF-8">
     <title>Profile</title>
     <link rel="stylesheet" href="../css/profileEdit/style.css">
+
 </head>
 <body>
+<md-button class="md-primary md-raised" ng-click="showConfirm($event)" >
+    Test
+</md-button>
+<hr>
 <div class="container">
     <div class="row">
 
@@ -15,7 +20,7 @@
                 <br>
                 <a data-toggle="tooltip modal" type="button" class="btn btn-lg btn-primary" ng-click="showModel()">Send <i class="glyphicon glyphicon-envelope"></i></a>
                 <button data-toggle="tooltip" type="button" class="btn btn-lg btn-success" ng-click="addFriend()" ng-show="show">Follow <span class="glyphicon glyphicon-user"></span></button>
-                <button data-toggle="tooltip" type="button" class="btn btn-lg btn-danger" ng-click="removeFriend()" ng-show="!show">Unfollow <span class="glyphicon glyphicon-user"></span></button>
+                <button data-toggle="tooltip" type="button" class="btn btn-lg btn-danger"  ng-click="removeFriend()" confirm="Unfollow {{friend.username}}?" confirm-title="Please {{userlogged.fullname}}, verify" confirm-settings="{size:'sm'}" ng-show="!show">Unfollow <span class="glyphicon glyphicon-user"></span></button>
             </div>
             <div class="col-md-3" ng-show="!myprofile">
                 <br>
@@ -25,7 +30,7 @@
         <div>
             <div class="row">
                 <div class="col-md-3" align="center">
-                    <img alt="User Pic" src="{{friend.imgurl}}" class="img-circle img-responsive">
+                    <img alt="Click edit to upload an image" src="{{friend.imgurl}}" class="img-circle img-responsive">
                 </div>
 
                 <div class=" col-md-6">

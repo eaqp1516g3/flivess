@@ -16,6 +16,9 @@ angular.module('Flivess').controller('messagesCtl', ['$scope', '$http','$cookies
         $http.get(base_url_prod+ '/messages/' + userLogged.username).success(function (response) {
             console.log(response);
             $scope.users = response;
+            if($scope.users == '')
+                $scope.noMessages= true;
+            else $scope.noMessages = false;
         });
     }
     refresh();
