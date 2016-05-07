@@ -7,6 +7,15 @@
     </div>
     <div class="row">
 
+        <!-- left column -->
+        <div class="col-md-4 col-sm-6 col-xs-12">
+            <div class="text-center">
+                <img ng-src="{{user.imgurl}}" class="avatar img-circle img-thumbnail" width="200" alt="avatar">
+                <h6>Upload a different photo...</h6>
+                <input type="file" class="text-center center-block well well-sm" name="file" uploader-model="file">
+            </div>
+        </div>
+
 
         <!-- edit form column -->
         <div class="col-md-8 col-sm-6 col-xs-12 personal-info">
@@ -54,20 +63,6 @@
                         <input class="form-control" ng-model="user.password" type="password">
                     </div>
                 </div>
-
-                                      <!-- left column -->
-                <div class="col-md-4 col-sm-6 col-xs-12">
-                    <div class="text-center">
-                        <img src="{{user.imgurl}}" class="avatar img-circle img-thumbnail" alt="avatar">
-                        <h6>Upload a different photo...</h6>
-                       <input type="file" class="text-center center-block well well-sm" name="file" uploader-model="file">
-                    </div>
-                </div>    
-
-                <div>
-
-                </div>
-
 
                 <div class="form-group">
                     <label class="col-md-3 control-label"></label>

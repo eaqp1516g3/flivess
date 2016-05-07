@@ -13,21 +13,17 @@ angular.module('Flivess').controller('friendsCtl', ['$scope', '$http', '$cookies
 
     var refresh = function() {
         $http.get(base_url_prod + '/friends/' + userLogged.username).success(function (data) {
+            console.log(data);
             $scope.users = data;
                 if($scope.users == '')
                     $scope.noFollowing = true;
                 else $scope.noFollowing = false;
-
-            $('#userList').show();
         }).error(function (data, status) {
             alert('get data error!');
         });
     }
 
     refresh();
-
-
-
 
 
     $scope.remove = function (friend) {

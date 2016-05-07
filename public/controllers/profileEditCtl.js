@@ -50,4 +50,8 @@ angular.module('Flivess').controller('profileEditCtl', ['$scope', '$http', '$coo
         })
 
     };
+
+    pepino = function () {
+        console.log("DENTRO DE LA FUNCION PEPINO");
+    }
 }]);
