@@ -1,5 +1,5 @@
 var base_url_prod="http://147.83.7.157:8080";
-var base_url_local="http://localhost:8080";
+var base_url_local="http://192.168.1.36:8080";
 
 
 angular.module('starter.controllers', ['ngOpenFB'])
