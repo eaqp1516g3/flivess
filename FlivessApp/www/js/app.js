@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers','ngStorage','ngOpenFB'])
+angular.module('starter', ['ionic', 'starter.controllers','ngStorage','ngOpenFB','ngCordova'])
 
 .run(function($ionicPlatform,$state,$stateParams,ngFB) {
   $ionicPlatform.ready(function() {
@@ -43,6 +43,12 @@ angular.module('starter', ['ionic', 'starter.controllers','ngStorage','ngOpenFB'
       url: '/register',
       templateUrl: 'templates/register.html',
       controller: 'RegisterCtrl'
+    })
+
+    .state('tracking',{
+      url: '/tracking',
+      templateUrl: 'templates/tracking.html',
+      controller: 'TrackingCtrl'
     })
 
   // setup an abstract state for the tabs directive

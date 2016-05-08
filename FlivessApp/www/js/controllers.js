@@ -4,7 +4,200 @@ var base_url_local="http://192.168.1.36:8080";
 
 angular.module('starter.controllers', ['ngOpenFB'])
 
-.controller('DashCtrl', function($scope) {})
+.controller('DashCtrl', function($scope,$state) {
+  $scope.toTrack = function(){
+    $state.go('tracking');
+  }
+
+
+
+})
+
+.controller('TrackingCtrl',['$scope','$http','$cordovaGeolocation','$ionicPlatform','$state','$ionicPopup', function($scope,$http,$cordovaGeolocation,$ionicPlatform,$state,$ionicPopup) {
+  console.log("EN EL TRACKINGCTRL");
+  $scope.distancia = '';
+  $scope.velocidad = '';
+  $scope.tiempo = '';
+  $scope.boton_start = true;
+  $scope.boton_stop = false;
+  $scope.boton_cancelar = true;
+  $scope.boton_envio = false;
+
+  var userLogged = JSON.parse(localStorage.getItem('userLogged'));
+  var track_id ='';      // Name/ID of the exercise
+  var tracking_data = []; // Array containing GPS position objects
+  var options = {
+    timeout: 10000,
+    enableHighAccuracy: true,
+  };
+  //Get plugin
+  var bgLocationServices =  window.plugins.backgroundLocationServices;
+
+  //////////////////////////CONFIGURACION DEL PLUGIN Y CALLBACK SUCCESS///////////////////////////////////
+
+  //Congfigure Plugin
+  bgLocationServices.configure({
+    //Both
+    desiredAccuracy: 0, // Desired Accuracy of the location updates (lower means more accurate but more battery consumption)
+    distanceFilter: 1, // (Meters) How far you must move from the last point to trigger a location update
+    debug: true, // <-- Enable to show visual indications when you receive a background location update
+    interval: 5000, // (Milliseconds) Requested Interval in between location updates.
+
+  });
+
+  bgLocationServices.registerForLocationUpdates(function(location) {
+    console.log("We got an BG Update" + JSON.stringify(location));
+    tracking_data.push(location);
+  }, function(err) {
+    console.log("Error: Didnt get an update", err);
+  });
+
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  ////////////////////////////////FUNCIONES TRACKING & OPERACIONES DE PARAMETROS DEL TRACK////////////////////////////////////////////////////
+
+  function gps_distance(lat1, lon1, lat2, lon2)
+  {
+    // http://www.movable-type.co.uk/scripts/latlong.html
+    var R = 6371; // km
+    var dLat = (lat2-lat1) * (Math.PI / 180);
+    var dLon = (lon2-lon1) * (Math.PI / 180);
+    var lat1 = lat1 * (Math.PI / 180);
+    var lat2 = lat2 * (Math.PI / 180);
+
+    var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+      Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    var d = R * c;
+
+    return d;
+  }
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  $ionicPlatform.ready(function() {
+
+
+
+      $scope.start = function () {
+        $scope.boton_start = false;
+        $scope.boton_stop = true;
+        $scope.boton_cancelar = false;
+        $scope.boton_envio = false;
+        tracking_data = [];
+        $scope.distancia = '';
+        $scope.velocidad = '';
+        $scope.tiempo = '';
+        $scope.tracking_state = 'GRABANDO...,PULSA STOP PARA FINALIZAR'
+        console.log("ARRAY AL INICIAR EL TRACK:  " + tracking_data);
+        $cordovaGeolocation.getCurrentPosition().then(
+          function (position) {
+            console.log("TENGO LA POSICION!");
+            tracking_data = [];
+            track_id = Date.now();
+            bgLocationServices.start();
+          });
+      }
+
+      $scope.stop_track = function(){
+        $scope.boton_start = true;
+        $scope.boton_stop = false;
+        $scope.boton_cancelar = true;
+        $scope.boton_envio = true;
+        $scope.tracking_state = '';
+        bgLocationServices.stop();
+        window.localStorage.setItem(track_id, JSON.stringify(tracking_data));
+        console.log(tracking_data.length);
+        //$scope.data=tracking_data.length;
+
+        // Calculate the total distance travelled
+        //    &
+        //Calcular la velocidad media de la ruta
+        avg_speed=0;
+        total_km = 0;
+
+        for(i = 0; i < tracking_data.length; i++){
+
+          if(i == (tracking_data.length - 1)){
+            break;
+          }
+
+          total_km += gps_distance(tracking_data[i].latitude, tracking_data[i].longitude, tracking_data[i+1].latitude, tracking_data[i+1].longitude);
+          if(tracking_data[i].speed>0) {
+            avg_speed += tracking_data[i].speed;
+          }
+        }
+        console.log("VELOCIDAD MEDIA(m/s): "+avg_speed);
+        console.log("DISTANCIA SIN REDONDEO: "+total_km);
+        total_km_rounded = total_km.toFixed(2);
+        avg_speed_norm = avg_speed/tracking_data.length;
+        avg_speed_km= (avg_speed_norm*3.6);
+        avg_speed_rounded = avg_speed_km.toFixed(1);
+
+        //$scope.distancia = total_km_rounded; // mostrar en la pantalla
+        //$scope.velocidad = avg_speed_rounded;
+
+
+        // Calculate the total time taken for the track
+
+        start_time = new Date(tracking_data[0].timestamp).getTime();
+        end_time = new Date(tracking_data[tracking_data.length-1].timestamp).getTime();
+
+        total_time_ms = end_time - start_time;
+        total_time_s = total_time_ms / 1000;
+
+        final_time_m = Math.floor(total_time_s / 60);
+        final_time_s = Math.floor(total_time_s - (final_time_m * 60));
+        console.log("total minutos  "+final_time_m);
+        console.log("total segundos"+final_time_s);
+       // $scope.tiempo_minutos = final_time_m;
+       // $scope.tiempo_segundos = final_time_s;
+
+        $scope.distancia = 'DISTANCIA: '+total_km_rounded+' Km';
+        $scope.velocidad = 'VELOCIDAD MEDIA: '+avg_speed_rounded+' Km/h';
+        $scope.tiempo = 'TIEMPO: '+final_time_m+' Minutos y '+final_time_s+' Segundos';
+
+        tracking_data=[];
+        console.log("ARRAY DESPUES DEL STOP: "+tracking_data);
+      }
+
+  })
+
+
+  $scope.send = function() {
+
+    var track ={
+      title: track_id,
+      username: userLogged.username,
+      data: tracking_data,
+      avg_speed: avg_speed_rounded,
+      distance: total_km_rounded,
+      time: total_time_s
+    };
+    console.log(track);
+    $http.post('http://192.168.1.36:8080/addtrack', track).then(function (response) {
+        console.log('ENVIADO');
+        $scope.res=response;
+        $ionicPopup.alert({
+          title: 'EXITO!',
+          template: 'Ruta guardada!'
+        });
+      $state.go('tab.dash');
+      },
+      function(error){
+        alert("ERROR");
+        $ionicPopup.alert({
+          title: 'ERROR!',
+          template: 'Vuelve a intentarlo'
+        });
+      })
+  }
+
+  $scope.volver = function() {
+    console.log("ENTRO EN LA FUUNCION DE CANCELAR");
+    $state.go('tab.dash');
+  }
+
+}])
 
 .controller('LoginCtrl',function($scope,$http,$state,$localStorage,ngFB){
 

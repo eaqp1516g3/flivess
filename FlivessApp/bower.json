@@ -6,6 +6,7 @@
   },
   "dependencies": {
     "ionic-material-design-lite": "^0.5.5",
-    "ngstorage": "^0.3.10"
+    "ngstorage": "^0.3.10",
+    "ngCordova": "^0.1.26-alpha"
   }
 }
