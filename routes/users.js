@@ -103,12 +103,12 @@ module.exports = function (app) {
                     email: request.body.email,
                     password: request.body.password,
                     level: 0,
-                    imgurl: '',
+                    imgurl: request.body.imgurl,
                     age: request.body.age,
                     sex:request.body.sex,
                     weight:request.body.weight,
                     height:request.body.height,
-                    facebook_id:'',
+                    facebook_id:request.body.facebook_id,
                     token:'',
                 })
             console.log(users);
@@ -256,6 +256,6 @@ module.exports = function (app) {
     app.get('/users/user/:username',findbyName);
     app.get('/users/user/facebook/:facebook_id',findbyFacebookid);
     app.put('/user/:id', updateUser);
-    app.post('/data/',getJson);
+    //app.post('/data/',getJson);
     app.delete('/user/:username', deleteUser);
 }

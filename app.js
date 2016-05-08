@@ -41,6 +41,7 @@ app.use(passport.session()); // persistent login sessions
 
 app.use(bodyParser());
 app.use(bodyParser({uploadDir:'./img'}));
+app.use(bodyParser({uploadDir:'./tracks'}));
 app.use(bodyParser.json({limit: '5mb'}));
 app.use(bodyParser.urlencoded({limit: '5mb'}));
 //app.use(bodyParser.urlencoded({ extended: false }));  
@@ -60,6 +61,7 @@ routes = require('./routes/friends')(app);
 routes = require('./routes/messages')(app);
 routes = require('./routes/login')(app);
 routes = require('./routes/facebook')(app,passport);
+routes = require('./routes/tracks')(app);
 
 
 var server = require('http').Server(app);
