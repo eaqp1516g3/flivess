@@ -47,6 +47,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngStorage','ngOpenFB'
 
     .state('tracking',{
       url: '/tracking',
+      cache:false,
       templateUrl: 'templates/tracking.html',
       controller: 'TrackingCtrl'
     })
@@ -65,6 +66,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngStorage','ngOpenFB'
     url: '/dash',
     views: {
       'tab-dash': {
+        cache:false,
         templateUrl: 'templates/tab-dash.html',
         controller: 'DashCtrl'
       }

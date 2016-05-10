@@ -8,7 +8,6 @@ angular.module('Flivess').controller('messagesCtl', ['$scope', '$http','$cookies
     var base_url_prod="http://localhost:8080"
     //var base_url_prod = "http://147.83.7.157:8080";
 
-
     var userLogged = $cookies.getObject('user');
     console.log(userLogged.username);
 
@@ -20,19 +19,37 @@ angular.module('Flivess').controller('messagesCtl', ['$scope', '$http','$cookies
                 $scope.noMessages= true;
             else $scope.noMessages = false;
         });
+
     }
     refresh();
 
+
+
     $scope.conversacion = function (user) {
+
         $http.get(base_url_prod+ '/messages/' + userLogged.username +'/' + user).success(function (response) {
             $scope.conv = true;
             console.log("Messages received");
             console.log(response);
             $scope.usuarioC = user;
+            console.log(user);
+            $http.get(base_url_prod + '/users/user/' + user).success(function (response) {
+
+                console.log("Entro");
+                console.log(response[0].username);
+                $scope.conversationWith = response[0];
+
+            });
             $scope.msgs = response;
         });
     }
 
+    $scope.getImage = function (user){
+
+        if(user==userLogged.username)
+            return userLogged.imgurl;
+        else return $scope.conversationWith.imgurl;
+    };
 
 
     $scope.sendMessage = function(receiver) {

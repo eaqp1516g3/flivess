@@ -1,5 +1,5 @@
 var base_url_prod="http://147.83.7.157:8080";
-var base_url_local="http://192.168.1.36:8080";
+var base_url_local="http://10.183.58.75:8080";
 
 
 angular.module('starter.controllers', ['ngOpenFB'])
@@ -42,6 +42,7 @@ angular.module('starter.controllers', ['ngOpenFB'])
     distanceFilter: 1, // (Meters) How far you must move from the last point to trigger a location update
     debug: true, // <-- Enable to show visual indications when you receive a background location update
     interval: 5000, // (Milliseconds) Requested Interval in between location updates.
+    fastestInterval: 5000,
 
   });
 
@@ -156,7 +157,7 @@ angular.module('starter.controllers', ['ngOpenFB'])
         $scope.velocidad = 'VELOCIDAD MEDIA: '+avg_speed_rounded+' Km/h';
         $scope.tiempo = 'TIEMPO: '+final_time_m+' Minutos y '+final_time_s+' Segundos';
 
-        tracking_data=[];
+        //tracking_data=[];
         console.log("ARRAY DESPUES DEL STOP: "+tracking_data);
       }
 
@@ -174,7 +175,7 @@ angular.module('starter.controllers', ['ngOpenFB'])
       time: total_time_s
     };
     console.log(track);
-    $http.post('http://192.168.1.36:8080/addtrack', track).then(function (response) {
+    $http.post(base_url_local, track).then(function (response) {
         console.log('ENVIADO');
         $scope.res=response;
         $ionicPopup.alert({
@@ -194,6 +195,9 @@ angular.module('starter.controllers', ['ngOpenFB'])
 
   $scope.volver = function() {
     console.log("ENTRO EN LA FUUNCION DE CANCELAR");
+    $scope.distancia = '';
+    $scope.velocidad = '';
+    $scope.tiempo = '';
     $state.go('tab.dash');
   }
 
@@ -394,7 +398,7 @@ angular.module('starter.controllers', ['ngOpenFB'])
 .controller('TestCtrl',['$scope','$http','$stateParams', function($scope,$http){
 console.log("estoy dentro");
   getUsersInConversation = function() {
-    $http.get(base_url_prod+ '/users/user/'+ stateParams.name).success(function (response) {
+    $http.get(base_url_local+ '/users/user/'+ stateParams.name).success(function (response) {
       console.log(response);
       $scope.user = response;
     });
