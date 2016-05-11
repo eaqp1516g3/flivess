@@ -10,11 +10,13 @@ angular.module('Flivess').controller('homeFacebookCtl', ['$scope', '$http', '$co
 
     var loadUser = function(){
         $http.get(base_url_prod + '/users/user/facebook/' + $routeParams.facebook_id).success(function (response) {
+            console.log("QUE ME DEVUELVES PAYO?");
             console.log(response[0]);
             $cookies.putObject('user',response[0]);
             $rootScope.userlog = $cookies.getObject('user');
+            $location.path('/home');
         });
-        $location.path('/home');
+
     }
     loadUser();
 }]);

@@ -3,15 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="../css/following/style.css">
+    <link  rel="stylesheet" href="../bower_components/angular-material/angular-material.css">
     <style>
         .btn-circle.btn-lg {
             width: 70px;
             height: 70px;
             padding: 10px 16px;
             font-size: 24px;
-            line-height: 1.33;
-            border-radius: 35px;
+            border-radius: 100px;
             color: white;
+        }
+        .otro{
+        background: rgba(19, 35, 47, 0.9);
+        opacity: 0.9;
         }
     </style>
 </head>
@@ -21,11 +25,12 @@
 
     <h1>Following</h1>
 
-    <label ng-show="noFollowing">Follow users to see their activities...</label>
+    <label ng-show="noFollowing">You don't follow anyone...</label>
     <div class="row">
         <table class="table table-hover">
             <tbody>
                 <tr ng-repeat="u in users"  ng-class-odd="'alt'" style="border: 1px solid grey;"  >
+
                          <td class="col-md-2" style="cursor:pointer;" ng-click="profile(u.friend.username)">
                             <img style="cursor:pointer;" ng-click="profile(u.friend.username)" ng-src="{{u.friend.imgurl}}"
                                  width="80" class="img-responsive img-circle center-block img-thumbnail">
@@ -48,7 +53,11 @@
                         </td>
 
                         <td class="col-md-2">
-                            <button type="button" ng-click="remove(u.friend.username)"  class="btn btn-circle btn-lg transparent navbar-inverse center-block"><i class="glyphicon glyphicon-minus"></i></button>
+
+                                    <md-button ng-click="showConfirm($event, u.friend.username)"   class="btn btn-circle btn-lg otro center-block"><i class="glyphicon glyphicon-minus"></i></md-button>
+
+                            <!--<button type="button" ng-click="remove(u.friend.username)"  class="btn btn-circle btn-lg transparent navbar-inverse center-block"><i class="glyphicon glyphicon-minus"></i></button>
+                            -->
                         </td>
                         <td class="col-md-1"></td>
                 </tr>
