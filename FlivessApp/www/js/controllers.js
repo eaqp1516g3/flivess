@@ -1,5 +1,5 @@
 var base_url_prod="http://147.83.7.157:8080";
-var base_url_local="http://10.183.58.75:8080";
+var base_url_local="http://192.168.0.10:8080";
 
 
 angular.module('starter.controllers', ['ngOpenFB'])
@@ -200,7 +200,9 @@ angular.module('starter.controllers', ['ngOpenFB'])
       time: total_time_s
     };
     console.log(track);
-    $http.post(base_url_local , track).then(function (response) {
+
+    $http.post(base_url_local + '/addtrack', track).then(function (response) {
+
         console.log('ENVIADO');
         $scope.res=response;
         $ionicPopup.alert({

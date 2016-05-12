@@ -20,8 +20,9 @@
             </div>
             <ul class="nav navbar-nav">
                 <li><a href="#/home" ><span class="glyphicon glyphicon-home"></span> Home</a></li>
-                <li><a href="#/friends" ><span class="glyphicons glyphicons-group"></span> Following</a></li>
+                <li><a href="#/friends" ><span class="glyphicon glyphicon-user"></span> Following</a></li>
                 <li><a href="#/messages" ><span class="glyphicon glyphicon-envelope"></span> Messages</a></li>
+                <li><a href="#/historical" ><span class="glyphicon glyphicon-th-list"></span> My tracks</a></li>
 
                 <form class="navbar-form navbar-left" role="search" >
 
@@ -36,7 +37,7 @@
 
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="" ng-init="userloggedInfo" ng-click="perfil()"><span class="glyphicon glyphicon-user"></span> {{userlog.username}}</a></li>
+                <li><a href="" ng-init="userloggedInfo" ng-click="perfil()"><span class="glyphicon glyphicon-cog"></span> {{userlog.username}}</a></li>
                 <li><a href="#/" ng-click="logOut()"><span class="glyphicon glyphicon-log-in"></span> Log Out</a></li>
             </ul>
         </div>
@@ -66,8 +67,10 @@
     <script src="bower_components/angular-google-chart/ng-google-chart.min.js"></script>
     <script src="bower_components/angular-bootstrap/ui-bootstrap.js"></script>
     <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
-    <script src="bower_components/angular-aria/angular-aria.js"></script>
+
     <script src="bower_components/angular-animate/angular-animate.js"></script>
+    <script src="bower_components/angular-aria/angular-aria.js"></script>
+    <script src="bower_components/angular-messages/angular-messages.js"></script>
     <script src="bower_components/angular-material/angular-material.min.js"></script>
 
     <script src="bower_components/angularjs-geolocation/dist/angularjs-geolocation.min.js"></script>
@@ -87,9 +90,6 @@
     <script src="controllers/modalMessageCtl.js"></script>
     <script src="controllers/indexCtl.js"></script>
     <script src="controllers/raceDetailsCtl.js"></script>
-
+    <script src="controllers/historicalCtl.js"></script>
 </body>
-
-
-
 </html>

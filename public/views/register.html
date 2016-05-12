@@ -11,27 +11,16 @@
 <body>
 
 <div class="form">
-
-    <ul class="tab-group">
-        <li class="tab"><a href="#/">Log In</a></li>
-        <li class="tab active"><a href="#register">Sign Up</a></li>
-    </ul>
-
     <div id="register">
         <h1>Sign Up</h1>
-
         <form>
                 <div class="field-wrap">
                     <input  placeholder="Username *" ng-model="user.username" type="text" required="required"/>
                 </div>
 
                 <div class="field-wrap">
-                    <input placeholder="Email *" required ng-model="user.email" type="text"  />
+                    <input placeholder="Fullname *" required ng-model="user.fullname" type="text"  />
                 </div>
-
-            <div class="field-wrap">
-                <input placeholder="Fullname *" required ng-model="user.fullname" type="text"  />
-            </div>
 
                 <div class="field-wrap" ng-init="user.password=''">
                     <input placeholder="Password *" ng-init="user.password=''" ng-model="user.password" type="password" required pattern=".{5,}" />
@@ -40,6 +29,7 @@
 
                 <div class="field-wrap">
                     <input placeholder="Re-enter password*" ng-init="reenterpass=''" ng-model="reenterpass" type="password" required autocomplete="off" />
+                    <label>Fields with * are required</label>
                 </div>
 
                 <div ng-show="alertReg" ng-init="alert.message=''" ng-class="{'alert-danger': true, 'alert-dismissable': closeable}">
@@ -47,15 +37,13 @@
                     <p>{{alert.message}}</p>
                 </div>
 
-                <div class="field-wrap">
-                     <label>Fields with * are required</label>
-                </div>
-
-                <br>
-                <br>
-
                 <button type="button" class="button button-block" ng-click="registerUser()">Get Started</button>
 
+                <div style="color: whitesmoke; text-align:right;">
+                    Already have an account?
+                    <u style="color: whitesmoke;">
+                        <a href="#/" style="color: whitesmoke;">Log In</a></u>
+                </div>
         </form>
 
     </div>
