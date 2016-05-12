@@ -7,27 +7,34 @@
 <body>
 <div class="col-md-2"></div>
 <div class="panel-group  col-md-8">
-    <div class="panel panel-default">
-        <div class="panel-heading">Race 1</div>
+    <label ng-show="noFollowing">Follow users to see their activities...</label>
+
+    <div class="panel panel-default" ng-repeat="route in routes" >
+        <div class="panel-heading"><strong>{{route.username}}</strong> {{route.title|date:"dd/MM/yyyy 'at' h:mma"}}</div>
         <div class="panel-body">
-            <div id="map" style="width:800px;height:300px"></div>
             <div class="row">
-                <div class="col-md-10">
+                <div class="col-md-7">
+                    <img border="0" ng-src="http://maps.googleapis.com/maps/api/staticmap?center={{route.center}}&zoom=17&size=470x180&maptype=roadmap&path=color:0xff0000ff|weight:5|{{route.path}}&sensor=false">
+                </div>
+                <div class="col-md-5">
                     <table class="table table-striped col-md-5">
                         <tbody>
                         <tr>
                             <td>Time</td>
-                            <td>22:21 h</td>
+                            <td>{{route.time}} h</td>
                         </tr>
                         <tr>
                             <td>Distance</td>
-                            <td>10,15 Km</td>
+                            <td>{{route.distance}} Km</td>
+
+                        </tr>
+                        <tr>
+                            <td>Average speed</td>
+                            <td>{{route.avg_speed}} Km/h</td>
                         </tr>
                         </tbody>
                     </table>
-                </div>
-                <div class="col-md-2">
-                    <a data-toggle="tooltip" type="button" class="btn btn-lg btn-success" href="#/details/12">Details <span class="glyphicon glyphicon-zoom-in"></span></a>
+                    <a data-toggle="tooltip" type="button" style="display: block;  float: right;" class="btn btn-lg btn-success" href="#/details/{{route._id}}">Details <span class="glyphicon glyphicon-zoom-in"></span></a>
                 </div>
             </div>
         </div>

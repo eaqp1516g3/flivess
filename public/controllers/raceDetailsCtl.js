@@ -1,23 +1,28 @@
 /**
  * Created by aitor on 1/5/16.
  */
-angular.module('Flivess').controller('raceDetailsCtl', ['$scope', '$http', function($scope, $http) {
+angular.module('Flivess').controller('raceDetailsCtl', ['$scope', '$http', '$routeParams',  function($scope, $http, $routeParams) {
+    var base_url_prod="http://localhost:8080"
+    //var base_url_prod = "http://147.83.7.157:8080";
+    console.log("LA ID: "+ $routeParams.id);
 
-    var inicio = function() {
-        $http.get('../controllers/generated.json').success(function(data) {
+    $http.get(base_url_prod + '/track/' + $routeParams.id).success(function (response) {
+        console.log("LA RESPUESTA");
+        console.log(response);
+        $http.get(response.pointsurl).success(function(data) {
             console.log(data);
             var map = new google.maps.Map(document.getElementById("map"),
                 {
                     zoom: 17,
-                    center: new google.maps.LatLng(data[1].coords.latitude,data[1].coords.longitude),
+                    center: new google.maps.LatLng(data[1].latitude,data[1].longitude),
                     mapTypeId: google.maps.MapTypeId.ROADMAP
                 });
 
 
             var route = [];
             for (var i = 0; i < data.length; i++){
-                console.log(data[i].coords.latitude);
-                route[i] = new google.maps.LatLng(data[i].coords.latitude,data[i].coords.longitude);
+                console.log(data[i].latitude);
+                route[i] = new google.maps.LatLng(data[i].latitude,data[i].longitude);
             }
             var path = new google.maps.Polyline(
                 {
@@ -29,7 +34,7 @@ angular.module('Flivess').controller('raceDetailsCtl', ['$scope', '$http', funct
             path.setMap(map);
 
             var marker=new google.maps.Marker({
-                position:new google.maps.LatLng(data[0].coords.latitude,data[0].coords.longitude),
+                position:new google.maps.LatLng(data[0].latitude,data[0].longitude),
                 label: 'START'
             });
 
@@ -40,15 +45,14 @@ angular.module('Flivess').controller('raceDetailsCtl', ['$scope', '$http', funct
                 scaledSize: new google.maps.Size(50, 50), // scaled size
             };
             var marker2=new google.maps.Marker({
-                position:new google.maps.LatLng(data[data.length-1].coords.latitude,data[data.length-1].coords.longitude),
+                position:new google.maps.LatLng(data[data.length-1].latitude,data[data.length-1].longitude),
                 icon: icon
             });
 
             marker2.setMap(map);
         });
 
-    }
-    inicio();
+    });
 
     $scope.chartObject = {
         "type": "AreaChart",
@@ -190,5 +194,6 @@ angular.module('Flivess').controller('raceDetailsCtl', ['$scope', '$http', funct
         },
         "formatters": {},
         "view": {}
-    }
+    };
+
 }]);

@@ -16,13 +16,13 @@
     <div class="col-md-1"></div>
     <div class="col-md-8" ng-show="conv">
 
-        <a style="border: 1px solid grey; border-radius: 10px;" href="" ng-click="profile(usuarioC)" class="list-group-item text-center "><h4>{{usuarioC}}</h4></a>
+        <a style="border: 1px solid grey; border-radius: 10px;" href=""  ng-click="profile(usuarioC)" class="list-group-item text-center "><h4>{{usuarioC}}</h4></a>
 
 
-        <div style="position: absolute; top: 70px; bottom: -430px; right: 12px; left: 12px; overflow-y: scroll; border: 1px solid grey; border-radius: 10px;">
-            <div class="media msg" ng-repeat="msg in msgs">
-                <a class="pull-left" href="#">
-                    <img class="media-object" data-src="" alt="64x64" style="width: 32px; height: 32px;" src="">
+        <div style="position: absolute; top: 70px; bottom: -430px; right: 12px; left: 12px; overflow-y: scroll; border: 1px solid grey; border-radius: 10px;" >
+            <div  class="media msg" ng-repeat="msg in msgs">
+                <a class="pull-left" href="#/profile/{{msg.sender}}">
+                    <img  ng-src="{{getImage(msg.sender)}}"  class="media-object" alt="64x64" style="width: 32px; height: 32px;" >
                 </a>
                 <div class="media-body">
                     <small class="pull-right time"><i class="fa fa-clock-o"></i> {{msg.createdAt|date:"dd/MM/yyyy 'at' h:mma"}}</small>

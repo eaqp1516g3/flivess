@@ -12,12 +12,6 @@
 <body>
 <div class="form">
 
-    <ul class="tab-group">
-        <li class="tab active"><a href="#/">Log In</a></li>
-        <li class="tab"><a href="#register">Sign Up</a></li>
-    </ul>
-
-
     <div id="login">
         <h1>Log In</h1>
         <form>
@@ -33,44 +27,26 @@
                     <a class="close" ng-click="closeAlert()">&times;</a>
                     <p>{{alert.message}}</p>
                 </div>
-
+            <div style="color: whitesmoke; text-align:right;">
+                New to Flivess?
+                <u style="color: whitesmoke;">
+                    <a href="#/register" style="color: whitesmoke;">Join Now</a></u>
+            </div>
         </form>
 
         <div class="or-box">
             <div class="omb_login">
                 <div class="row omb_row-sm-offset-3 omb_socialButtons">
-                    <div class="col-xs-3 col-sm-3">
+                    <div>
                         <a href="/auth/facebook/callback" class="btn btn-lg btn-block omb_btn-facebook">
                             <i class="fa fa-facebook visible-xs"></i>
-                            <span class="hidden-xs">Facebook</span>
-                        </a>
-                    </div>
-                    <div class="col-xs-3 col-sm-3">
-                        <a href="#" class="btn btn-lg btn-block omb_btn-twitter">
-                            <i class="fa fa-twitter visible-xs"></i>
-                            <span class="hidden-xs">Twitter</span>
-                        </a>
-                    </div>
-                    <div class="col-xs-3 col-sm-3">
-                        <a href="#" class="btn btn-lg btn-block omb_btn-google">
-                            <i class="fa fa-google-plus visible-xs"></i>
-                            <span class="hidden-xs">Google+</span>
+                            <span class="hidden-xs">f Facebook</span>
                         </a>
                     </div>
                 </div>
             </div>
-        </div>
 
-    
-        <!--
-        <div class="or-box row-block">
-            <div class="row">
-                <div class="col-md-12 row-block">
-                    <a href="#/register" class="btn btn-primary btn-block">Create New Account</a>
-                </div>
-            </div>
         </div>
-        -->
     </div>
 </div>
 </body>

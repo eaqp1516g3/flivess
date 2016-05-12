@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="col-md-2"></div>
+<div class="col-md-8">
+    <table class="table table-striped header-fixed" >
+        <thead>
+        <tr>
+            <th st-sort="firstName">date</th>
+            <th st-sort="lastName">distance</th>
+            <th st-sort="birthDate">time</th>
+            <th st-sort="balance">average speed</th>
+        </tr>
+        </thead>
+        <tbody style="border: 1px solid grey;">
+
+        <tr ng-repeat="route in routes">
+            <td >{{route.title|date:"dd/MM/yyyy 'at' h:mma"}}</td>
+
+            <td>{{route.avg_speed}} Km/h</td>
+            <td>{{route.distance}} Km</td>
+            <td>{{route.time}} h</td>
+            <td>
+                <a data-toggle="tooltip" type="button" style="display: block;  float: right;" class="btn btn-sm btn-success" href="#/details/{{route._id}}">Details <span class="glyphicon glyphicon-zoom-in"></span></a>
+            </td>
+
+        </tr>
+        </tbody>
+</div>
+<div class="col-md-2"></div>
+</body>
+</html>
