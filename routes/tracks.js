@@ -7,11 +7,20 @@ module.exports = function (app) {
     var mongoose = require('mongoose');
     var Track = require('../models/track.js');
     var base_url = 'http://localhost:8080';
+    var fs = require('fs');
 
 
     //Prueba de funcionamiento
     test = function(req,res){
-        res.send("WORKING");
+        fs.readFile('test','utf8', function (err,data) {
+            if (err) {
+                return console.log(err);
+            }
+            var points = JSON.parse(data);
+            console.log(points[0]);
+            res.send(points[0]);
+        });
+
     }
 
 
@@ -25,7 +34,6 @@ module.exports = function (app) {
         console.log('FICHERO GENERADO');
         var url = base_url+'/tracks/'+req.body.title+'.json';
 
-
         var track = new Track({
             title: req.body.title,
             username: req.body.username,
@@ -35,6 +43,7 @@ module.exports = function (app) {
             pointsurl:url,
         })
         console.log(track);
+
 
         track.save(function (err, track) {
             if (err) {
