@@ -4,6 +4,38 @@
   The FriendsCtrl pulls data from the Friends service (service.js)
   The Friends service returns an array of friend data
 -->
+<ion-view>
+  <ion-content delegate-handle="chat" id="chat-list" class="content-stable padding">
+    <div ng-repeat="post in chat.posts" ng-class="{other:post.user !== chat.handle}" class="messages">
+      <div class="message">
+        <div>{{chat.handle}}</div>
+        <span ng-if="post.message">{{post.message}}</span>
+        <img ng-if="post.img" ng-src="{{post.img}}" class="post-img" />
+        <div class="time-stamp">{{post.timestamp | date:"h:mma"}}</div>
+      </div>
+    </div>
+  </ion-content>
+
+
+  <form id="footer-input" ng-submit="chat.add(chat.message)">
+    <ion-footer-bar keyboard-attach class="item-input-inset">
+      <label class="item-input-wrapper">
+        <i class="icon ion-ios7-search placeholder-icon"></i>
+        <input ng-focus="chat.inputUp()" ng-blur="inputDown()" type="text" placeholder="Send a message..." ng-model="chat.message">
+      </label>
+      <a class="button button-clear" ng-click="chat.takePicture()">
+        <i class="icon ion-ios-paperplane"></i>
+      </a>
+    </ion-footer-bar>
+  </form>
+
+
+</ion-view>
+
+
+
+
+<!--
 <ion-view view-title="Mensajes">
   <ion-content class="padding">
     <ion-list ng-repeat="msg in msgs">
@@ -17,3 +49,4 @@
     </ion-list>
   </ion-content>
 </ion-view>
+-->

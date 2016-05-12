@@ -1,6 +1,7 @@
 module.exports = function (app) {
     var mongoose = require('mongoose');
     var User = require('../models/user.js');
+    var base_url = "http://localhost:8080";
 
     //GET - GET All Users By Into DB
     AllUsers = function (req, res) {
@@ -97,13 +98,21 @@ module.exports = function (app) {
         }
         else {
             console.log("he comprobado que no existe")
+            var imgurl;
+            if(request.body.imgurl == null)
+            {
+                imgurl = base_url + '/img/default-image.png'
+            }
+            else imgurl =  request.body.imgurl;
+
+
                 var users = new User({
                     username: request.body.username,
                     fullname: request.body.fullname,
                     email: request.body.email,
                     password: request.body.password,
                     level: 0,
-                    imgurl: request.body.imgurl,
+                    imgurl: imgurl,
                     age: request.body.age,
                     sex:request.body.sex,
                     weight:request.body.weight,
@@ -187,7 +196,6 @@ module.exports = function (app) {
     var formidable = require('formidable');
     var filename;
     var imagen;
-    var base_url_prod="http://localhost:8080"
 
     //PUT- upload img
     addImg = function (req, res) {
@@ -219,7 +227,7 @@ module.exports = function (app) {
 
                 var usern = req.params.username;
                 User.findOne({username: usern}, function (err, user) {
-                    imagen = base_url_prod+"/img/" + filename;
+                    imagen = base_url+"/img/" + filename;
                     console.log ("user: " + user);
                     user.imgurl = imagen;
 

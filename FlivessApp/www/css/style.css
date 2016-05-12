@@ -1,1 +1,11 @@
 /* Empty. Add your own CSS if you like */
+.scroll {
+  height: 80%;
+
+}
+
+#map {
+  margin: auto;
+  width: 95%;
+  height: 40%;
+}
