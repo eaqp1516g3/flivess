@@ -46,6 +46,28 @@ angular.module('starter', ['ionic', 'starter.controllers','ngStorage','ngOpenFB'
       controller: 'TrackingCtrl'
     })
 
+/*
+    .state('tracking',{
+      url: '/tracking',
+      cache:false,
+      views: {
+        'tracking': {
+          templateUrl: 'templates/tracking.html',
+          controller: 'TrackingCtrl'
+        }
+      }
+    })
+*/
+    .state('trackingManager', {
+      url: '/tracking/manager',
+      cache:false,
+      templateUrl: 'templates/track-manager.html',
+      controller: 'TrackManagerCtrl'
+
+    })
+
+
+
   // setup an abstract state for the tabs directive
     .state('tab', {
     url: '/tab',
@@ -101,7 +123,6 @@ angular.module('starter', ['ionic', 'starter.controllers','ngStorage','ngOpenFB'
         }
       }
     })
-
 
 
   // if none of the above states are matched, use this as the fallback

@@ -10,11 +10,20 @@ module.exports = function (app) {
     var User = require('../models/user.js');
 
     var base_url = 'http://localhost:8080';
+    var fs = require('fs');
 
 
     //Prueba de funcionamiento
     test = function(req,res){
-        res.send("WORKING");
+        fs.readFile('test','utf8', function (err,data) {
+            if (err) {
+                return console.log(err);
+            }
+            var points = JSON.parse(data);
+            console.log(points[0]);
+            res.send(points[0]);
+        });
+
     }
 
 
@@ -29,7 +38,6 @@ module.exports = function (app) {
         console.log('FICHERO GENERADO');
         var url = base_url+'/tracks/'+req.body.title+'.json';
 
-
         var track = new Track({
             title: req.body.title,
             username: req.body.username,
@@ -39,6 +47,7 @@ module.exports = function (app) {
             pointsurl:url,
         })
         console.log(track);
+
 
         track.save(function (err, track) {
             if (err) {
@@ -92,6 +101,22 @@ module.exports = function (app) {
         });
     }
 
+    deleteTrack = function(req, res){
+        Track.findOne({_id:req.params.id}, function(err,result){
+            if(err) return res.send(500,err.message);
+            console.log(result);
+            result.remove(function(err){
+                if (!err) {
+                    console.log("track eliminado");
+                    res.send("DELETED!")
+                } else {
+                    console.log(err);
+                }
+            });
+
+        });
+    }
+
 
 
 
@@ -100,6 +125,6 @@ module.exports = function (app) {
     app.get('/track/:id',getTrack);
     app.get('/tracks/:username',tracksByUserName);
     app.get('/tracks/friends/:username',getLastFriendsTracks);
-
+    app.delete('/track/:id',deleteTrack);
     app.post('/addtrack',addTrack);
 }

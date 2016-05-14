@@ -76,6 +76,20 @@ module.exports = function (app) {
         });
     };
 
+    findFollowers = function (req,res) {
+        User.findOne({username: req.params.username},function (err,user){
+            if (err) return res.send(500, err.message);
+            console.log(user);
+            Friend.find({friend:user._id},function (err,followers){
+                if (err) return res.send(500, err.message);
+                console.log(followers);
+                res.send(followers);
+            });
+
+        });
+
+    }
+
     
     //DELETE - Delete a User with specified ID
     deleteFriend = function (req, res) {
@@ -107,6 +121,7 @@ module.exports = function (app) {
     app.get('/allfriends', allFriends);
     app.get('/friends/:username', findFriends);
     app.get('/friends/:username/:friend',isFriend);
+    app.get('/friends/friend/:username/followers',findFollowers);
     app.post('/addfriend', addFriend);
     app.delete('/friend/:username/:friend', deleteFriend);
 
