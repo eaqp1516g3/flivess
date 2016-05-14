@@ -101,6 +101,22 @@ module.exports = function (app) {
         });
     }
 
+    deleteTrack = function(req, res){
+        Track.findOne({_id:req.params.id}, function(err,result){
+            if(err) return res.send(500,err.message);
+            console.log(result);
+            result.remove(function(err){
+                if (!err) {
+                    console.log("track eliminado");
+                    res.send("DELETED!")
+                } else {
+                    console.log(err);
+                }
+            });
+
+        });
+    }
+
 
 
 
@@ -109,6 +125,6 @@ module.exports = function (app) {
     app.get('/track/:id',getTrack);
     app.get('/tracks/:username',tracksByUserName);
     app.get('/tracks/friends/:username',getLastFriendsTracks);
-
+    app.delete('/track/:id',deleteTrack);
     app.post('/addtrack',addTrack);
 }
