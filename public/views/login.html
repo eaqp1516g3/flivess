@@ -12,7 +12,7 @@
 <body>
 <div class="form">
 
-    <div id="login">
+    <div id="login" ng-show="vlogin">
         <h1>Log In</h1>
         <form>
             <div class="field-wrap">
@@ -30,7 +30,7 @@
             <div style="color: whitesmoke; text-align:right;">
                 New to Flivess?
                 <u style="color: whitesmoke;">
-                    <a href="#/register" style="color: whitesmoke;">Join Now</a></u>
+                    <a href="" ng-click="vlogin=false" style="color: whitesmoke;">Join Now</a></u>
             </div>
         </form>
 
@@ -47,6 +47,42 @@
             </div>
 
         </div>
+    </div>
+    <div id="register" ng-show="!vlogin">
+        <h1>Sign Up</h1>
+        <form>
+            <div class="field-wrap">
+                <input placeholder="Username *" ng-model="usuario.username" type="text" required="required">
+            </div>
+
+            <div class="field-wrap">
+                <input placeholder="Full name *" ng-model="usuario.fullname" type="text" required="required">
+            </div>
+
+            <div class="field-wrap" ng-init="usuario.password=''">
+                <input placeholder="Password *"ng-model="usuario.password" type="password" required pattern=".{5,}">
+                <label>(At least 5 characters)</label>
+            </div>
+
+            <div class="field-wrap">
+                <input placeholder="Re-enter password*" ng-init="reenterpass=''" ng-model="reenterpass" type="password" required autocomplete="off">
+                <label>Fields with * are required</label>
+            </div>
+
+            <div ng-show="alertReg" ng-init="alert.message=''" ng-class="{'alert-danger': true, 'alert-dismissable': closeable}">
+                <a class="close" ng-click="closeAlert()">&times;</a>
+                <p>{{alert.message}}</p>
+            </div>
+
+            <button type="button" class="button button-block" ng-click="registerUser()">Get Started</button>
+
+            <div style="color: whitesmoke; text-align:right;">
+                Already have an account?
+                <u style="color: whitesmoke;">
+                    <a href="" ng-click="cambio()" style="color: whitesmoke;">Log In</a></u>
+            </div>
+        </form>
+
     </div>
 </div>
 </body>
