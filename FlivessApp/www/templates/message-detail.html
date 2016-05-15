@@ -4,33 +4,81 @@
   The FriendsCtrl pulls data from the Friends service (service.js)
   The Friends service returns an array of friend data
 -->
-<ion-view>
-  <ion-content delegate-handle="chat" id="chat-list" class="content-stable padding">
-    <div ng-repeat="post in chat.posts" ng-class="{other:post.user !== chat.handle}" class="messages">
-      <div class="message">
-        <div>{{chat.handle}}</div>
-        <span ng-if="post.message">{{post.message}}</span>
-        <img ng-if="post.img" ng-src="{{post.img}}" class="post-img" />
-        <div class="time-stamp">{{post.timestamp | date:"h:mma"}}</div>
+
+
+<ion-view id="userMessagesView" cache-view="false" view-title="<i class='icon ion-chatbubble user-messages-top-icon'></i> <div class='msg-header-username'>{{userC}}</div>">
+
+
+  <ion-content has-bouncing="true" class="has-header has-footer"  delegate-handle="userMessageScroll">
+
+    <div  ng-repeat="message in messages" class="message-wrapper">
+
+
+
+      <div ng-if="userLogged.username !== message.sender">
+
+        <img ng-click="viewProfile(conversationWith.username)" class="profile-pic left"
+             ng-src="{{conversationWith.imgurl}}" />
+
+        <div class="chat-bubble left">
+
+          <div class="message" ng-bind-html="message.text">
+          </div>
+
+          <div class="message-detail">
+                              <span ng-click="viewProfile(message)"
+                                    class="bold"><!--{{conversationWith.username}}--></span>
+            <span class="bold" am-time-ago="message.createdAt"></span>
+
+          </div>
+
+        </div>
       </div>
+
+      <div ng-if="userLogged.username === message.sender">
+
+        <img ng-click="viewProfile(message)" class="profile-pic right"
+             ng-src="{{userLogged.imgurl}}"/>
+
+        <div class="chat-bubble right">
+
+          <div class="message" ng-bind-html="message.text" >
+          </div>
+
+          <div class="message-detail">
+                              <span ng-click="viewProfile(message)"
+                                    class="bold"><!--{{conversationWith.username}}--></span>
+            <span class="bold" am-time-ago="message.createdAt"></span>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="cf"></div>
+
     </div>
   </ion-content>
 
-
-  <form id="footer-input" ng-submit="chat.add(chat.message)">
-    <ion-footer-bar keyboard-attach class="item-input-inset">
-      <label class="item-input-wrapper">
-        <i class="icon ion-ios7-search placeholder-icon"></i>
-        <input ng-focus="chat.inputUp()" ng-blur="inputDown()" type="text" placeholder="Send a message..." ng-model="chat.message">
-      </label>
-      <a class="button button-clear" ng-click="chat.takePicture()">
-        <i class="icon ion-ios-paperplane"></i>
-      </a>
-    </ion-footer-bar>
-  </form>
-
-
 </ion-view>
+
+
+<form id="footer-input">
+  <ion-footer-bar keyboard-attach class="item-input-inset">
+    <label class="item-input-wrapper">
+      <i class="icon  placeholder-icon"></i>
+      <input type="text" placeholder="Send a message..." ng-model="message.text">
+    </label>
+    <a class="button button-clear" ng-click="sendMessage(conversationWith.username)">
+      <i class="icon ion-ios-paperplane"></i>
+    </a>
+  </ion-footer-bar>
+</form>
+
+
+
+
+
 
 
 

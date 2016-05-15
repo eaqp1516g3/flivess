@@ -1,5 +1,5 @@
 var base_url_prod="http://147.83.7.157:8080";
-var base_url_local="http://192.168.0.10:8080";
+var base_url_local="http://192.168.1.10:8080";
 
 
 angular.module('starter.controllers', ['ngOpenFB'])
@@ -516,8 +516,66 @@ angular.module('starter.controllers', ['ngOpenFB'])
 
 }])
 
-.controller('MessageDetailCtrl',['$scope','$http','$stateParams','$localStorage', function($scope,$http,$stateParams,$localStorage) {
-  //$scope.chat = Chats.get($stateParams.chatId);
+.controller('MessageDetailCtrl',['$scope','$http','$stateParams','$localStorage','$ionicScrollDelegate', function($scope,$http,$stateParams,$localStorage,$ionicScrollDelegate) {
+
+  $scope.userC = $stateParams.name;
+  $scope.userLogged = JSON.parse(localStorage.getItem('userLogged'));
+  //$scope.logged = userLogged;
+
+  var load = function(){
+
+    $http.get(base_url_local+ '/messages/' + $scope.userLogged.username +'/' + $stateParams.name).success(function (response) {
+      console.log("Messages received");
+      console.log(response);
+      $http.get(base_url_local+ '/users/user/' + $stateParams.name).success(function (response) {
+
+        console.log("Entro");
+        console.log(response[0].username);
+        $scope.conversationWith = response[0];
+
+      });
+      $scope.messages = response;
+
+
+      $ionicScrollDelegate.scrollBottom();
+
+    });
+
+  };
+
+  load();
+
+
+  $scope.sendMessage = function(receiver) {
+    console.log("Before sending")
+    console.log($scope.message);
+
+    $scope.message.sender = $scope.userLogged.username;
+    $scope.message.receiver = receiver;
+    console.log('Mensaje:' +$scope.message);
+    console.log('Sender:' +$scope.message.sender);
+    console.log('Receiver:' +$scope.message.receiver);
+    console.log('Text:' +$scope.message.text);
+
+    $http.post(base_url_local+'/addmessage', $scope.message).success(function(response) {
+
+      console.log($scope.message);
+      console.log("Response");
+      console.log(response);
+      $scope.message="";
+
+      load()
+    });
+  };
+
+
+
+  $scope.profile = function (name) {
+    $location.path('/profile/' + name);
+  }
+
+
+  /*
   conversacion = function () {
     var userLogged = JSON.parse(localStorage.getItem('userLogged'));
     console.log(userLogged);
@@ -533,7 +591,7 @@ angular.module('starter.controllers', ['ngOpenFB'])
   }
 
   conversacion();
-
+*/
 
 
 }])
