@@ -39,6 +39,12 @@ angular.module('starter', ['ionic', 'starter.controllers','ngStorage','ngOpenFB'
       controller: 'LoginCtrl'
     })
 
+    .state('register', {
+      url: '/register',
+      templateUrl: 'templates/register.html',
+      controller: 'RegisterCtrl'
+    })
+
     .state('tracking',{
       url: '/tracking',
       cache:false,
