@@ -31,11 +31,6 @@ angular.module('Flivess', ['ngRoute', 'ngCookies','ui.bootstrap','angularModalSe
             controller  : 'profileCtl'
         })
 
-        .when('/register', {
-            templateUrl : 'views/register.html',
-            controller  : 'registerCtl'
-        })
-
         .when('/home', {
             templateUrl : 'views/home.html',
             controller  : 'homeCtl'
