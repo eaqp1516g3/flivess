@@ -1,16 +1,22 @@
 /**
  * Created by aitor on 1/5/16.
  */
-angular.module('Flivess').controller('raceDetailsCtl', ['$scope', '$http', '$routeParams',  function($scope, $http, $routeParams) {
+angular.module('Flivess').controller('raceDetailsCtl', ['$scope', '$http', '$routeParams', '$location', '$mdDialog', function($scope, $http, $routeParams, $location, $mdDialog) {
     var base_url_prod="http://localhost:8080"
     //var base_url_prod = "http://147.83.7.157:8080";
     console.log("LA ID: "+ $routeParams.id);
 
     $http.get(base_url_prod + '/track/' + $routeParams.id).success(function (response) {
-        console.log("LA RESPUESTA");
-        console.log(response);
+        var final_time_m = Math.floor(response.time / 60);
+        var final_time_s = Math.floor(response.time - (final_time_m * 60));
+        response.time =final_time_m+' min '+final_time_s+' s';
+
+        if(response.distance<1) response.distance=response.distance * 1000 + ' m';
+        else response.distance=response.distance + ' Km';
+
+        if (response.avg_speed>0) (response.avg_speed= 1/response.avg_speed)*60;
+
         $http.get(response.pointsurl).success(function(data) {
-            console.log(data);
             var map = new google.maps.Map(document.getElementById("map"),
                 {
                     zoom: 17,
@@ -21,7 +27,6 @@ angular.module('Flivess').controller('raceDetailsCtl', ['$scope', '$http', '$rou
 
             var route = [];
             for (var i = 0; i < data.length; i++){
-                console.log(data[i].latitude);
                 route[i] = new google.maps.LatLng(data[i].latitude,data[i].longitude);
             }
             var path = new google.maps.Polyline(
@@ -52,7 +57,26 @@ angular.module('Flivess').controller('raceDetailsCtl', ['$scope', '$http', '$rou
             marker2.setMap(map);
         });
 
+        $scope.route = response;
+
     });
+
+    $scope.showConfirm = function(ev, id) {
+        // Appending dialog to document.body to cover sidenav in docs app
+        var confirm = $mdDialog.confirm()
+            .title('Would you like to delete this track?')
+            .ariaLabel('Lucky day')
+            .targetEvent(ev)
+            .ok('YES')
+            .cancel('NO');
+        $mdDialog.show(confirm).then(function() {
+            $http.delete(base_url_prod + '/track/' + id).success(function (data) {
+                $location.path('/historical');
+            });
+        }, function() {
+            console.log("EN EL POZO");
+        });
+    };
 
     $scope.chartObject = {
         "type": "AreaChart",

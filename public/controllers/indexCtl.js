@@ -4,11 +4,10 @@
 angular.module('Flivess').controller('indexCtl', ['$scope', '$http', '$cookies', '$location', '$location',  function($scope, $http,$cookies,$location) {
     var base_url_prod="http://localhost:8080"
     //var base_url_prod = "http://147.83.7.157:8080";
-    var userLogged = $cookies.getObject('user');
 
-
-    $scope.perfil = function () {
-        $location.path('/profile/' + userLogged.username);
+    $scope.perfil = function (username) {
+        console.log(username);
+        $location.path('/profile/' + username);
     }
 
 
@@ -22,8 +21,6 @@ angular.module('Flivess').controller('indexCtl', ['$scope', '$http', '$cookies',
         $scope.users = data;
         console.log("Obtengo users");
     });
-
-    var _selected;
 
     $scope.selected = undefined;
 

@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+
+    <link  rel="stylesheet" href="../bower_components/angular-material/angular-material.css">
 </head>
 <body>
 <div class="container">
@@ -15,17 +17,28 @@
                 <table class="table table-striped ">
                     <thead>
                     <tr>
+                        <div class="col-md-6"></div>
+                        <div class="col-md-6">
+                        <button data-toggle="tooltip" type="button" class="btn btn-lg btn-danger" ng-click="showConfirm($event, route._id)">Delete track</button>
+                        </div>
+                    </tr>
+                    <tr>
                         <th>Parameters:</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr>
                         <td>Time</td>
-                        <td>22:21 h</td>
+                        <td>{{route.time}}</td>
                     </tr>
                     <tr>
                         <td>Distance</td>
-                        <td>10,15 Km</td>
+                        <td>{{route.distance}}</td>
+
+                    </tr>
+                    <tr>
+                        <td>Average speed</td>
+                        <td>{{route.avg_speed}} min/Km</td>
                     </tr>
                     </tbody>
                 </table>
