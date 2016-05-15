@@ -1,12 +1,17 @@
 /**
  * Created by aitor on 1/5/16.
  */
-angular.module('Flivess').controller('raceDetailsCtl', ['$scope', '$http', '$routeParams', '$location', '$mdDialog', function($scope, $http, $routeParams, $location, $mdDialog) {
-    var base_url_prod="http://localhost:8080"
+angular.module('Flivess').controller('raceDetailsCtl', ['$scope', '$http', '$cookies', '$routeParams', '$location', '$mdDialog', function($scope, $http, $cookies, $routeParams, $location, $mdDialog) {
+    var base_url_prod="http://localhost:8080";
     //var base_url_prod = "http://147.83.7.157:8080";
-    console.log("LA ID: "+ $routeParams.id);
 
+    var userLogged = $cookies.getObject('user');
+    console.log("LA ID: "+ $routeParams.id);
+    $scope.myTrack = false;
     $http.get(base_url_prod + '/track/' + $routeParams.id).success(function (response) {
+        console.log(userLogged.username + " y el otro " + response.username);
+        if(userLogged.username == response.username) $scope.myTrack = true;
+
         var final_time_m = Math.floor(response.time / 60);
         var final_time_s = Math.floor(response.time - (final_time_m * 60));
         response.time =final_time_m+' min '+final_time_s+' s';
