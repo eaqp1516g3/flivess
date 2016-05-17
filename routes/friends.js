@@ -90,6 +90,32 @@ module.exports = function (app) {
 
     }
 
+    numFollowers = function (req,res) {
+        User.findOne({username: req.params.username},function (err,user){
+            if (err) return res.send(500, err.message);
+            console.log(user);
+            Friend.find({friend:user._id},function (err,followers){
+                if (err) return res.send(500, err.message);
+                console.log(followers);
+                console.log(followers.length);
+                res.status(200).json(followers.length);
+            });
+
+        });
+
+    }
+
+    numFollowing = function (req, res) {
+
+        console.log ("joder");
+        console.log (req.params.username);
+        Friend.find({username: req.params.username}, function (err, friend) {
+            res.status(200).json(friend.length);
+            console.log(friend.length);
+
+        });
+    };
+
     
     //DELETE - Delete a User with specified ID
     deleteFriend = function (req, res) {
@@ -118,6 +144,8 @@ module.exports = function (app) {
     
 
     //endpoints
+    app.get('/nfollowers/:username', numFollowers);
+    app.get('/nfollowing/:username', numFollowing);
     app.get('/allfriends', allFriends);
     app.get('/friends/:username', findFriends);
     app.get('/friends/:username/:friend',isFriend);

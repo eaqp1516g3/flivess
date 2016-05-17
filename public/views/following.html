@@ -21,11 +21,10 @@
 <body>
 <div class="col-md-1"></div>
 <div class="container col-md-10">
-
-    <h1>Following</h1>
-
+    <div class="text-center">
     <label ng-show="noFollowing">You don't follow anyone...</label>
-    <div class="row">
+    </div>
+    <div class="row" ng-show="!noFollowing">
         <table class="table table-hover">
             <tbody>
                 <tr ng-repeat="u in users"  ng-class-odd="'alt'" style="border: 1px solid grey;"  >

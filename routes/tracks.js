@@ -9,7 +9,8 @@ module.exports = function (app) {
     var Friend = require('../models/friend.js');
     var User = require('../models/user.js');
 
-    var base_url = 'http://localhost:8080';
+    //var base_url = 'http://localhost:8080';
+    var base_url="http://147.83.7.157:8080";
     var fs = require('fs');
     var geolib = require('geolib');
 
@@ -143,6 +144,15 @@ module.exports = function (app) {
 
     }
 
+    numtracksByUserName = function(req,res){
+        Track.find({username:req.params.username}, function (err,tracks){
+            if (err) return res.send(500, err.message);
+            console.log("Obtengo tracks de: "+ req.params.username);
+            res.status(200).json(tracks.length);
+        })
+
+    }
+
 
     getLastFriendsTracks = function(req,res){
 
@@ -184,6 +194,7 @@ module.exports = function (app) {
     app.post('/test',test);
     app.get('/track/:id',getTrack);
     app.get('/tracks/:username',tracksByUserName);
+    app.get('/tracks/num/:username',numtracksByUserName);
     app.get('/tracks/friends/:username',getLastFriendsTracks);
     app.delete('/track/:id',deleteTrack);
     app.post('/addtrack',addTrack);

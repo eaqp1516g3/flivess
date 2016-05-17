@@ -4,8 +4,8 @@
 
 angular.module('Flivess').controller('historicalCtl', ['$scope', '$http', '$cookies', '$rootScope', '$location', '$mdDialog', function($scope, $http, $cookies, $rootScope, $location, $mdDialog) {
    console.log("EN HISTORIAL CTL");
-    var base_url_prod="http://localhost:8080"
-    //var base_url_prod = "http://147.83.7.157:8080";
+    //var base_url_prod="http://localhost:8080"
+    var base_url_prod = "http://147.83.7.157:8080";
 
     $rootScope.isLogged=true;
     var userLogged = $cookies.getObject('user');

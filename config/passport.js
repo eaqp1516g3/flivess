@@ -54,7 +54,8 @@ module.exports = function(passport) {
                             newUser.facebook_id = profile._json.id;
                             newUser.username = profile._json.name;
                             newUser.fullname = profile._json.name;
-                            newUser.email = profile._json.email;
+                            newUser.email = profile.emails[0].value;
+                            newUser.imgurl = 'http://graph.facebook.com/'+ profile._json.id +'/picture?width=270&height=270';
 
                             newUser.save(function (err) {
                                 if (err)
