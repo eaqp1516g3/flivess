@@ -1,6 +1,6 @@
-var base_url_prod="http://147.83.7.157:8080";
+var base_url_local="http://147.83.7.157:8080";
 
-var base_url_local="http://10.83.2.169:8080";
+//var base_url_local="http://10.83.2.169:8080";
 
 
 

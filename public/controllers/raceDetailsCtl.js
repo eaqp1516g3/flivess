@@ -2,8 +2,8 @@
  * Created by aitor on 1/5/16.
  */
 angular.module('Flivess').controller('raceDetailsCtl', ['$scope', '$http', '$routeParams',  function($scope, $http, $routeParams) {
-    var base_url_prod="http://localhost:8080"
-    //var base_url_prod = "http://147.83.7.157:8080";
+    //var base_url_prod="http://localhost:8080"
+    var base_url_prod = "http://147.83.7.157:8080";
     console.log("LA ID: "+ $routeParams.id);
 
     $http.get(base_url_prod + '/track/' + $routeParams.id).success(function (response) {

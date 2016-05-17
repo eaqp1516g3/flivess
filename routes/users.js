@@ -1,7 +1,8 @@
 module.exports = function (app) {
     var mongoose = require('mongoose');
     var User = require('../models/user.js');
-    var base_url = "http://localhost:8080";
+    var base_url="http://147.83.7.157:8080";
+    //var base_url = "http://localhost:8080";
 
     //GET - GET All Users By Into DB
     AllUsers = function (req, res) {
@@ -227,7 +228,7 @@ module.exports = function (app) {
 
                 var usern = req.params.username;
                 User.findOne({username: usern}, function (err, user) {
-                    imagen = base_url+"/img/" + filename;
+                    imagen = base_url + "/img/" + filename;
                     console.log ("user: " + user);
                     user.imgurl = imagen;
 
