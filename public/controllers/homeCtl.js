@@ -17,8 +17,18 @@ angular.module('Flivess').controller('homeCtl', ['$scope', '$http', '$cookies', 
             $scope.noFollowing = true;
         }
         else{
+
             var int=0;
             for (var i = 0; i < data.length; i++) {
+                var final_time_m = Math.floor(data[i].time / 60);
+                var final_time_s = Math.floor(data[i].time - (final_time_m * 60));
+                data[i].time =final_time_m+' min '+final_time_s+' s';
+
+                if(data[i].distance<1) data[i].distance=data[i].distance * 1000 + ' m';
+                else data[i].distance=data[i].distance + ' Km';
+
+                if (data[i].avg_speed>0) (data[i].avg_speed= 1/data[i].avg_speed)*60;
+
                 $http.get(data[i].pointsurl).success(function (datos) {
                     for (var i = 0; i < datos.length; i++) {
                         if (i == 0) data[int].path = datos[i].latitude + "," + datos[i].longitude;

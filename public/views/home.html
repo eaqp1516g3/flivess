@@ -7,7 +7,9 @@
 <body>
 <div class="col-md-2"></div>
 <div class="panel-group  col-md-8">
-    <label ng-show="noFollowing">Follow users to see their activities...</label>
+    <div class="text-center">
+    <label  ng-show="noFollowing">Follow users to see their activities...</label>
+    </div>
     <div ng-repeat="route in routes"></divng-repeat>
         <div class="panel panel-default">
             <div class="panel-heading"><strong>{{route.username}}</strong> {{route.title|date:"dd/MM/yyyy 'at' h:mma"}}</div>
@@ -21,16 +23,16 @@
                             <tbody>
                             <tr>
                                 <td>Time</td>
-                                <td>{{route.time}} h</td>
+                                <td>{{route.time}}</td>
                             </tr>
                             <tr>
                                 <td>Distance</td>
-                                <td>{{route.distance}} Km</td>
+                                <td>{{route.distance}}</td>
 
                             </tr>
                             <tr>
                                 <td>Average speed</td>
-                                <td>{{route.avg_speed}} Km/h</td>
+                                <td>{{route.avg_speed}} min/Km</td>
                             </tr>
                             </tbody>
                         </table>

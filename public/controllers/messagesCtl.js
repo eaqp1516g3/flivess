@@ -46,8 +46,9 @@ angular.module('Flivess').controller('messagesCtl', ['$scope', '$http','$cookies
 
     $scope.getImage = function (user){
 
-        if(user==userLogged.username)
+        if(user==userLogged.username) {
             return userLogged.imgurl;
+        }
         else return $scope.conversationWith.imgurl;
     };
 

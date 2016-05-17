@@ -9,7 +9,7 @@
             width: 70px;
             height: 70px;
             font-size: 24px;
-            border-radius: 30px;
+            border-radius: 40px;
             color: white;
         }
         .otro{
@@ -21,11 +21,10 @@
 <body>
 <div class="col-md-1"></div>
 <div class="container col-md-10">
-
-    <h1>Following</h1>
-
+    <div class="text-center">
     <label ng-show="noFollowing">You don't follow anyone...</label>
-    <div class="row">
+    </div>
+    <div class="row" ng-show="!noFollowing">
         <table class="table table-hover">
             <tbody>
                 <tr ng-repeat="u in users"  ng-class-odd="'alt'" style="border: 1px solid grey;"  >
@@ -53,7 +52,7 @@
 
                         <td class="col-md-2">
 
-                                    <md-button ng-click="showConfirm($event, u.friend.username)"   class="btn btn-circle btn-lg otro center-block"><i class="glyphicon glyphicon-minus"></i></md-button>
+                            <button ng-click="showConfirm($event, u.friend.username)"   class="btn btn-circle btn-lg otro center-block"><i class="glyphicon glyphicon-minus"></i></button>
 
                             <!--<button type="button" ng-click="remove(u.friend.username)"  class="btn btn-circle btn-lg transparent navbar-inverse center-block"><i class="glyphicon glyphicon-minus"></i></button>
                             -->
