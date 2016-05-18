@@ -27,7 +27,15 @@
             <div class="row">
                 <div class="col-md-3" align="center">
                     <img alt="Click edit to upload an image" width="200" height="200" src="{{friend.imgurl}}" class="img-circle img-responsive">
+                    <br>
+                    <div class="row">
+                        <div class="col-xs-6 col-md-4 well well-sm"><b>Tracks</b><br>{{ntracks}}</div>
+                        <div class="col-xs-6 col-md-4 well well-sm"><b >Following</b><br> {{nfollowing}}</div>
+                        <div class="col-xs-6 col-md-4 well well-sm"><b>Followers</b><br> {{nfollowers}}</div>
+                    </div>
+
                 </div>
+
 
                 <div class=" col-md-6">
                     <table class="table table-user-information">
@@ -63,8 +71,11 @@
             </div>
         </div>
     </div>
-    <div class="col-md-2"></div>
-    <div class="panel-group  col-md-8">
+
+    <div class="col-md-2"><label ng-show="noTracks">You don't have tracks...</label></div>
+
+    <div id="tracks" class="panel-group  col-md-8">
+
         <div ng-repeat="route in routes">
         <div class="panel panel-default">
             <a href="#/details/{{route._id}}">

@@ -58,12 +58,32 @@ angular.module('Flivess').controller('profileCtl', ['$scope', '$http', '$cookies
         amigos.friend = friend.username;
         $http.post(base_url_prod+'/addfriend', amigos).success(function(response) {
             isFriend();
+            $scope.loadInfo();
         });
     }
+
+    $scope.loadInfo = function () {
+        $http.get(base_url_prod + '/tracks/num/' + $routeParams.friend ).success(function (response) {
+
+            $scope.ntracks = response;
+        });
+        $http.get(base_url_prod + '/nfollowing/' + $routeParams.friend ).success(function (response) {
+
+            $scope.nfollowing = response;
+        });
+        $http.get(base_url_prod + '/nfollowers/' + $routeParams.friend ).success(function (response) {
+
+            $scope.nfollowers = response;
+        });
+
+    }
+
+    $scope.loadInfo();
 
     $scope.removeFriend = function () {
         $http.delete(base_url_prod+'/friend/' + userLogged.username + "/" + friend.username).success(function () {
             isFriend();
+            $scope.loadInfo();
         });
     };
 
@@ -94,7 +114,7 @@ angular.module('Flivess').controller('profileCtl', ['$scope', '$http', '$cookies
         message.receiver = friend.username;
         $http.post(base_url_prod+'/addmessage', message).success(function() {
         });
-    }
+    };
 
 
     var isFriend = function () {
@@ -110,7 +130,7 @@ angular.module('Flivess').controller('profileCtl', ['$scope', '$http', '$cookies
             }
 
         });
-    }
+    };
 
 
     $scope.showConfirm = function(ev) {
@@ -133,7 +153,7 @@ angular.module('Flivess').controller('profileCtl', ['$scope', '$http', '$cookies
     $http.get(base_url_prod + '/tracks/' + $routeParams.friend).success(function (data) {
         console.log(data);
         if(data=="") {
-            $scope.noFollowing = true;
+            $scope.noTracks = true;
         }
         else{
             var int=0;
