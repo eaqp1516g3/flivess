@@ -32,21 +32,34 @@ angular.module('Flivess').controller('profileEditCtl', ['$scope', '$http', '$coo
 
 
                 if ($scope.file) {
-                    $http.put('/addimg/' + username, formData, {
+                    $http.put(base_url_prod+'/addimg/' + username, formData, {
                             headers: {
                                 "Content-type": undefined
                             },
                             transformRequest: angular.identity
                         }
                     ).success(function (data) {
+
+                        $http.get(base_url_prod + '/users/user/' + userLogged.username).success(function (response) {
+                            $cookies.putObject('user',response[0]);
+                            console.log(response[0]);
+                            $location.path('/profile/' + response[0].username);
+
+
+                        });
+
+
                         }).error(function (data) {
                             console.log('Error: ' + data);
                         });
                 }
+                else {
+
+                    $location.path('/profile/' + userLogged.username)
+                }
 
 
 
-            $location.path('/profile/' + response.username);
         })
 
     };

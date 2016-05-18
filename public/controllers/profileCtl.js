@@ -14,8 +14,6 @@ angular.module('Flivess').controller('profileCtl', ['$scope', '$http', '$cookies
 
     var getOwnProfile = function(){
 
-
-
         $http.get(base_url_prod + '/users/user/' + userLogged.username).success(function (response) {
         console.log("Get own profile");
             console.log("Entro");
@@ -24,9 +22,8 @@ angular.module('Flivess').controller('profileCtl', ['$scope', '$http', '$cookies
 
         });
 
-
-
     }
+
 
     var refresh = function() {
         console.log("USER: " +userLogged.username + " FRIEND: " + $routeParams.friend);
