@@ -12,18 +12,78 @@ module.exports = function (app) {
     //var base_url = 'http://localhost:8080';
     var base_url="http://147.83.7.157:8080";
     var fs = require('fs');
+    var geolib = require('geolib');
 
 
     //Prueba de funcionamiento
     test = function(req,res){
-        fs.readFile('test','utf8', function (err,data) {
+        var path = './public/tracks/';
+        var tracks_cercanos=[];
+        var track_list;
+        var j;
+        var latitude_user = req.body.latitude;
+        var longitude_user = req.body.longitude;
+        var latitude;
+        var longiude;
+        console.log(req.body.latitude);
+        console.log(req.body.latitude);
+        var  getTracks = function(){
+            Track.find({},function(err,tracks){
+                track_list=tracks;
+                //var files= tracks.pointsurl.split('/');
+                console.log("CUANTOS TRACKS: "+tracks.length);
+                for(i=0;i<track_list.length;i++){
+                    j=i;
+                    var url= track_list[i].pointsurl;
+                    //console.log(url);
+                    var files = url.split("/");
+                    console.log(files);
+                    fs.readFile(path+files[4],'utf8',function(err,data){
+                        if (err) {
+                            return console.log(err);
+                        }
+                        var points = JSON.parse(data);
+                        latitude = points[0].latitude;
+                        longiude = points[0].longitude;
+                        //console.log(points[0]);
+                        if(geolib.isPointInCircle(
+                                {latitude: latitude_user, longitude: longitude_user},
+                                {latitude: latitude, longitude: longiude},
+                                50
+                            )==true){
+                            tracks_cercanos.push(track_list[j]);
+                        }
+                        //console.log(tracks_cercanos);
+                    })
+
+                }
+
+
+            });
+
+        }
+
+        function testing(){
+            console.log("YOUUUU");
+            console.log(tracks_cercanos.length);
+            res.send(tracks_cercanos);
+        }
+        getTracks();
+        setTimeout(testing,3000);
+
+
+
+
+
+
+        /*fs.readFile('test','utf8', function (err,data) {
             if (err) {
                 return console.log(err);
             }
             var points = JSON.parse(data);
             console.log(points[0]);
             res.send(points[0]);
-        });
+        });*/
 
     }
 
@@ -131,7 +191,7 @@ module.exports = function (app) {
 
 
     //endPoints
-    app.get('/track',test);
+    app.post('/test',test);
     app.get('/track/:id',getTrack);
     app.get('/tracks/:username',tracksByUserName);
     app.get('/tracks/num/:username',numtracksByUserName);

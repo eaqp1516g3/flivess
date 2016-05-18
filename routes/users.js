@@ -67,23 +67,25 @@ module.exports = function (app) {
        var username = req.body.username;
 
         
-        User.find({username: username}, function (err, user) {
+        User.findOne({username: username}, function (err, user) {
             console.log (user);
 
 
-            if (user == "") {
-                u1 = '"' + req.body.username + '"';
+            if (user == null) {
+                u1 = req.body.username;
                 console.log(u1 + u2 );
                 checkregister(u1, u2);
             }
             else {
-                var user = JSON.stringify(user);
-                var res = user.split(",");
-                console.log("aqui el res esta con el split"+res);
 
-                u = res[1].split(":");
-                u2 = u[1];
-                u1 = '"' + req.body.username + '"';
+                //var user = JSON.stringify(user);
+                //var res = user.split(",");
+                //console.log("aqui el res esta con el split"+res);
+               // console.log(user.username);
+               // u = res[3].split(":");
+               // console.log(u);
+                u2 = user.username;
+                u1 = req.body.username;
                 checkregister(u1, u2);
             }
             
@@ -93,6 +95,9 @@ module.exports = function (app) {
     };
 
     function checkregister(u1, u2) {
+        console.log("CHECK REGISTER");
+        console.log("U1: "+u1);
+        console.log("U2: "+u2);
 
         if (u1 == u2) {
             return result.status(409).json("usuario " + u1 + " ya existe");
