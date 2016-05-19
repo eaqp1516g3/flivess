@@ -52,18 +52,26 @@ angular.module('starter', ['ionic', 'starter.controllers','ngStorage','ngOpenFB'
       controller: 'TrackingCtrl'
     })
 
-/*
-    .state('tracking',{
-      url: '/tracking',
+    .state('search',{
+      url: '/search',
       cache:false,
-      views: {
-        'tracking': {
-          templateUrl: 'templates/tracking.html',
-          controller: 'TrackingCtrl'
-        }
-      }
+      templateUrl: 'templates/search.html',
+      controller: 'SearchCtrl'
     })
-*/
+    .state('editprofile',{
+      url: '/editprofile',
+      cache:false,
+      templateUrl: 'templates/editprofile.html',
+      controller: 'EditProfileCtrl'
+    })
+   .state('profile',{
+      url: '/profile/:username',
+      cache:false,
+      templateUrl: 'templates/profile.html',
+      controller: 'ProfileCtrl'
+    })
+
+
     .state('trackingManager', {
       url: '/tracking/manager',
       cache:false,
@@ -71,7 +79,6 @@ angular.module('starter', ['ionic', 'starter.controllers','ngStorage','ngOpenFB'
       controller: 'TrackManagerCtrl'
 
     })
-
 
 
   // setup an abstract state for the tabs directive
@@ -94,6 +101,17 @@ angular.module('starter', ['ionic', 'starter.controllers','ngStorage','ngOpenFB'
       }
     }
   })
+
+    .state('tab.account', {
+      url: '/account',
+      views: {
+        'tab-account': {
+          cache:false,
+          templateUrl: 'templates/tab-account.html',
+          controller: 'AccountCtrl'
+        }
+      }
+    })
 
     .state('tab.test',{
       url: '/test/:name',

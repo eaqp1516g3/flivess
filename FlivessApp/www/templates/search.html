@@ -1,0 +1,21 @@
+<ion-header-bar class="bar-subheader item-input-inset">
+  <label class="item-input-wrapper">
+    <i class="icon ion-ios-search placeholder-icon"></i>
+    <input type="search" placeholder="Search users..." ng-change="search()" ng-model="data.search">
+  </label>
+  <button ng-click="goback()" class="button">
+    Cancel
+  </button>
+</ion-header-bar>
+<ion-content>
+  <div class="list">
+
+    <a class="item item-avatar"  ng-repeat="user in data.users" ng-click="profile(user.username)">
+      <img src="{{user.imgurl}}">
+      <h2>{{user.fullname}}</h2>
+      <p>{{user.username}} &bull; {{user.email}}</p>
+    </a>
+
+  </div>
+
+</ion-content>

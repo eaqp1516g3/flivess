@@ -1,16 +1,288 @@
 var base_url_local="http://147.83.7.157:8080";
 
-//var base_url_local="http://10.83.2.169:8080";
+//var base_url_local="http://10.183.58.75:8080";
 
 
 
 angular.module('starter.controllers', ['ngOpenFB'])
 
+.factory('UsersDataService', function($q, $timeout, $http) {
+
+    var users;
+    var getUsers = function(){
+      $http.get(base_url_local + '/allusers/').success(function(data) {
+        console.log("Obtengo users");
+        console.log(data);
+        users=data;
+
+        users = users.sort(function(a, b) {
+
+          var userA = a.username.toLowerCase();
+          var userB = b.username.toLowerCase();
+
+          if(userA > userB) return 1;
+          if(userA < userB) return -1;
+          return 0;
+
+        });
+
+      });
+    }
+
+    getUsers();
+
+    var searchUsers = function(searchFilter) {
+
+      console.log('Searching users for ' + searchFilter);
+
+      var deferred = $q.defer();
+
+      var matches = users.filter( function(user) {
+        if(user.username.toLowerCase().indexOf(searchFilter.toLowerCase()) !== -1 || user.fullname.toLowerCase().indexOf(searchFilter.toLowerCase()) !== -1) return true;
+      })
+
+      $timeout( function(){
+
+        deferred.resolve( matches );
+
+      }, 100);
+
+      return deferred.promise;
+
+    };
+
+    return {
+
+      searchUsers : searchUsers
+
+    }
+  })
+
 .controller('DashCtrl', function($scope,$state) {
   $scope.toTrack = function(){
     $state.go('tracking');
   }
+
+  $scope.toSearch= function(){
+    $state.go('search');
+  }
+
+
 })
+
+.controller('ProfileCtrl', function($scope,$http,$state,$ionicPopup,$ionicActionSheet,$stateParams,$anchorScroll,$location) {
+
+  $scope.userLogged = JSON.parse(localStorage.getItem('userLogged'));
+  $scope.showActionSheet = function() {// Show the action sheet
+
+
+
+
+    var hideSheet = $ionicActionSheet.show({
+      buttons: [
+        { text: 'We' }
+        , { text: 'Are' }
+        , { text: 'Working' }
+        , { text: "On this. Flivess" }
+      ],
+      cancelText: '<span class="color-white">Cancel</span>',
+      cssClass: 'tinder-actionsheet',
+      cancel: function() {
+        // add cancel code..
+      },
+      buttonClicked: function(index) {
+        return true;
+      }
+    });};
+
+
+
+  var friend= new Object();
+
+  var refresh = function(){
+    $http.get(base_url_local + '/users/user/' + $stateParams.username).success(function (response) {
+
+      friend = response[0];
+      $scope.friend = friend;
+      console.log(friend.username);
+      isFriend();
+
+    });
+    $http.get(base_url_local + '/tracks/num/' + $stateParams.username).success(function (response) {
+
+      $scope.ntracks = response;
+    });
+    $http.get(base_url_local + '/nfollowing/' + $stateParams.username).success(function (response) {
+
+      $scope.nfollowing = response;
+    });
+    $http.get(base_url_local + '/nfollowers/' + $stateParams.username).success(function (response) {
+
+      $scope.nfollowers = response;
+    });
+  }
+
+  refresh();
+
+  $scope.follow = function () {
+    console.log("Dentro de addFriend");
+    var amigos = new Object();
+    amigos.username = $scope.userLogged.username;
+    console.log($scope.userLogged.username);
+    amigos.friend = $stateParams.username;
+    console.log($stateParams.username);
+    console.log("Lo que envio " + amigos)
+    $http.post(base_url_local+'/addfriend', amigos).success(function(response) {
+      isFriend();
+      refresh();
+    });
+  }
+
+  $scope.unfollow = function () {
+
+    var confirmPopup = $ionicPopup.confirm({
+      title: 'Unfollow '+ $scope.friend.username + ' ?'
+    });
+
+    confirmPopup.then(function(res) {
+      if(res) {
+        $http.delete(base_url_local+'/friend/' + $scope.userLogged.username + "/" + $scope.friend.username).success(function () {
+          isFriend();
+          refresh();
+        });
+      } else {
+        console.log('You are not sure');
+      }
+    });
+
+  };
+
+  var isFriend = function () {
+    $http.get(base_url_local+ '/friends/' + $scope.userLogged.username + "/" + $scope.friend.username).success(function (response) {
+      console.log(response);
+      if(response==true){
+        $scope.isfriend=true;
+      }
+      else{
+        $scope.isfriend=false;
+      }
+
+    });
+  }
+
+  $scope.goback = function(){
+
+   $state.go('tab.dash');
+
+  };
+
+  $scope.editProfile = function(){
+
+    $state.go('editprofile');
+
+  };
+
+  $scope.goTracksArea = function() {
+    // set the location.hash to the id of
+    // the element you wish to scroll to.
+    if($scope.userLogged.username != $stateParams.username)
+    {
+      $location.hash('trackArea');
+
+      // call $anchorScroll()
+      $anchorScroll();
+    }
+  }
+
+
+
+})
+
+.controller('SearchCtrl', ['$scope', 'UsersDataService','$ionicHistory','$state', function($scope, UsersDataService,$ionicHistory,$state) {
+
+  $scope.profile = function(username){
+    $state.go('profile',{username:username});
+  }
+
+  $scope.goback= function(){
+    $ionicHistory.goBack();
+  }
+
+  $scope.data = { "users" : [], "search" : '' };
+
+    $scope.search = function() {
+
+      UsersDataService.searchUsers($scope.data.search).then(
+        function(matches) {
+          $scope.data.users = matches;
+        }
+      )
+    }
+
+}])
+
+
+
+.controller('EditProfileCtrl', ['$scope','$ionicHistory','$state','$http', function($scope,$ionicHistory,$state,$http) {
+
+  $scope.userLogged = JSON.parse(localStorage.getItem('userLogged'));
+
+  $scope.goback= function(){
+      $ionicHistory.goBack();
+    }
+
+  $http.get(base_url_local + '/user/' + $scope.userLogged._id).success(function(response){
+    $scope.user = response;
+
+  });
+
+  $scope.updateUser = function() {
+
+    $http.put(base_url_local +'/user/' + $scope.userLogged._id, $scope.user).success(function (response) {
+      $ionicHistory.goBack();
+    })
+
+  };
+
+  }])
+
+.controller('AccountCtrl', function($scope,$ionicPopup,$state) {
+
+  $scope.userLogged = JSON.parse(localStorage.getItem('userLogged'));
+
+
+  $scope.myprofile = function(){
+    $state.go('profile',{username:$scope.userLogged.username});
+  }
+
+  $scope.toSearch= function(){
+    $state.go('search');
+  }
+
+
+  $scope.toTrack = function(){
+    $state.go('tracking');
+  }
+
+  $scope.logout = function() {
+    var confirmPopup = $ionicPopup.confirm({
+      title: 'Exit Flivess',
+      template: 'Are you sure?'
+    });
+
+    confirmPopup.then(function(res) {
+      if(res) {
+        localStorage.clear();
+        console.log(localStorage.getItem('userLogged'));
+        $state.go('login');
+      } else {
+        $state.go('tab.account');
+      }
+    });
+  }
+
+
+  })
 
 .controller('TrackingCtrl',['$scope','$http','$cordovaGeolocation','$ionicPlatform','$state','$ionicPopup','$ionicLoading', function($scope,$http,$cordovaGeolocation,$ionicPlatform,$state,$ionicPopup,$ionicLoading) {
   console.log("EN EL TRACKINGCTRL");
@@ -496,8 +768,14 @@ angular.module('starter.controllers', ['ngOpenFB'])
 
 .controller('MessagesCtrl',['$scope','$http','$localStorage','$state','$stateParams','$rootScope','simpleObj', function($scope,$http,$localStorage,$state,$stateParams,$rootScope, simpleObj) {
   //$window.location.reload();
+  $scope.toSearch= function(){
+    $state.go('search');
+  }
 
 
+  $scope.toTrack = function(){
+    $state.go('tracking');
+  }
 
   $scope.detail=function(username){
     $state.go('tab.message-detail',{name:username});
@@ -632,21 +910,6 @@ console.log("estoy dentro");
   }
 
 
-  $scope.logout = function() {
-    var confirmPopup = $ionicPopup.confirm({
-      title: 'Salir de Flivess',
-      template: 'Estas seguro que quieres salir?'
-    });
 
-    confirmPopup.then(function(res) {
-      if(res) {
-        localStorage.clear();
-        console.log(localStorage.getItem('userLogged'));
-        $state.go('login');
-      } else {
-        $state.go('tab.dash');
-      }
-    });
-  }
 
 });
