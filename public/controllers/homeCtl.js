@@ -27,7 +27,7 @@ angular.module('Flivess').controller('homeCtl', ['$scope', '$http', '$cookies', 
                 if(data[i].distance<1) data[i].distance=data[i].distance * 1000 + ' m';
                 else data[i].distance=data[i].distance + ' Km';
 
-                if (data[i].avg_speed>0) data[i].avg_speed= 1/(data[i].avg_speed*60);
+                if (data[i].avg_speed>0) data[i].avg_speed= Math.floor(1/(data[i].avg_speed*60)).toFixed(2);
 
                 $http.get(data[i].pointsurl).success(function (datos) {
                     for (var i = 0; i < datos.length; i++) {
