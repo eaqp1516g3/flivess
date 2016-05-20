@@ -13,6 +13,7 @@ var trackSchema = new Schema({
         distance:           { type: Number},
         avg_speed:          { type: Number},
         time:               { type: Number},
+        id_comun:           { type: String},
         created:            { type: Date, default: Date.now}
     },
     {

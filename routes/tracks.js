@@ -49,7 +49,7 @@ module.exports = function (app) {
                         if(geolib.isPointInCircle(
                                 {latitude: latitude_user, longitude: longitude_user},
                                 {latitude: latitude, longitude: longiude},
-                                50
+                                30
                             )==true){
                             tracks_cercanos.push(track_list[j]);
                         }
@@ -62,7 +62,6 @@ module.exports = function (app) {
             });
 
         }
-
         function testing(){
             console.log("YOUUUU");
             console.log(tracks_cercanos.length);
@@ -90,14 +89,18 @@ module.exports = function (app) {
 
     //genera un modelo de track con los parametros calculados en el cliente y un un fichero json con los puntos del track
     addTrack = function(req,res){
-        console.log(req.body);
         var fs = require('fs');
         var path = './public/tracks/';
+        if(req.body.id_comun==null){
+            console.log("ESTA RUTA ES NUEVA")
+            req.body.id_comun = Math.floor((Math.random() * 99999) + 1);
+        }
         fs.writeFile(path + req.body.title+'.json',JSON.stringify(req.body.data),function(err){
             return console.log(err);
         })
         console.log('FICHERO GENERADO');
         var url = base_url+'/tracks/'+req.body.title+'.json';
+
 
         var track = new Track({
             title: req.body.title,
@@ -106,9 +109,9 @@ module.exports = function (app) {
             distance: req.body.distance,
             time: req.body.time,
             pointsurl:url,
+            id_comun:req.body.id_comun,
         })
         console.log(track);
-
 
         track.save(function (err, track) {
             if (err) {
@@ -123,7 +126,7 @@ module.exports = function (app) {
     }
 
 
-    //Obtiene un track mediante ID
+   /* //Obtiene un track mediante ID
     getTrack = function(req,res){
         Track.findById(req.params.id, function (err, track) {
             if (err) return res.send(500, err.message);
@@ -132,6 +135,52 @@ module.exports = function (app) {
             res.status(200).json(track);
         });
 
+    }*/
+
+    //Obtiene un track mediante ID
+    getTrack = function(req,res){
+        var ranking =[];
+        var existe = false;
+        Track.findById(req.params.id, function (err, track) {
+            if (err) return res.send(500, err.message);
+
+            console.log('GET track by ID: ' + req.params.id);
+            //res.status(200).json(track);
+
+            Track.find({id_comun:track.id_comun},function(err,tracks){
+                console.log("BUSCO TRACKS CON ID COMUN");
+                ranking.push(tracks[0]);
+                for(i=1;i<tracks.length;i++){
+                    for(j=0;j<ranking.length;j++) {
+                        if (tracks[i].username == ranking[j].username) {
+                            console.log("ESTA DENTRO DEL RANKING");
+                            existe = true;
+                            if (tracks[i].time < ranking[j].time) {
+                                console.log("CAMBIO A UN TIEMPO MEJOR")
+                                ranking[j] = tracks[i];
+                            }
+                        }
+                    }
+                    if(existe == false){
+                        console.log("AÑADO AL RANKING");
+                        ranking.push(tracks[i]);
+                    }
+                    existe = false;
+                }
+                console.log("FINISH!")
+                var ranking_obj ={
+                    track_pedido: track,
+                    ranking: ranking,
+                }
+                res.send(ranking_obj);
+            })
+        });
+        /* function testing(){
+         console.log("YOUUUU");
+         console.log(ranking.length);
+         res.send(ranking);
+         }
+         setTimeout(testing,2000);*/
     }
 
     //Obtiene mis tracks
