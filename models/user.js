@@ -5,13 +5,12 @@ var mongoose = require('mongoose');
 
 var userSchema = new Schema({
     facebook_id:        { type: String},
-    token:              { type: String},
     username:           { type: String},
     fullname:           { type: String},
     email:              { type: String},
     password:           { type: String},
     imgurl:             { type: String},
-    level:              { type: String},
+    city:               { type: String},
     age:                { type: String},
     sex:                { type: String},
     weight:             { type: String},

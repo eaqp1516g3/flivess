@@ -2,8 +2,8 @@
  * Created by aitor on 19/4/16.
  */
 angular.module('Flivess').controller('profileCtl', ['$scope', '$http', '$cookies', 'ModalService', '$routeParams', function($scope, $http, $cookies, ModalService, $routeParams,$mdDialog) {
-    //var base_url_prod="http://localhost:8080"
-    var base_url_prod = "http://147.83.7.157:8080";
+    var base_url_prod="http://localhost:8080";
+    //var base_url_prod = "http://147.83.7.157:8080";
 
 
     console.log("DENTRO DE CONTROLOADOR de profile.html");
@@ -162,7 +162,7 @@ angular.module('Flivess').controller('profileCtl', ['$scope', '$http', '$cookies
                 if(data[i].distance<1) data[i].distance=data[i].distance * 1000 + ' m';
                 else data[i].distance=data[i].distance + ' Km';
 
-                if (data[i].avg_speed>0) (data[i].avg_speed= 1/data[i].avg_speed)*60;
+                if (data[i].avg_speed>0) data[i].avg_speed= Math.floor(60/(data[i].avg_speed)).toFixed(2);
 
                 $http.get(data[i].pointsurl).success(function (datos) {
                     for (var i = 0; i < datos.length; i++) {

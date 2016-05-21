@@ -3,27 +3,28 @@
  */
 
 angular.module('Flivess').controller('raceDetailsCtl', ['$scope', '$http', '$cookies', '$routeParams', '$location', '$mdDialog', function($scope, $http, $cookies, $routeParams, $location, $mdDialog) {
-    //var base_url_prod="http://localhost:8080";
-    var base_url_prod = "http://147.83.7.157:8080";
+    var base_url_prod="http://localhost:8080";
+    //var base_url_prod = "http://147.83.7.157:8080";
 
 
     var userLogged = $cookies.getObject('user');
     console.log("LA ID: "+ $routeParams.id);
     $scope.myTrack = false;
     $http.get(base_url_prod + '/track/' + $routeParams.id).success(function (response) {
-        console.log(userLogged.username + " y el otro " + response.username);
-        if(userLogged.username == response.username) $scope.myTrack = true;
+        console.log(response);
+        console.log(userLogged.username + " y el otro " + response.track_pedido.username);
+        if(userLogged.username == response.track_pedido.username) $scope.myTrack = true;
 
-        var final_time_m = Math.floor(response.time / 60);
-        var final_time_s = Math.floor(response.time - (final_time_m * 60));
-        response.time =final_time_m+' min '+final_time_s+' s';
+        var final_time_m = Math.floor(response.track_pedido.time / 60);
+        var final_time_s = Math.floor(response.track_pedido.time - (final_time_m * 60));
+        response.track_pedido.time =final_time_m+' min '+final_time_s+' s';
 
-        if(response.distance<1) response.distance=response.distance * 1000 + ' m';
-        else response.distance=response.distance + ' Km';
+        if(response.track_pedido.distance<1) response.track_pedido.distance=response.track_pedido.distance * 1000 + ' m';
+        else response.track_pedido.distance=response.track_pedido.distance + ' Km';
 
-        if (response.avg_speed>0) (response.avg_speed= 1/response.avg_speed)*60;
+        if (response.track_pedido.avg_speed>0)response.track_pedido.avg_speed= Math.floor(60/(response.track_pedido.avg_speed)).toFixed(2);
 
-        $http.get(response.pointsurl).success(function(data) {
+        $http.get(response.track_pedido.pointsurl).success(function(data) {
             var map = new google.maps.Map(document.getElementById("map"),
                 {
                     zoom: 17,
@@ -64,7 +65,24 @@ angular.module('Flivess').controller('raceDetailsCtl', ['$scope', '$http', '$coo
             marker2.setMap(map);
         });
 
-        $scope.route = response;
+        $scope.route = response.track_pedido;
+
+
+        console.log(response.ranking.length);
+        response.ranking.sort(function(a, b) {
+            var s = parseFloat(a.time) - parseFloat(b.time);
+            console.log("EL A: " + s);
+            return s;
+        });
+        for(var i=0; i<response.ranking.length; i++) {
+            console.log("1 TIEMPO: "+response.ranking[i].time);
+            var final_time_m = Math.floor(response.ranking[i].time / 60);
+            var final_time_s = Math.floor(response.ranking[i].time - (final_time_m * 60));
+            response.ranking[i].time = final_time_m + ' min ' + final_time_s + ' s';
+            console.log("2 TIEMPO: "+ response.ranking[i].time);
+        }
+
+        $scope.ranking = response.ranking;
 
     });
 
@@ -84,6 +102,15 @@ angular.module('Flivess').controller('raceDetailsCtl', ['$scope', '$http', '$coo
             console.log("EN EL POZO");
         });
     };
+
+
+
+
+    $scope.details = function (id) {
+        $location.path('/details/' + id);
+    };
+
+
 
     $scope.chartObject = {
         "type": "AreaChart",

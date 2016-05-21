@@ -37,8 +37,9 @@
 
                     </tr>
                     <tr>
-                        <td>Average speed</td>
+                        <td>Average Speed</td>
                         <td>{{route.avg_speed}} min/Km</td>
+
                     </tr>
                     </tbody>
                 </table>
@@ -49,7 +50,23 @@
         <div google-chart chart="chartObject" style="{{cssStyle}}"></div>
     </div>
     <div  class="panel panel-default col-md-6">
-        HOla
+        <h1>RANKING</h1>
+        <table class="table table-striped header-fixed">
+            <thead>
+            <tr>
+                <th>User</th>
+                <th>Time</th>
+            </tr>
+            </thead>
+            <tbody style="border: 1px solid grey;" ng-repeat="rank in ranking">
+            <tr ng-click="details(rank._id)" style="cursor: pointer;">
+                <td >{{rank.username}}</td>
+                <td>{{rank.time}}</td>
+            </tr>
+
+            </tbody>
+
+        </table>
     </div>
 
 </div>
