@@ -4,8 +4,8 @@
 
 angular.module('Flivess').controller('historicalCtl', ['$scope', '$http', '$cookies', '$rootScope', '$location', '$mdDialog', function($scope, $http, $cookies, $rootScope, $location, $mdDialog) {
    console.log("EN HISTORIAL CTL");
-    //var base_url_prod="http://localhost:8080"
-    var base_url_prod = "http://147.83.7.157:8080";
+    var base_url_prod="http://localhost:8080";
+    //var base_url_prod = "http://147.83.7.157:8080";
 
     $rootScope.isLogged=true;
     var userLogged = $cookies.getObject('user');
@@ -27,7 +27,7 @@ angular.module('Flivess').controller('historicalCtl', ['$scope', '$http', '$cook
                     if (data[i].distance < 1) data[i].distance = data[i].distance * 1000 + ' m';
                     else data[i].distance = data[i].distance + ' Km';
 
-                    if (data[i].avg_speed > 0) (data[i].avg_speed = 1 / data[i].avg_speed) * 60;
+                    if (data[i].avg_speed>0) data[i].avg_speed= Math.floor(60/(data[i].avg_speed)).toFixed(2);
                 }
                 console.log(data);
                 $scope.routes = data;

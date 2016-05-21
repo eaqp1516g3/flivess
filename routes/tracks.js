@@ -9,8 +9,8 @@ module.exports = function (app) {
     var Friend = require('../models/friend.js');
     var User = require('../models/user.js');
 
-    //var base_url = 'http://localhost:8080';
-    var base_url="http://147.83.7.157:8080";
+    var base_url = 'http://localhost:8080';
+    //var base_url="http://147.83.7.157:8080";
     var fs = require('fs');
     var geolib = require('geolib');
 
