@@ -370,15 +370,15 @@ angular.module('starter.controllers', ['ngOpenFB'])
           });
       }
 
-      $scope.stop_track = function(){
+      $scope.stop_track = function() {
 
-        var showL = function() {
+       /* var showL = function () {
           $ionicLoading.show({
             template: 'Loading...'
           });
         };
 
-        showL();
+        showL();*/
 
         $scope.boton_start = true;
         $scope.boton_stop = false;
@@ -388,76 +388,88 @@ angular.module('starter.controllers', ['ngOpenFB'])
         bgLocationServices.stop();
         window.localStorage.setItem(track_id, JSON.stringify(tracking_data));
         console.log(tracking_data.length);
-        //$scope.data=tracking_data.length;
+        if (tracking_data.length < 2) {
+          $ionicPopup.alert({
+            title: 'Not Tracking',
+            template: 'Are you runned? there are not points tracked!'
+          });
+          $state.go('tab.dash');
 
-        // Calculate the total distance travelled
-        //    &
-        //Calcular la velocidad media de la ruta
-        avg_speed=0;
-        total_km = 0;
-
-        for(i = 0; i < tracking_data.length; i++){
-
-          if(i == (tracking_data.length - 1)){
-            break;
-          }
-
-          total_km += gps_distance(tracking_data[i].latitude, tracking_data[i].longitude, tracking_data[i+1].latitude, tracking_data[i+1].longitude);
-          if(tracking_data[i].speed>0) {
-            avg_speed += tracking_data[i].speed;
-          }
         }
-        console.log("VELOCIDAD MEDIA(m/s): "+avg_speed);
-        console.log("DISTANCIA SIN REDONDEO: "+total_km);
-        total_km_rounded = total_km.toFixed(2);
-        avg_speed_norm = avg_speed/tracking_data.length;
-        avg_speed_km= (avg_speed_norm*3.6);
-        avg_speed_rounded = avg_speed_km.toFixed(1);
-
-        //$scope.distancia = total_km_rounded; // mostrar en la pantalla
-        //$scope.velocidad = avg_speed_rounded;
+        else {
 
 
-        // Calculate the total time taken for the track
+          //$scope.data=tracking_data.length;
 
-        start_time = new Date(tracking_data[0].timestamp).getTime();
-        end_time = new Date(tracking_data[tracking_data.length-1].timestamp).getTime();
+          // Calculate the total distance travelled
+          //    &
+          //Calcular la velocidad media de la ruta
+          avg_speed = 0;
+          total_km = 0;
 
-        total_time_ms = end_time - start_time;
-        total_time_s = total_time_ms / 1000;
+          for (i = 0; i < tracking_data.length; i++) {
 
-        final_time_m = Math.floor(total_time_s / 60);
-        final_time_s = Math.floor(total_time_s - (final_time_m * 60));
-        console.log("total minutos  "+final_time_m);
-        console.log("total segundos"+final_time_s);
-       // $scope.tiempo_minutos = final_time_m;
-       // $scope.tiempo_segundos = final_time_s;
+            if (i == (tracking_data.length - 1)) {
+              break;
+            }
 
-        $scope.distancia = 'DISTANCIA: '+total_km_rounded+' Km';
-        $scope.velocidad = 'VELOCIDAD MEDIA: '+avg_speed_rounded+' Km/h';
-        $scope.tiempo = 'TIEMPO: '+final_time_m+' Minutos y '+final_time_s+' Segundos';
+            total_km += gps_distance(tracking_data[i].latitude, tracking_data[i].longitude, tracking_data[i + 1].latitude, tracking_data[i + 1].longitude);
+            if (tracking_data[i].speed > 0) {
+              avg_speed += tracking_data[i].speed;
+            }
+          }
+          console.log("VELOCIDAD MEDIA(m/s): " + avg_speed);
+          console.log("DISTANCIA SIN REDONDEO: " + total_km);
+          total_km_rounded = total_km.toFixed(2);
+          avg_speed_norm = avg_speed / tracking_data.length;
+          avg_speed_km = (avg_speed_norm * 3.6);
+          avg_speed_rounded = avg_speed_km.toFixed(1);
 
-        //tracking_data=[];
-        console.log("ARRAY DESPUES DEL STOP: "+tracking_data);
-
-        //Me
-        var trackSt ={
-          title: track_id,
-          username: userLogged.username,
-          data: tracking_data,
-          avg_speed: avg_speed_rounded,
-          distance: total_km_rounded,
-          time: total_time_s
-        };
-        window.localStorage.setItem('trackInfo',JSON.stringify(trackSt));
+          //$scope.distancia = total_km_rounded; // mostrar en la pantalla
+          //$scope.velocidad = avg_speed_rounded;
 
 
-        var hide = function(){
-          $ionicLoading.hide();
-        };
-        hide();
-        //Me
-        $state.go('trackingManager');
+          // Calculate the total time taken for the track
+
+          start_time = new Date(tracking_data[0].timestamp).getTime();
+          end_time = new Date(tracking_data[tracking_data.length - 1].timestamp).getTime();
+
+          total_time_ms = end_time - start_time;
+          total_time_s = total_time_ms / 1000;
+
+          final_time_m = Math.floor(total_time_s / 60);
+          final_time_s = Math.floor(total_time_s - (final_time_m * 60));
+          console.log("total minutos  " + final_time_m);
+          console.log("total segundos" + final_time_s);
+          // $scope.tiempo_minutos = final_time_m;
+          // $scope.tiempo_segundos = final_time_s;
+
+          $scope.distancia = 'DISTANCIA: ' + total_km_rounded + ' Km';
+          $scope.velocidad = 'VELOCIDAD MEDIA: ' + avg_speed_rounded + ' Km/h';
+          $scope.tiempo = 'TIEMPO: ' + final_time_m + ' Minutos y ' + final_time_s + ' Segundos';
+
+          //tracking_data=[];
+          console.log("ARRAY DESPUES DEL STOP: " + tracking_data);
+
+          //Me
+          var trackSt = {
+            title: track_id,
+            username: userLogged.username,
+            data: tracking_data,
+            avg_speed: avg_speed_rounded,
+            distance: total_km_rounded,
+            time: total_time_s
+          };
+          window.localStorage.setItem('trackInfo', JSON.stringify(trackSt));
+
+
+          var hide = function () {
+            $ionicLoading.hide();
+          };
+          hide();
+          //Me
+          $state.go('trackingManager');
+        }
       }
 
   })
