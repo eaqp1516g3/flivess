@@ -70,6 +70,26 @@ angular.module('starter', ['ionic', 'starter.controllers','ngStorage','ngOpenFB'
       templateUrl: 'templates/profile.html',
       controller: 'ProfileCtrl'
     })
+    .state('tracksUser',{
+      url: '/tracks/:username',
+      cache:false,
+      templateUrl: 'templates/tracks-user.html',
+      controller: 'TracksUserCtrl'
+    })
+
+    .state('friends',{
+      url: '/friends/:type/:username',
+      cache:false,
+      templateUrl: 'templates/friends-list.html',
+      controller: 'FriendsCtrl'
+    })
+
+    .state('followers',{
+      url: '/followers/:username',
+      cache:false,
+      templateUrl: 'templates/followers-list.html',
+      controller: 'FollowersCtrl'
+    })
 
 
     .state('trackingManager', {

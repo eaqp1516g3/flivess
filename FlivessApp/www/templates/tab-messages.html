@@ -8,8 +8,18 @@
   </ion-nav-buttons>
 
   <ion-content>
+    <div ng-if="users == ''" class="text-center">
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <p class="color-gray"  >No recent messages...</p>
+    </div>
+
+
     <ion-list>
-      <ion-item name="message-detail" class="item-remove-animate item-avatar item-icon-right" ng-repeat="user in users" type="item-text-wrap" ng-click="detail(user.username)">
+      <ion-item name="message-detail" class="item-remove-animate item-avatar item-icon-right" ng-repeat="user in users" type="item-text-wrap" ng-click="detail(user.username);loading()">
         <img ng-src="{{user.imgurl}}">
         <h2>{{user.username}}</h2>
         <p>{{user.email}}</p>

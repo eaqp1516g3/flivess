@@ -1,7 +1,6 @@
-var base_url_local="http://147.83.7.157:8080";
+//var base_url_local="http://147.83.7.157:8080";
 
-//var base_url_local="http://10.183.58.75:8080";
-
+var base_url_local="http://192.168.1.10:8080";
 
 
 angular.module('starter.controllers', ['ngOpenFB'])
@@ -70,7 +69,7 @@ angular.module('starter.controllers', ['ngOpenFB'])
 
 })
 
-.controller('ProfileCtrl', function($scope,$http,$state,$ionicPopup,$ionicActionSheet,$stateParams,$anchorScroll,$location) {
+.controller('ProfileCtrl', function($scope,$http,$state,$ionicPopup,$ionicActionSheet,$stateParams,$anchorScroll,$location,$ionicLoading,$timeout,$ionicScrollDelegate,$ionicHistory) {
 
   $scope.userLogged = JSON.parse(localStorage.getItem('userLogged'));
   $scope.showActionSheet = function() {// Show the action sheet
@@ -95,6 +94,13 @@ angular.module('starter.controllers', ['ngOpenFB'])
       }
     });};
 
+  $scope.toFollowing = function(user){
+    $state.go('friends',{type:'following',username:user});
+  };
+
+  $scope.toFollowers = function(user){
+    $state.go('followers',{username:user});
+  };
 
 
   var friend= new Object();
@@ -106,6 +112,10 @@ angular.module('starter.controllers', ['ngOpenFB'])
       $scope.friend = friend;
       console.log(friend.username);
       isFriend();
+
+      if(angular.isUndefined($scope.friend.level)){
+        $scope.friend.level = '0';
+      }
 
     });
     $http.get(base_url_local + '/tracks/num/' + $stateParams.username).success(function (response) {
@@ -172,7 +182,7 @@ angular.module('starter.controllers', ['ngOpenFB'])
 
   $scope.goback = function(){
 
-   $state.go('tab.dash');
+    $ionicHistory.goBack();
 
   };
 
@@ -185,32 +195,99 @@ angular.module('starter.controllers', ['ngOpenFB'])
   $scope.goTracksArea = function() {
     // set the location.hash to the id of
     // the element you wish to scroll to.
+    //$ionicScrollDelegate.anchorScroll('trackArea');
+
     if($scope.userLogged.username != $stateParams.username)
     {
       $location.hash('trackArea');
 
-      // call $anchorScroll()
-      $anchorScroll();
+      $ionicScrollDelegate.anchorScroll()
     }
   }
 
+  $scope.loading = function(){
+    $ionicLoading.show();
+
+    $timeout(function () {
+      $ionicLoading.hide();
+    }, 500);
+
+  }
+
+  var getTracks = function(){
+    $scope.routes='';
+
+    if($scope.userLogged.username != $stateParams.username){
+      $http.get(base_url_local + '/tracks/' + $stateParams.username).success(function (data) {
+        console.log(data);
+        if(data=="") {
+          $scope.noTracks = true;
+        }
+        else{
+          var int=0;
+          for (var i = 0; i < data.length; i++) {
+            var final_time_m = Math.floor(data[i].time / 60);
+            var final_time_s = Math.floor(data[i].time - (final_time_m * 60));
+            data[i].time =final_time_m+' min '+final_time_s+' s';
+
+            if(data[i].distance<1) data[i].distance=data[i].distance * 1000 + ' m';
+            else data[i].distance=data[i].distance + ' Km';
+
+            if (data[i].avg_speed>0) (data[i].avg_speed= 1/data[i].avg_speed)*60;
+
+            $http.get(data[i].pointsurl).success(function (datos) {
+              for (var i = 0; i < datos.length; i++) {
+                if (i == 0) data[int].path = datos[i].latitude + "," + datos[i].longitude;
+                else data[int].path += "|" + datos[i].latitude + "," + datos[i].longitude;
+              }
+              data[int].center = datos[1].latitude + "," + datos[1].longitude;
+              var marker1 = datos[0].latitude + "," + datos[0].longitude;
+              var marker2 = datos[datos.length -1].latitude + "," + datos[datos.length -1].longitude;
+
+              //strokeColor: "#FF0000",
+              //strokeOpacity: 0.7,
+              //strokeWeight: 3
+              data[int].img="http://maps.googleapis.com/maps/api/staticmap?center=" + data[int].center+"&zoom=17&size=425x180&maptype=roadmap&path=color:0xff0000ff|weight:3|"+data[int].path +"&sensor=false&markers=color:blue%7Clabel:S%7C"+marker1+"&markers=color:red%7Clabel:F%7C"+marker2;
+              //zoom:17
+              //mapTypeId: google.maps.MapTypeId.ROADMAP
+              int++;
+            });
+          }
+          console.log(data);
+          $scope.routes = data;
+        }
+      });
+    }
+  };
+
+  getTracks();
 
 
 })
 
-.controller('SearchCtrl', ['$scope', 'UsersDataService','$ionicHistory','$state', function($scope, UsersDataService,$ionicHistory,$state) {
+.controller('SearchCtrl', ['$scope', 'UsersDataService','$ionicHistory','$state','$ionicLoading','$timeout', function($scope, UsersDataService,$ionicHistory,$state,$ionicLoading,$timeout) {
 
   $scope.profile = function(username){
     $state.go('profile',{username:username});
   }
 
   $scope.goback= function(){
-    $ionicHistory.goBack();
+    $state.go('tab.dash');
   }
 
   $scope.data = { "users" : [], "search" : '' };
 
     $scope.search = function() {
+
+      var loading = function(){
+        $ionicLoading.show();
+
+        $timeout(function () {
+          $ionicLoading.hide();
+        }, 300);
+
+      }
+      loading();
 
       UsersDataService.searchUsers($scope.data.search).then(
         function(matches) {
@@ -221,9 +298,9 @@ angular.module('starter.controllers', ['ngOpenFB'])
 
 }])
 
+.controller('EditProfileCtrl', ['$scope','$ionicHistory','$state','$http','$ionicLoading','$timeout','$rootScope', function($scope,$ionicHistory,$state,$http) {
 
 
-.controller('EditProfileCtrl', ['$scope','$ionicHistory','$state','$http', function($scope,$ionicHistory,$state,$http) {
 
   $scope.userLogged = JSON.parse(localStorage.getItem('userLogged'));
 
@@ -244,15 +321,39 @@ angular.module('starter.controllers', ['ngOpenFB'])
 
   };
 
+
+
   }])
 
-.controller('AccountCtrl', function($scope,$ionicPopup,$state) {
+.controller('AccountCtrl', function($scope,$ionicPopup,$state,$ionicLoading,$timeout) {
 
-  $scope.userLogged = JSON.parse(localStorage.getItem('userLogged'));
+  $scope.loading = function(){
+    $ionicLoading.show();
+
+    $timeout(function () {
+      $ionicLoading.hide();
+    }, 600);
+
+  }
+
+  $scope.loading2 = function(){
+    $ionicLoading.show();
+
+    $timeout(function () {
+      $ionicLoading.hide();
+    }, 1500);
+
+  }
 
 
   $scope.myprofile = function(){
-    $state.go('profile',{username:$scope.userLogged.username});
+    var userLogged = JSON.parse(localStorage.getItem('userLogged'));
+    $state.go('profile',{username:userLogged.username});
+  }
+
+  $scope.mytracks = function(){
+    var userLogged = JSON.parse(localStorage.getItem('userLogged'));
+    $state.go('tracksUser',{username:userLogged.username});
   }
 
   $scope.toSearch= function(){
@@ -284,7 +385,64 @@ angular.module('starter.controllers', ['ngOpenFB'])
 
   })
 
-.controller('TrackingCtrl',['$scope','$http','$cordovaGeolocation','$ionicPlatform','$state','$ionicPopup','$ionicLoading', function($scope,$http,$cordovaGeolocation,$ionicPlatform,$state,$ionicPopup,$ionicLoading) {
+.controller('TracksUserCtrl', function($http,$scope,$ionicPopup,$state,$stateParams,$ionicHistory) {
+
+  var getTracks = function(){
+    $scope.routes='';
+
+
+      $http.get(base_url_local + '/tracks/' + $stateParams.username).success(function (data) {
+        console.log(data);
+        if(data=="") {
+          $scope.noTracks = true;
+        }
+        else{
+          var int=0;
+          for (var i = 0; i < data.length; i++) {
+            var final_time_m = Math.floor(data[i].time / 60);
+            var final_time_s = Math.floor(data[i].time - (final_time_m * 60));
+            data[i].time =final_time_m+' min '+final_time_s+' s';
+
+            if(data[i].distance<1) data[i].distance=data[i].distance * 1000 + ' m';
+            else data[i].distance=data[i].distance + ' Km';
+
+            if (data[i].avg_speed>0) (data[i].avg_speed= 1/data[i].avg_speed)*60;
+
+            $http.get(data[i].pointsurl).success(function (datos) {
+              for (var i = 0; i < datos.length; i++) {
+                if (i == 0) data[int].path = datos[i].latitude + "," + datos[i].longitude;
+                else data[int].path += "|" + datos[i].latitude + "," + datos[i].longitude;
+              }
+              data[int].center = datos[1].latitude + "," + datos[1].longitude;
+              var marker1 = datos[0].latitude + "," + datos[0].longitude;
+              var marker2 = datos[datos.length -1].latitude + "," + datos[datos.length -1].longitude;
+
+              //strokeColor: "#FF0000",
+              //strokeOpacity: 0.7,
+              //strokeWeight: 3
+              data[int].img="http://maps.googleapis.com/maps/api/staticmap?center=" + data[int].center+"&zoom=17&size=425x180&maptype=roadmap&path=color:0xff0000ff|weight:3|"+data[int].path +"&sensor=false&markers=color:blue%7Clabel:S%7C"+marker1+"&markers=color:red%7Clabel:F%7C"+marker2;
+              //zoom:17
+              //mapTypeId: google.maps.MapTypeId.ROADMAP
+              int++;
+            });
+          }
+          console.log(data);
+          $scope.routes = data;
+        }
+      });
+
+  };
+
+  getTracks();
+
+  $scope.goback= function(){
+    $ionicHistory.goBack();
+  }
+
+
+  })
+
+.controller('TrackingCtrl',['$scope','$http','$cordovaGeolocation','$ionicPlatform','$state','$ionicPopup','$ionicLoading','$timeout', function($scope,$http,$cordovaGeolocation,$ionicPlatform,$state,$ionicPopup,$ionicLoading,$timeout) {
   console.log("EN EL TRACKINGCTRL");
   $scope.distancia = '';
   $scope.velocidad = '';
@@ -370,15 +528,17 @@ angular.module('starter.controllers', ['ngOpenFB'])
           });
       }
 
+      $scope.loading = function(){
+        $ionicLoading.show();
+
+        $timeout(function () {
+          $ionicLoading.hide();
+      }, 2000);
+
+    }
+
       $scope.stop_track = function(){
 
-        var showL = function() {
-          $ionicLoading.show({
-            template: 'Loading...'
-          });
-        };
-
-        showL();
 
         $scope.boton_start = true;
         $scope.boton_stop = false;
@@ -452,10 +612,6 @@ angular.module('starter.controllers', ['ngOpenFB'])
         window.localStorage.setItem('trackInfo',JSON.stringify(trackSt));
 
 
-        var hide = function(){
-          $ionicLoading.hide();
-        };
-        hide();
         //Me
         $state.go('trackingManager');
       }
@@ -796,6 +952,260 @@ angular.module('starter.controllers', ['ngOpenFB'])
 
 }])
 
+.controller('FriendsCtrl',function($scope,$http,$state,$ionicPopup,$stateParams,$ionicHistory,$timeout,$ionicLoading){
+
+  var userLogged = JSON.parse(localStorage.getItem('userLogged'));
+  $scope.userLogged = userLogged;
+
+  $scope.loading = function(){
+    $ionicLoading.show();
+
+    $timeout(function () {
+      $ionicLoading.hide();
+    }, 600);
+
+  }
+
+
+  $scope.goback= function(){
+    $ionicHistory.goBack();
+  };
+
+  $scope.follow = function (namee) {
+    console.log("Dentro de addFriend");
+    var amigos = new Object();
+    amigos.username = userLogged.username;
+    console.log(userLogged.username);
+    amigos.friend = namee;
+    console.log(namee);
+    console.log("Lo que envio " + amigos)
+    $http.post(base_url_local+'/addfriend', amigos).success(function(response) {
+      main();
+
+    });
+  }
+
+  $scope.unfollow = function (name) {
+
+    var confirmPopup = $ionicPopup.confirm({
+      title: 'Unfollow '+ name + ' ?'
+    });
+
+    confirmPopup.then(function(res) {
+      if(res) {
+        $scope.loading();
+        $http.delete(base_url_local+'/friend/' + $scope.userLogged.username + "/" + name).success(function () {
+          main();
+        });
+      } else {
+        console.log('You are not sure');
+      }
+    });
+
+  };
+
+  $scope.buttons = [];
+
+  $scope.isFriend = function (isfriend) {
+
+    console.log(userLogged.username + isfriend);
+    $http.get(base_url_local+ '/friends/' + userLogged.username + "/" + isfriend).success(function (response) {
+      console.log(response);
+      var obj = { data: response };
+      $scope.buttons.push(obj);
+      //return response;
+    });
+
+    console.log($scope.buttons);
+
+  };
+
+
+  var loadButtons = function(data){
+    $scope.buttons = [];
+    console.log(data);
+    angular.forEach(data, function(user, key) {
+      $scope.isFriend(user.friend.username);
+
+    });
+
+  }
+
+  var main = function(){
+
+    $scope.buttons = [];
+
+    if($stateParams.type == 'following'){
+
+
+      var refresh = function() {
+        $scope.buttons = [];
+        $http.get(base_url_local + '/friends/' + $stateParams.username).success(function (data) {
+          console.log(data);
+          $scope.friends = data;
+          loadButtons(data);
+          if($scope.friends == '')
+            $scope.noAct = true;
+          else $scope.noAct = false;
+        }).error(function (data, status) {
+          alert('get data error!');
+        });
+
+
+      }
+      refresh();
+
+
+    }
+
+
+    if($stateParams.type == 'followers'){
+
+      var refresh2 = function() {
+        $scope.buttons = [];
+        $http.get(base_url_local + '/friends/friend/' + $stateParams.username+'/followers').success(function (data) {
+          console.log(data);
+          $scope.friends = data;
+          loadButtons(data);
+          if($scope.friends == '')
+            $scope.noAct= true;
+          else $scope.noAct = false;
+        }).error(function (data, status) {
+          alert('get data error!');
+        });
+
+
+      }
+      refresh2();
+
+    }
+
+  };
+
+  main();
+
+
+
+
+  $scope.profile = function(username){
+    $state.go('profile',{username:username});
+  }
+
+  })
+
+.controller('FollowersCtrl',function($scope,$http,$state,$ionicPopup,$stateParams,$ionicHistory,$timeout,$ionicLoading){
+
+    var userLogged = JSON.parse(localStorage.getItem('userLogged'));
+    $scope.userLogged = userLogged;
+
+    $scope.loading = function(){
+    $ionicLoading.show();
+
+    $timeout(function () {
+      $ionicLoading.hide();
+    }, 600);
+
+  }
+    $scope.goback= function(){
+      $ionicHistory.goBack();
+    };
+
+    $scope.follow = function (namee) {
+      console.log("Dentro de addFriend");
+      var amigos = new Object();
+      amigos.username = userLogged.username;
+      console.log(userLogged.username);
+      amigos.friend = namee;
+      console.log(namee);
+      console.log("Lo que envio " + amigos)
+      $http.post(base_url_local+'/addfriend', amigos).success(function(response) {
+        main();
+
+      });
+    }
+
+    $scope.unfollow = function (name) {
+
+      var confirmPopup = $ionicPopup.confirm({
+        title: 'Unfollow '+ name + ' ?'
+      });
+
+      confirmPopup.then(function(res) {
+        if(res) {
+          $scope.loading();
+          $http.delete(base_url_local+'/friend/' + $scope.userLogged.username + "/" + name).success(function () {
+            main();
+          });
+        } else {
+          console.log('You are not sure');
+        }
+      });
+
+    };
+
+    $scope.buttons = [];
+
+    $scope.isFriend = function (isfriend) {
+
+      console.log(userLogged.username + isfriend);
+      $http.get(base_url_local+ '/friends/' + userLogged.username + "/" + isfriend).success(function (response) {
+        console.log(response);
+        var obj = { data: response };
+        $scope.buttons.push(obj);
+        //return response;
+      });
+
+      console.log($scope.buttons);
+
+    };
+
+
+    var loadButtons = function(data){
+      $scope.buttons = [];
+      console.log(data);
+
+      console.log('for each followers');
+      angular.forEach(data, function(user) {
+        $scope.isFriend(user.username);
+
+      });
+
+    }
+
+    var main = function(){
+
+      $scope.buttons = [];
+        console.log('followers');
+
+        var refresh = function() {
+          $scope.buttons = [];
+          $http.get(base_url_local + '/friends/friend/' + $stateParams.username+'/followers').success(function (data) {
+            console.log(data);
+            $scope.friends = data;
+            loadButtons(data);
+            if($scope.friends == '')
+              $scope.noAct= true;
+            else $scope.noAct = false;
+          }).error(function (data, status) {
+            alert('get data error!');
+          });
+
+
+
+      }
+
+        refresh();
+    };
+
+    main();
+
+
+
+    $scope.profile = function(username){
+      $state.go('profile',{username:username});
+    }
+  })
+
 .controller('MessageDetailCtrl',['$scope','$http','$stateParams','$localStorage','$ionicScrollDelegate', function($scope,$http,$stateParams,$localStorage,$ionicScrollDelegate) {
 
   $scope.userC = $stateParams.name;
@@ -887,12 +1297,35 @@ console.log("estoy dentro");
   getUsersInConversation();
 }])
 
-.controller('TabCtrl', function($scope,$http,$localStorage,$ionicPopup,$state){
+.controller('TabCtrl', function($scope,$http,$localStorage,$ionicPopup,$state,$ionicLoading,$timeout){
 
   $scope.$on('$stateChangeStart',
     function(event, toState, toParams, fromState, fromParams){
       console.log("STATE CHANGE START");
     });
+
+  $scope.loading = function(){
+    $ionicLoading.show();
+
+    $timeout(function () {
+      $ionicLoading.hide();
+    }, 600);
+
+  }
+
+  $scope.loading2 = function(){
+    $ionicLoading.show();
+
+    $timeout(function () {
+      $ionicLoading.hide();
+    }, 1500);
+
+  }
+
+  $scope.activity = function() {
+
+    $state.go('tab.dash');
+  }
 
 
    $scope.messages = function() {
