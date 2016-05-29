@@ -2,8 +2,9 @@
  * Created by aitor on 17/4/16.
  */
 
-angular.module('Flivess').controller('loginCtl', ['$scope', '$http', '$cookies', '$rootScope', '$location', '$window', function($scope, $http, $cookies, $rootScope, $location, $window)  {
+angular.module('Flivess').controller('loginCtl', ['$scope', '$http', '$cookies', '$rootScope', '$location', 'SocketIoFactory', function($scope, $http, $cookies, $rootScope, $location, socket)  {
     var base_url_prod="http://localhost:8080";
+    var base_socket = "http://localhost:3000";
     //var base_url_prod = "http://147.83.7.157:8080";
     $scope.vlogin=true;
 
@@ -15,12 +16,34 @@ angular.module('Flivess').controller('loginCtl', ['$scope', '$http', '$cookies',
     $rootScope.isLogged=false;
 
     $scope.login = function () {
-        console.log($scope.user);
-        console.log($scope.user.password);
         $http.post(base_url_prod+'/login', $scope.user).success(function (response) {
             console.log(response);
             $cookies.putObject('user',response);
             $rootScope.userlog = $cookies.getObject('user');
+
+            socket.connect();
+            socket.on('connection', function(data){
+                console.log(data);
+                socket.emit('username',$rootScope.userlog.username);
+                socket.emit('notification',$rootScope.userlog.username);
+            });
+            socket.on('listaUsers', function(data){
+                console.log("LOS USUARIOS");
+                console.log(data);
+            });
+            console.log("3");
+            socket.on('new notification', function(data){
+                socket.emit('notification',$rootScope.userlog.username, function(data){
+                } )
+            });
+            socket.on('notification', function(data){
+
+                $rootScope.notlength=data.numeros;
+                $rootScope.notification=data.notifications;
+                console.log(data);
+            });
+
+
             window.location.href = "#/home";
         }).error(function (response) {
                      $scope.alertReg = true;
@@ -51,7 +74,29 @@ angular.module('Flivess').controller('loginCtl', ['$scope', '$http', '$cookies',
                 console.log($scope.usuario.fullname);
                 $cookies.putObject('user',response);
                 $rootScope.userlog = $cookies.getObject('user');
-                $scope.alert.message="";
+                $rootScope.isLogged=true;
+                console.log("Holiii" +$rootScope.userlog.username);
+                socket.connect();
+                socket.on('connection', function(data){
+                    console.log(data);
+                    socket.emit('username',$rootScope.userlog.username);
+                    socket.emit('notification',$rootScope.userlog.username);
+                });
+                socket.on('listaUsers', function(data){
+                    console.log("LOS USUARIOS");
+                    console.log(data);
+                });
+                console.log("3");
+                socket.on('new notification', function(data){
+                    socket.emit('notification',$rootScope.userlog.username, function(data){
+                    } )
+                });
+                socket.on('notification', function(data){
+                    $rootScope.notlength=data.numeros;
+                    $rootScope.notification=data.notifications;
+                    console.log(data);
+                })
+
                 window.location.href = "#/home";
             }).error(function (response) {
                 $scope.alertReg = true;

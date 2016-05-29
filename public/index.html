@@ -37,6 +37,37 @@
 
             </ul>
             <ul class="nav navbar-nav navbar-right">
+
+                <li >
+                        <a id="dLabel" role="button" data-toggle="dropdown" data-target="#" ng-init="userloggedInfo" ng-click="clickNot(userlog.username)">
+                            <i class="glyphicon glyphicon-globe"></i>
+                            <span class="number">{{notlength}}</span></a>
+                        </a>
+
+                        <ul class="dropdown-menu notifications" role="menu" aria-labelledby="dLabel">
+
+                            <div class="notification-heading" >
+                                <h4 class="menu-title">Notifications</h4>
+                                <a class="btn menu-title pull-right" href="#/notifications">View all<i class="glyphicon glyphicon-circle-arrow-right"></i></a>
+                            </div>
+                            <li class="divider"></li>
+                            <div class="notifications-wrapper" ng-repeat="notify in notification" >
+                                <a class="content" href="#/profile/{{notify.actionusername}}">
+
+                                    <div class="notification-item">
+                                        <h4 class="item-title">{{notify.date|date:"dd/MM/yyyy 'at' h:mma"}}</h4>
+                                        <p>{{notify.actionusername}} {{notify.text}}</p>
+                                    </div>
+
+                                </a>
+                            </div>
+                            <li class="divider"></li>
+                            <div class="notification-footer">
+                                <a class="btn menu-title" href="#/notifications">View all<i class="glyphicon glyphicon-circle-arrow-right"></i></a>
+                            </div>
+                        </ul>
+                </li>
+
                 <li><a href="" ng-init="userloggedInfo" ng-click="perfil(userlog.username)"><span class="glyphicon glyphicon-cog"></span> {{userlog.username}}</a></li>
                 <li><a href="#/" ng-click="logOut()"><span class="glyphicon glyphicon-log-in"></span> Log Out</a></li>
             </ul>
@@ -67,7 +98,6 @@
     <script src="bower_components/angular-google-chart/ng-google-chart.min.js"></script>
     <script src="bower_components/angular-bootstrap/ui-bootstrap.js"></script>
     <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
-
     <script src="bower_components/angular-animate/angular-animate.js"></script>
     <script src="bower_components/angular-aria/angular-aria.js"></script>
     <script src="bower_components/angular-messages/angular-messages.js"></script>
@@ -76,6 +106,8 @@
     <script src="bower_components/angularjs-geolocation/dist/angularjs-geolocation.min.js"></script>
     <script src="bower_components/angular-confirm-modal/angular-confirm.min.js"></script>
 
+    <script src="bower_components/socket.io-client/socket.io.js"></script>
+    <script src="bower_components/angular-socket-io/socket.js"></script>
 
 
     <script src="routes.js"></script>
@@ -90,5 +122,6 @@
     <script src="controllers/indexCtl.js"></script>
     <script src="controllers/raceDetailsCtl.js"></script>
     <script src="controllers/historicalCtl.js"></script>
+    <script src="controllers/notificationsCtl.js"></script>
 </body>
 </html>

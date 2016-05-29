@@ -2,7 +2,7 @@ module.exports = function (app) {
 
     var Friend = require('../models/friend.js');
     var User = require('../models/user.js');
-
+    var notification = require('../models/notification.js');
 
 
     //GET- GET ALL Friends by Username
@@ -51,14 +51,30 @@ module.exports = function (app) {
 
             var friend = new Friend({
                 username: req.body.username,
-                friend: id_friend,
-
+                friend: id_friend
             });
 
             friend.save(function (err, friend) {
                 if (err) return res.send(500, err.message);
                 res.status(200).json(friend);
             });
+
+            notification.findOne({username: req.body.friend, type: 1, actionusername: req.body.username}).exec(function(err,res){
+                console.log('CREO LA NOTIFICACION');
+                if(err) console.log("Falla");
+                else if(res==undefined) {
+                    var notify = new notification({
+                        username: req.body.friend,
+                        type: 1,
+                        actionusername: req.body.username,
+                        text: "is following you",
+                        vist: false
+                    });
+                    notify.save(function (err) {
+                        if (err)res.status(500).send('Internal server error');
+                    })
+                }
+            })
         });
 
 
