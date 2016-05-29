@@ -45,9 +45,7 @@ angular.module('Flivess').controller('indexCtl', ['$scope', '$http', '$cookies',
     $scope.clickNot = function (user) {
         console.log("EL USARNAME PARA LAS NOTIFICACIONES: " + user);
         if ($rootScope.notlength != 0) {
-            $http.put(base_url_prod + '/notifications/saw/' + user).success(function () {
-                console.log("LO PONGO A 0");
-            });
+            $http.put(base_url_prod + '/notifications/saw/' + user);
             $rootScope.notlength = 0;
         }
     };

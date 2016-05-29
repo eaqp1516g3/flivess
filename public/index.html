@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.css">
     <link rel="stylesheet" href="css/nav/style.css">
+    <link rel="stylesheet" href="css/font-awesome/css/font-awesome.min.css">
 
 
     <title>Flivess</title>
@@ -20,7 +21,7 @@
             </div>
             <ul class="nav navbar-nav">
                 <li><a href="#/home" ><span class="glyphicon glyphicon-home"></span> Home</a></li>
-                <li><a href="#/friends" ><span class="glyphicon glyphicon-user"></span> Following</a></li>
+                <li><a href="#/friends" ><span class="fa fa-users"></span> Following</a></li>
                 <li><a href="#/messages" ><span class="glyphicon glyphicon-envelope"></span> Messages</a></li>
                 <li><a href="#/historical" ><span class="glyphicon glyphicon-th-list"></span> My tracks</a></li>
 
@@ -41,7 +42,7 @@
                 <li >
                         <a id="dLabel" role="button" data-toggle="dropdown" data-target="#" ng-init="userloggedInfo" ng-click="clickNot(userlog.username)">
                             <i class="glyphicon glyphicon-globe"></i>
-                            <span class="number">{{notlength}}</span></a>
+                            <span class="noti_bubble">{{notlength}}</span>
                         </a>
 
                         <ul class="dropdown-menu notifications" role="menu" aria-labelledby="dLabel">
@@ -52,11 +53,19 @@
                             </div>
                             <li class="divider"></li>
                             <div class="notifications-wrapper" ng-repeat="notify in notification" >
-                                <a class="content" href="#/profile/{{notify.actionusername}}">
+
+                                <a class="content" href="#/profile/{{notify.actionusername}}" ng-if="notify.type==1">
+                                    <div class="notification-item">
+                                        <h4 class="item-title">{{notify.date|date:"dd/MM/yyyy 'at' h:mma"}}</h4>
+                                        <p><i class="fa fa-user-plus" aria-hidden="true"></i> {{notify.actionusername}} {{notify.text}}</p>
+                                    </div>
+
+                                </a>
+                                <a class="content" href="#/messages" ng-if="notify.type==0">
 
                                     <div class="notification-item">
                                         <h4 class="item-title">{{notify.date|date:"dd/MM/yyyy 'at' h:mma"}}</h4>
-                                        <p>{{notify.actionusername}} {{notify.text}}</p>
+                                        <p><i class="fa fa-envelope" aria-hidden="true"></i> {{notify.actionusername}} {{notify.text}}</p>
                                     </div>
 
                                 </a>
@@ -68,7 +77,7 @@
                         </ul>
                 </li>
 
-                <li><a href="" ng-init="userloggedInfo" ng-click="perfil(userlog.username)"><span class="glyphicon glyphicon-cog"></span> {{userlog.username}}</a></li>
+                <li><a href="" ng-init="userloggedInfo" ng-click="perfil(userlog.username)"><span class="fa fa-cogs"></span> {{userlog.username}}</a></li>
                 <li><a href="#/" ng-click="logOut()"><span class="glyphicon glyphicon-log-in"></span> Log Out</a></li>
             </ul>
         </div>

@@ -9,6 +9,7 @@ angular.module('Flivess').controller('notificationsCtl', ['$scope', '$http', '$c
     var userLogged = $cookies.getObject('user');
 
     $http.get(base_url_prod + '/notifications/user/' + userLogged.username).success(function (response) {
+        console.log(response);
         $scope.notifications = response;
     });
 

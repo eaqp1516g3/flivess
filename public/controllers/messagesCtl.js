@@ -3,7 +3,7 @@
  */
 
 
-angular.module('Flivess').controller('messagesCtl', ['$scope', '$http','$cookies', '$location', function($scope, $http, $cookies, $location) {
+angular.module('Flivess').controller('messagesCtl', ['$scope', '$http','$cookies', '$location', 'SocketIoFactory', function($scope, $http, $cookies, $location, socket) {
 
     var base_url_prod="http://localhost:8080";
     //var base_url_prod = "http://147.83.7.157:8080";
@@ -54,7 +54,7 @@ angular.module('Flivess').controller('messagesCtl', ['$scope', '$http','$cookies
 
 
     $scope.sendMessage = function(receiver) {
-        console.log("Before sending")
+        console.log("Before sending");
         console.log($scope.message);
 
         $scope.message.sender = userLogged.username;
@@ -68,6 +68,7 @@ angular.module('Flivess').controller('messagesCtl', ['$scope', '$http','$cookies
 
             $http.get(base_url_prod+ '/messages/' + userLogged.username +'/' + receiver).success(function (response) {
                 $scope.msgs = response;
+                socket.emit('message', receiver);
             });
         });
     };

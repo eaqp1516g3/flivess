@@ -143,6 +143,22 @@ io.on('connection', function(conn){
         })
     });
 
+    conn.on('message', function(data){
+        console.log("DENTRO DEL SOCKET PARA MESSAGE");
+        usuario.findOne({username: data}).exec(function(err,res){
+            console.log(res.username);
+            if(err) conn.emit('err', "Error");
+            else{
+                if(data in users) {
+                    console.log("ENVIO LA NOTIFICACION 2");
+                    console.log("EL USUARIO AL Q SE LO ENVIA 2: " + data);
+                    users[data].emit('new notification', res);
+                }
+                else console.log("IS NOT CONNECTED");
+            }
+        })
+    });
+
     conn.on('disconnect', function(data){
         console.log("INSIDE DISCONNECT");
         console.log(conn.username);

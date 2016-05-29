@@ -111,6 +111,7 @@ angular.module('Flivess').controller('profileCtl', ['$scope', '$http', '$cookies
         message.sender = userLogged.username;
         message.receiver = friend.username;
         $http.post(base_url_prod+'/addmessage', message).success(function() {
+            socket.emit('message', friend.username);
         });
     };
 

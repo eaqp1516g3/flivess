@@ -2,6 +2,7 @@ module.exports = function (app) {
 
     var User = require('../models/user.js');
     var Message = require('../models/message.js');
+    var notification = require('../models/notification.js');
 
     getMessagesByUser = function(req,res) {
 
@@ -52,15 +53,27 @@ module.exports = function (app) {
                 res.send(401, err.message);
             }
             else {
-                    var message = new Message({
-                        receiver: req.body.receiver,
-                        sender: req.body.sender,
-                        text: req.body.text,
-                    });
-                    message.save(function (err, message) {
-                        if (err) return res.send(500, err.message);
-                        res.status(200).json(message);
-                    });
+                var message = new Message({
+                    receiver: req.body.receiver,
+                    sender: req.body.sender,
+                    text: req.body.text
+                });
+                message.save(function (err, message) {
+                    if (err) return res.send(500, err.message);
+                    res.status(200).json(message);
+                });
+
+                console.log('CREO LA NOTIFICACION');
+                var notify = new notification({
+                    username: req.body.receiver,
+                    type: 0,
+                    actionusername: req.body.sender,
+                    text: "send you a message",
+                    vist: false
+                });
+                notify.save(function (err) {
+                    if (err)res.status(500).send('Internal server error');
+                })
             }
         });
     };
