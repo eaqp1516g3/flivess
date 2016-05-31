@@ -19,6 +19,12 @@ angular.module('Flivess').controller('profileCtl', ['$scope', '$http', '$cookies
             console.log("Entro");
             console.log(response[0]);
             $scope.friend = response[0];
+            if(!angular.isUndefined($scope.friend.weight)){
+                $scope.friend.weight= $scope.friend.weight+' Kg';
+            }
+            if(!angular.isUndefined($scope.friend.height)){
+                $scope.friend.height=$scope.friend.height+' cm';
+            }
 
         });
 
@@ -40,6 +46,12 @@ angular.module('Flivess').controller('profileCtl', ['$scope', '$http', '$cookies
 
                 friend = response[0];
                 $scope.friend = friend;
+                if(!angular.isUndefined($scope.friend.weight)){
+                    $scope.friend.weight= $scope.friend.weight+' Kg';
+                }
+                if(!angular.isUndefined($scope.friend.height)){
+                    $scope.friend.height=$scope.friend.height+' cm';
+                }
                 isFriend();
             });
         }
