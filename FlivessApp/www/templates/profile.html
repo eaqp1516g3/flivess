@@ -3,7 +3,7 @@
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<h5 class="font-130 text-center">{{friend.username}}</h5>
 </ion-header-bar>
 
-  <ion-content>
+  <ion-content overflow-scroll="true">
 
     <div class="profile-container">
 
@@ -43,7 +43,7 @@
           <h2 class="font-130 text-center">{{friend.fullname}}</h2>
           <p class="color-gray text-center">{{friend.username}}</p>
           <h4 class="text-center">{{friend.email}}</h4>
-          <i class="icon ion-android-more-vertical color-red bold" ng-click="showActionSheet()"></i>
+          <i ng-show="userLogged.username!=friend.username" class="icon ion-android-more-vertical color-red bold" ng-click="showActionSheet()"></i>
           <p ng-if="friend.sex || friend.height || friend.weight" class="color-gray text-center">{{friend.sex}}, {{friend.height}} cm {{friend.weight}} kg</p>
           <p class="color-gray text-center">Barcelona</p>
         </ion-item>
@@ -63,7 +63,7 @@
                 </p>
 
                 <div class="item item-body">
-                  <img class="full-image" src="{{route.img}}">
+                  <img ng-click="trackdetail(route._id)" class="full-image" src="{{route.img}}">
 
                   <p class="text-center">
                     <a href="#" class="subdued text-left bold">{{route.distance}}  &nbsp; &#9679;</a>

@@ -46,7 +46,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngStorage','ngOpenFB'
     })
 
     .state('tracking',{
-      url: '/tracking',
+      url: '/tracking/:type/:id_comun/:distance/:id',
       cache:false,
       templateUrl: 'templates/tracking.html',
       controller: 'TrackingCtrl'
@@ -64,12 +64,30 @@ angular.module('starter', ['ionic', 'starter.controllers','ngStorage','ngOpenFB'
       templateUrl: 'templates/editprofile.html',
       controller: 'EditProfileCtrl'
     })
-   .state('profile',{
+
+
+   .state('selecter',{
+      url: '/selecter',
+      cache:false,
+      templateUrl: 'templates/selecter.html',
+      controller: 'SelecterCtrl'
+    })
+    .state('nearoutes',{
+      url: '/nearoutes/:range',
+      cache:false,
+      templateUrl: 'templates/nearoutes.html',
+      controller: 'NearRoutesCtrl'
+    })
+
+
+    .state('profile',{
       url: '/profile/:username',
       cache:false,
       templateUrl: 'templates/profile.html',
       controller: 'ProfileCtrl'
     })
+
+
     .state('tracksUser',{
       url: '/tracks/:username',
       cache:false,
@@ -89,6 +107,13 @@ angular.module('starter', ['ionic', 'starter.controllers','ngStorage','ngOpenFB'
       cache:false,
       templateUrl: 'templates/followers-list.html',
       controller: 'FollowersCtrl'
+    })
+
+    .state('trackdetail',{
+      url: '/tracks/:type/:id',
+      cache:false,
+      templateUrl: 'templates/trackdetail.html',
+      controller: 'TrackDetailCtrl'
     })
 
 

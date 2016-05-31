@@ -471,3 +471,24 @@ textarea.about-me{
   border: 4px solid white;
 }
 
+.spinner-ripple svg {
+  width: 210px;
+  height: 210px;
+  stroke: #444;
+  fill: #444;
+}
+
+.larger {
+  font-size: 120px;
+}
+
+.transparente {
+  background: rgba(19, 35, 47, 0.9);
+  opacity: 1;
+  z-index: 2050;
+}
+.pane {
+  background-color: rgba(165, 246, 249, 0.98);
+
+}
+

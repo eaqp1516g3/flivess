@@ -59,7 +59,8 @@ angular.module('starter.controllers', ['ngOpenFB'])
 
 .controller('DashCtrl', function($scope,$state) {
   $scope.toTrack = function(){
-    $state.go('tracking');
+    $state.go('selecter');
+    //$state.go('tracking');
   }
 
   $scope.toSearch= function(){
@@ -74,23 +75,19 @@ angular.module('starter.controllers', ['ngOpenFB'])
   $scope.userLogged = JSON.parse(localStorage.getItem('userLogged'));
   $scope.showActionSheet = function() {// Show the action sheet
 
-
-
-
     var hideSheet = $ionicActionSheet.show({
       buttons: [
-        { text: 'We' }
-        , { text: 'Are' }
-        , { text: 'Working' }
-        , { text: "On this. Flivess" }
+        { text: 'Send message' }
       ],
-      cancelText: '<span class="color-white">Cancel</span>',
-      cssClass: 'tinder-actionsheet',
+      cancelText: '<span >Cancel</span>',
       cancel: function() {
         // add cancel code..
       },
       buttonClicked: function(index) {
-        return true;
+        if(index===0){
+          $state.go('tab.message-detail',{name:$stateParams.username});
+        }
+
       }
     });};
 
@@ -100,6 +97,10 @@ angular.module('starter.controllers', ['ngOpenFB'])
 
   $scope.toFollowers = function(user){
     $state.go('followers',{username:user});
+  };
+
+  $scope.trackdetail= function(trackid){
+    $state.go('trackdetail',{type:'profile',id:trackid});
   };
 
 
@@ -301,21 +302,23 @@ angular.module('starter.controllers', ['ngOpenFB'])
 .controller('EditProfileCtrl', ['$scope','$ionicHistory','$state','$http','$ionicLoading','$timeout','$rootScope', function($scope,$ionicHistory,$state,$http) {
 
 
+  var userLogged = JSON.parse(localStorage.getItem('userLogged'));
+  console.log(userLogged);
 
-  $scope.userLogged = JSON.parse(localStorage.getItem('userLogged'));
-
-  $scope.goback= function(){
-      $ionicHistory.goBack();
-    }
-
-  $http.get(base_url_local + '/user/' + $scope.userLogged._id).success(function(response){
-    $scope.user = response;
+  $scope.user={};
+  $http.get(base_url_local + '/users/user/' + userLogged.username).success(function(response){
+   console.log(response);
+    $scope.user = response[0];
 
   });
 
+  $scope.goback= function(){
+      $ionicHistory.goBack();
+    };
+
   $scope.updateUser = function() {
 
-    $http.put(base_url_local +'/user/' + $scope.userLogged._id, $scope.user).success(function (response) {
+    $http.put(base_url_local +'/user/' + userLogged._id, $scope.user).success(function (response) {
       $ionicHistory.goBack();
     })
 
@@ -435,6 +438,10 @@ angular.module('starter.controllers', ['ngOpenFB'])
 
   getTracks();
 
+  $scope.trackdetail= function(trackid){
+    $state.go('trackdetail',{type:'profile',id:trackid});
+  };
+
   $scope.goback= function(){
     $ionicHistory.goBack();
   }
@@ -442,8 +449,10 @@ angular.module('starter.controllers', ['ngOpenFB'])
 
   })
 
-.controller('TrackingCtrl',['$scope','$http','$cordovaGeolocation','$ionicPlatform','$state','$ionicPopup','$ionicLoading','$timeout', function($scope,$http,$cordovaGeolocation,$ionicPlatform,$state,$ionicPopup,$ionicLoading,$timeout) {
+.controller('TrackingCtrl',['$scope','$http','$cordovaGeolocation','$ionicPlatform','$state','$ionicPopup','$ionicLoading','$timeout','$stateParams', function($scope,$http,$cordovaGeolocation,$ionicPlatform,$state,$ionicPopup,$ionicLoading,$timeout,$stateParams) {
+
   console.log("EN EL TRACKINGCTRL");
+  console.log('En tracking, tengo el id'+ $stateParams.id + 'y tipo'+$stateParams.type);
   $scope.distancia = '';
   $scope.velocidad = '';
   $scope.tiempo = '';
@@ -551,14 +560,23 @@ angular.module('starter.controllers', ['ngOpenFB'])
         if (tracking_data.length < 2) {
           $ionicPopup.alert({
             title: 'Not tracking...',
-            template: 'Are you lazy today? there are not points tracked!'
+            template: 'Feeling lazy today? there are not points tracked!' +
+            '    (Be sure your GPS is on)'
           });
           $state.go('tab.dash');
 
         }
         else {
 
+          var loading = function(){
+            $ionicLoading.show();
 
+            $timeout(function () {
+              $ionicLoading.hide();
+            }, 2000);
+
+          }
+          $scope.loading();
           //$scope.data=tracking_data.length;
 
           // Calculate the total distance travelled
@@ -610,25 +628,49 @@ angular.module('starter.controllers', ['ngOpenFB'])
 
           //tracking_data=[];
           console.log("ARRAY DESPUES DEL STOP: " + tracking_data);
+          console.log('Tengo: '+$stateParams.id+' '+$stateParams.id_comun+' '+$stateParams.distance);
 
+          var trackSt;
+
+          if($stateParams.type=='near'){
+            console.log('Nearrrrrrrr');
+
+            trackSt = {
+              title: track_id,
+              username: userLogged.username,
+              data: tracking_data,
+              avg_speed: avg_speed_rounded,
+              distance: total_km_rounded,
+              time: total_time_s,
+              id_comun: $stateParams.id_comun
+            };
+
+          }else {
+
+            trackSt = {
+              title: track_id,
+              username: userLogged.username,
+              data: tracking_data,
+              avg_speed: avg_speed_rounded,
+              distance: total_km_rounded,
+              time: total_time_s
           //Me
-          var trackSt = {
-            title: track_id,
-            username: userLogged.username,
-            data: tracking_data,
-            avg_speed: avg_speed_rounded,
-            distance: total_km_rounded,
-            time: total_time_s
-          };
+            };
+
+          }
+
           window.localStorage.setItem('trackInfo', JSON.stringify(trackSt));
 
-
-          var hide = function () {
-            $ionicLoading.hide();
-          };
-          hide();
           //Me
-          $state.go('trackingManager');
+          if($stateParams.type=='near'){
+            console.log('entro en tipo near')
+
+              $state.go('trackingManager',{type:'near',id:$stateParams.id});
+
+          }else{
+            $state.go('trackingManager');
+          }
+
         }
 
       }
@@ -677,12 +719,13 @@ angular.module('starter.controllers', ['ngOpenFB'])
 
 }])
 
-.controller('TrackManagerCtrl',function($scope,$http,$state,$ionicPopup,$ionicLoading){
+.controller('TrackManagerCtrl',function($scope,$http,$state,$ionicPopup,$ionicLoading,$stateParams){
 
 
 
   //MAP
   var info = JSON.parse(window.localStorage.getItem('trackInfo'));
+  console.log(info);
   console.log(info.data[1].latitude);
   console.log(info.avg_speed);
   $scope.avgspeed = info.avg_speed;
@@ -735,12 +778,7 @@ angular.module('starter.controllers', ['ngOpenFB'])
   });
 
   marker2.setMap(map);
-/*
-  var hide = function(){
-    $ionicLoading.hide();
-  };
-  hide();
-*/
+
   $scope.cancel= function() {
 
     //FUNCTIONS
@@ -795,6 +833,185 @@ angular.module('starter.controllers', ['ngOpenFB'])
 
 })
 
+.controller('TrackDetailCtrl', function($scope,$state,$stateParams,$http,$ionicHistory,$ionicLoading,$timeout,$ionicModal) {
+
+
+
+  $ionicModal.fromTemplateUrl('templates/modalimg.html', {
+    scope: $scope,
+    animation: 'slide-in-up'
+  }).then(function(modal) {
+    $scope.modal = modal;
+  });
+
+
+  $scope.onHold = function(url,name,time,created,speed,distance,pos){
+
+    var data = [];
+    $http.get(url).success(function (datos) {
+
+      console.log('URL: ' + url)
+
+      console.log('Entro en el get');
+      for (var i = 0; i < datos.length; i++) {
+        if (i == 0) data.path = datos[i].latitude + "," + datos[i].longitude;
+        else data.path += "|" + datos[i].latitude + "," + datos[i].longitude;
+      }
+
+      data.center = datos[1].latitude + "," + datos[1].longitude;
+      var marker1 = datos[0].latitude + "," + datos[0].longitude;
+      var marker2 = datos[datos.length -1].latitude + "," + datos[datos.length -1].longitude;
+
+      $scope.modalimage="http://maps.googleapis.com/maps/api/staticmap?center=" + data.center+"&zoom=17&size=425x180&maptype=roadmap&path=color:0xff0000ff|weight:3|"+data.path +"&sensor=false&markers=color:blue%7Clabel:S%7C"+marker1+"&markers=color:red%7Clabel:F%7C"+marker2;
+      console.log('Image: '+$scope.modalimage);
+    });
+
+    $scope.modalname = name;
+    $scope.modalspeed = speed;
+    $scope.modalcreated = created;
+    $scope.modaldistance = distance;
+    $scope.modaltime = time;
+    $scope.modalpos = pos;
+    console.log('Holding...');
+    $scope.modal.show();
+  };
+  $scope.onRelease = function(){
+    console.log('Releasing...');
+    $scope.modal.hide();
+  };
+
+
+
+  $scope.loading = function(){
+    $ionicLoading.show();
+
+    $timeout(function () {
+      $ionicLoading.hide();
+    }, 1000);
+
+  }
+
+  $scope.toTracking = function(id,id_comun,distance){
+    console.log('En detail, paso el ID'+ id);
+    $state.go('tracking',{type:'near',id:id,id_comun:id_comun,distance:distance});
+  };
+
+  $scope.loading();
+
+  $scope.type = $stateParams.type;
+
+  var userLogged = JSON.parse(localStorage.getItem('userLogged'));
+
+  $scope.goback= function(){
+    $ionicHistory.goBack();
+  };
+
+  console.log('El ID: '+$stateParams.id);
+
+
+  $http.get(base_url_local + '/track/' + $stateParams.id).success(function (response) {
+
+
+
+    var final_time_m = Math.floor(response.track_pedido.time / 60);
+    var final_time_s = Math.floor(response.track_pedido.time - (final_time_m * 60));
+    response.track_pedido.time = final_time_m+' min '+final_time_s+' s';
+
+    if(response.track_pedido.distance<1) response.track_pedido.distance=response.track_pedido.distance * 1000 + ' m';
+    else response.track_pedido.distance=response.track_pedido.distance + ' Km';
+
+    if (response.track_pedido.avg_speed>0)response.track_pedido.avg_speed= Math.floor(60/(response.track_pedido.avg_speed)).toFixed(2);
+
+    $http.get(response.track_pedido.pointsurl).success(function(data) {
+      var map = new google.maps.Map(document.getElementById("map"),
+        {
+          zoom: 17,
+          center: new google.maps.LatLng(data[1].latitude,data[1].longitude),
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        });
+
+
+      var route = [];
+      for (var i = 0; i < data.length; i++){
+        route[i] = new google.maps.LatLng(data[i].latitude,data[i].longitude);
+      }
+      var path = new google.maps.Polyline(
+        {
+          path: route,
+          strokeColor: "#FF0000",
+          strokeOpacity: 0.7,
+          strokeWeight: 3
+        });
+      path.setMap(map);
+
+      var marker=new google.maps.Marker({
+        position:new google.maps.LatLng(data[0].latitude,data[0].longitude),
+        label: 'START'
+      });
+
+      marker.setMap(map);
+
+      var icon = {
+        url: "img/flag2.png", // url
+        scaledSize: new google.maps.Size(50, 50), // scaled size
+      };
+      var marker2=new google.maps.Marker({
+        position:new google.maps.LatLng(data[data.length-1].latitude,data[data.length-1].longitude),
+        icon: icon
+      });
+
+      marker2.setMap(map);
+
+
+      var url = "https://maps.googleapis.com/maps/api/geocode/json?latlng="+data[1].latitude+","+data[1].longitude+"&&sensor=true";
+      //var url = "http://maps.googleapis.com/maps/api/geocode/json?latlng=" + datos[0].latitude + "," + datos[1].longitude + "&&sensor=true";
+      console.log(url);
+      $http.get(url).success(function (response) {
+        console.log(response);
+        var address= response.results[0].formatted_address.split(',');
+        $scope.addressTop = address[2] + ',' +address[3];
+        $scope.addressList = address[0] + ',' +address[1];
+      });
+    });
+
+    $scope.track = response.track_pedido;
+
+
+    console.log(response.ranking.length);
+    response.ranking.sort(function(a, b) {
+      var s = parseFloat(a.time) - parseFloat(b.time);
+      console.log("EL A: " + s);
+      return s;
+    });
+    for(var i=0; i<response.ranking.length; i++) {
+      console.log("1 TIEMPO: "+response.ranking[i].time);
+      var final_time_m = Math.floor(response.ranking[i].time / 60);
+      var final_time_s = Math.floor(response.ranking[i].time - (final_time_m * 60));
+      response.ranking[i].time = final_time_m + ' min ' + final_time_s + ' s';
+      console.log("2 TIEMPO: "+ response.ranking[i].time);
+    }
+
+
+    $scope.ranking = response.ranking;
+
+    $scope.position = 0;
+    for(var pos=0; pos<response.ranking.length; pos++) {
+      if(response.ranking[pos].username == userLogged.username){
+        $scope.position = pos+1;
+        break;
+      }
+      else pos++;
+    }
+
+    console.log($scope.position);
+    console.log('Rank:');
+    console.log($scope.ranking);
+
+  });
+
+
+})
+
 .controller('LoginCtrl',function($scope,$http,$state,$localStorage,ngFB){
 
   $scope.redir = function() {
@@ -815,7 +1032,7 @@ angular.module('starter.controllers', ['ngOpenFB'])
       $state.go('tab.dash');
     },
     function(error){
-      alert("ERROR");
+      alert("Username or password are incorrect");
     })
   }
 
@@ -1225,6 +1442,10 @@ angular.module('starter.controllers', ['ngOpenFB'])
 
 .controller('MessageDetailCtrl',['$scope','$http','$stateParams','$localStorage','$ionicScrollDelegate', function($scope,$http,$stateParams,$localStorage,$ionicScrollDelegate) {
 
+  $scope.$on('$ionicView.beforeEnter', function (event, viewData) {
+    viewData.enableBack = true;
+  });
+
   $scope.userC = $stateParams.name;
   $scope.userLogged = JSON.parse(localStorage.getItem('userLogged'));
   //$scope.logged = userLogged;
@@ -1314,6 +1535,137 @@ console.log("estoy dentro");
   getUsersInConversation();
 }])
 
+.controller('SelecterCtrl', function($scope,$state,$ionicHistory,$ionicLoading,$timeout){
+
+  $scope.numberange = 30;
+
+  $scope.toNearRoutes = function(rangeNear){
+    $state.go('nearoutes',{range:rangeNear});
+  };
+
+
+  $scope.goback = function(){
+
+    $ionicHistory.goBack();
+
+  };
+  $scope.toTrack = function(){
+    $state.go('tracking');
+  }
+
+  $scope.loading = function(){
+    $ionicLoading.show();
+
+    $timeout(function () {
+      $ionicLoading.hide();
+    }, 2000);
+
+  }
+
+
+
+
+})
+
+.controller('NearRoutesCtrl', function($scope,$http,$cordovaGeolocation,$ionicPopup,$state,$ionicLoading,$timeout,$stateParams){
+
+  $scope.range = $stateParams.range;
+
+  var loading = function(){
+    $ionicLoading.show();
+
+    $timeout(function () {
+      $ionicLoading.hide();
+    }, 2000);
+
+  }
+
+  loading();
+
+
+  var getPosition = function(){
+
+
+  var posOptions = {timeout: 10000, enableHighAccuracy: true};
+  $cordovaGeolocation.getCurrentPosition(posOptions).then(function (position) {
+console.log('Range: '+$stateParams.range);
+    var cord ={
+      latitude : position.coords.latitude,
+      longitude: position.coords.longitude,
+      range: $stateParams.range
+    };
+    console.log(cord);
+
+    $http.post(base_url_local+'/test', cord).success(function (data) {
+      console.log('Near routes: ')
+        console.log(data);
+      //AQUI IF Y ELSE
+          var int=0;
+          for (var i = 0; i < data.length; i++) {
+            var final_time_m = Math.floor(data[i].time / 60);
+            var final_time_s = Math.floor(data[i].time - (final_time_m * 60));
+            data[i].time =final_time_m+' min '+final_time_s+' s';
+
+            if(data[i].distance<1) data[i].distance=data[i].distance * 1000 + ' m';
+            else data[i].distance=data[i].distance + ' Km';
+
+            if (data[i].avg_speed>0) (data[i].avg_speed= 1/data[i].avg_speed)*60;
+
+            $http.get(data[i].pointsurl).success(function (datos) {
+              for (var i = 0; i < datos.length; i++) {
+                if (i == 0) data[int].path = datos[i].latitude + "," + datos[i].longitude;
+                else data[int].path += "|" + datos[i].latitude + "," + datos[i].longitude;
+              }
+              data[int].center = datos[1].latitude + "," + datos[1].longitude;
+              var marker1 = datos[0].latitude + "," + datos[0].longitude;
+              var marker2 = datos[datos.length -1].latitude + "," + datos[datos.length -1].longitude;
+
+              //CITY AÑADIR/////////////////////////////////
+             /* var url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=41.164224,1.581452&&sensor=true";
+              //var url = "http://maps.googleapis.com/maps/api/geocode/json?latlng=" + datos[0].latitude + "," + datos[1].longitude + "&&sensor=true";
+              console.log(url);
+              $http.get(url).success(function (response) {
+                console.log('entro');
+                console.log(response);
+              });
+              //CITY/////////////////////////////////////////
+              */
+              //strokeColor: "#FF0000",
+              //strokeOpacity: 0.7,
+              //strokeWeight: 3
+              data[int].img="http://maps.googleapis.com/maps/api/staticmap?center=" + data[int].center+"&zoom=17&size=425x180&maptype=roadmap&path=color:0xff0000ff|weight:3|"+data[int].path +"&sensor=false&markers=color:blue%7Clabel:S%7C"+marker1+"&markers=color:red%7Clabel:F%7C"+marker2;
+              //zoom:17
+              //mapTypeId: google.maps.MapTypeId.ROADMAP
+              int++;
+            });
+          }
+          console.log(data);
+          $scope.routes = data;
+          if(data==''){
+            $scope.noTracks=true;
+          }
+
+
+      },
+      function(error){
+        alert("ERROR");
+      })
+
+    });
+
+
+
+  };
+
+  getPosition();
+
+  $scope.trackdetail= function(trackid){
+    $state.go('trackdetail',{type:'near',id:trackid});
+  }
+
+  })
+
+
 .controller('TabCtrl', function($scope,$http,$localStorage,$ionicPopup,$state,$ionicLoading,$timeout){
 
   $scope.$on('$stateChangeStart',
@@ -1326,7 +1678,7 @@ console.log("estoy dentro");
 
     $timeout(function () {
       $ionicLoading.hide();
-    }, 600);
+    }, 700);
 
   }
 
@@ -1335,7 +1687,7 @@ console.log("estoy dentro");
 
     $timeout(function () {
       $ionicLoading.hide();
-    }, 1500);
+    }, 900);
 
   }
 
