@@ -4,10 +4,10 @@
   <button class="button button-clear button-assertive" ng-click="goback()">
     Cancel
   </button>
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<h5 class="font-130 text-center">{{friend.username}}</h5>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<h5 class="font-130 text-center">{{user.username}}</h5>
 </ion-header-bar>
 
-  <ion-content class="bg-color-stable">
+  <ion-content ng-controller="EditProfileCtrl" class="bg-color-stable">
     <div class="list">
       <h3 class="padding gotham-medium color-darkgray text-center">Edit profile</h3>
       <h4 class="padding gotham-medium  text-center">{{user.username}}</h4>

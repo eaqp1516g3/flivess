@@ -10,13 +10,13 @@
 <ion-content>
     <ion-list id="trackArea"  class="text-center uppercase">
       <label ng-show="noTracks">No tracks available...</label>
-      <div ng-if="routes !=''" ng-repeat="route in routes" class="list card">
+      <div  ng-if="routes !=''" ng-repeat="route in routes  | orderBy:'created':true" class="list card">
 
         <p class="item text-center">
           <a style="color: #0a9dc7" am-time-ago="route.created"></a>
         </p>
 
-        <div class="item item-body">
+        <div ng-click="trackdetail(route._id)" class="item item-body">
           <img class="full-image" src="{{route.img}}">
 
           <p class="text-center">

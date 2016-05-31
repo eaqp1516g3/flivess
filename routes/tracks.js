@@ -8,7 +8,7 @@ module.exports = function (app) {
     var Track = require('../models/track.js');
     var Friend = require('../models/friend.js');
     var User = require('../models/user.js');
-    var base_url = 'http://localhost:8080';
+    var base_url = 'http://192.168.1.10:8080';
     //var base_url="http://147.83.7.157:8080";
     var fs = require('fs');
     var geolib = require('geolib');
@@ -22,12 +22,12 @@ module.exports = function (app) {
         var track_list;
         var latitude_user = req.body.latitude;
         var longitude_user = req.body.longitude;
-        //var range = req.body.range;
+        var range = req.body.range;
         var latitude;
         var longiude;
         console.log(req.body.latitude);
         console.log(req.body.longitude);
-        //console.log(req.body.range);
+        console.log('Range:'+req.body.range);
             Track.find({}, function (err, tracks) {
                 console.log('prueba!');
                 track_list = tracks;
@@ -43,7 +43,7 @@ module.exports = function (app) {
                     if (geolib.isPointInCircle(
                             {latitude: latitude_user, longitude: longitude_user},
                             {latitude: latitude, longitude: longiude},
-                            30//range
+                            range
                         ) == true) {
                         console.log('esta cerca!');
                         tracks_cercanos.push(track_list[i]);
