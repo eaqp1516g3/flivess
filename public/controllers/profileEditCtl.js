@@ -15,6 +15,22 @@ angular.module('Flivess').controller('profileEditCtl', ['$scope', '$http', '$coo
         $scope.contact = "";
     });
 
+    $scope.range_weight = function(start,end) {
+        var result = [];
+        for (var i = start; i <= end; i++) {
+            result.push(i);
+        }
+        return result;
+    };
+
+    $scope.range_height = function(start,end) {
+        var result = [];
+        for (var i = start; i <= end; i++) {
+            result.push(i);
+        }
+        return result;
+    };
+
     $scope.updateUser = function() {
 
         console.log($scope.user._id);

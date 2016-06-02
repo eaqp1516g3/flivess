@@ -19,6 +19,7 @@ module.exports = function (app) {
         var path = './public/tracks/';
         var tracks_cercanos=[];
         var filesync=[];
+        var tracks_final=[];
         var track_list;
         var latitude_user = req.body.latitude;
         var longitude_user = req.body.longitude;
@@ -27,31 +28,61 @@ module.exports = function (app) {
         var longiude;
         console.log(req.body.latitude);
         console.log(req.body.longitude);
-        console.log('Range:'+req.body.range);
-            Track.find({}, function (err, tracks) {
-                console.log('prueba!');
-                track_list = tracks;
-                for (i = 0; i < track_list.length; i++) {
-                    var url = track_list[i].pointsurl;
-                    var files = url.split("/");
-                    console.log("PUNTOS");
-                    filesync[i] = fs.readFileSync(path + files[4], 'utf8');
-                    var points = JSON.parse(filesync[i]);
-                    latitude = points[0].latitude;
-                    longiude = points[0].longitude;
-                    console.log(latitude + ' ' + longiude);
-                    if (geolib.isPointInCircle(
-                            {latitude: latitude_user, longitude: longitude_user},
-                            {latitude: latitude, longitude: longiude},
-                            range
-                        ) == true) {
-                        console.log('esta cerca!');
-                        tracks_cercanos.push(track_list[i]);
+
+        //console.log(req.body.range);
+
+        onlyOneForId = function(arrtracks){
+            console.log("DENTRO DE LA FUNCION!")
+            console.log("RECIBO "+arrtracks.length+" TRACKS");
+            var tracks =[];
+            var existe = false;
+            tracks.push(arrtracks[0]);
+            console.log(tracks);
+            for(i=1;i<arrtracks.length;i++){
+                for(j=0;j<tracks.length;j++){
+                    if(arrtracks[i].id_comun==tracks[j].id_comun){
+                        existe=true;
+                        console.log("YA HAY UNO");
                     }
                 }
-                console.log(tracks_cercanos);
-                res.send(tracks_cercanos);
-                console.log('FINISH');
+                if(existe == false){
+                    console.log("AÑADO AL ARRAY");
+                    tracks.push(arrtracks[i]);
+                }
+                existe = false;
+            }
+            return tracks;
+        }
+
+            Track.find({}, function (err, tracks) {
+                    console.log(tracks);
+                    console.log('prueba!');
+                    track_list = tracks;
+                    console.log(" numero de tracks: "+track_list.length);
+                    for (i = 0; i < track_list.length; i++) {
+                        var url = track_list[i].pointsurl;
+                        var files = url.split("/");
+                        console.log("PUNTOS");
+                        filesync[i] = fs.readFileSync(path + files[4], 'utf8');
+                        var points = JSON.parse(filesync[i]);
+                        latitude = points[0].latitude;
+                        longiude = points[0].longitude;
+                        console.log(latitude + ' ' + longiude);
+                        if (geolib.isPointInCircle(
+                                {latitude: latitude_user, longitude: longitude_user},
+                                {latitude: latitude, longitude: longiude},
+                                30//range
+                            ) == true) {
+                            console.log('esta cerca!');
+                            tracks_cercanos.push(track_list[i]);
+                        }
+                    }
+                    console.log(tracks_cercanos);
+                    tracks_final = onlyOneForId(tracks_cercanos);
+                    console.log(tracks_final);
+                    res.send(tracks_final);
+                    console.log('FINISH');
+
             });
     }
 

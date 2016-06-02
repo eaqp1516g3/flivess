@@ -117,14 +117,14 @@ module.exports = function (app) {
                     fullname: request.body.fullname,
                     email: request.body.email,
                     password: request.body.password,
-                    level: 0,
                     imgurl: imgurl,
                     age: request.body.age,
                     sex:request.body.sex,
+                    city:request.body.city,
                     weight:request.body.weight,
                     height:request.body.height,
                     facebook_id:request.body.facebook_id,
-                    token:'',
+
                 })
             console.log(users);
 
@@ -155,9 +155,9 @@ module.exports = function (app) {
             users.fullname = req.body.fullname;
             users.email = req.body.email;
             users.password = req.body.password;
-            users.level= req.body.level;
             users.age = req.body.age;
             users.sex = req.body.sex;
+            users.city = req.body.city;
             users.weight = req.body.weight;
             users.height = req.body.height;
             users.imgurl= req.body.imgurl;
