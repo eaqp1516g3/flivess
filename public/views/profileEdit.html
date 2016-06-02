@@ -10,9 +10,11 @@
         <!-- left column -->
         <div class="col-md-4 col-sm-6 col-xs-12">
             <div class="text-center">
-                <img ng-src="{{user.imgurl}}" class="avatar img-circle img-thumbnail" width="200" alt="avatar">
-                <h6>Upload a different photo...</h6>
-                <input type="file" class="text-center center-block well well-sm" name="file" uploader-model="file">
+                <img ng-src="{{user.imgurl}}" class="avatar img-circle img-thumbnail" width="200" height="200" alt="avatar"></img>
+
+                <div><br><br>
+                    <a href="#/edit_foto" data-toggle="tooltip modal" type="button" class="btn btn-lg btn-info"><i class="fa fa-picture-o" aria-hidden="true" ></i> EDIT PHOTO</a>
+                </div>
             </div>
         </div>
 

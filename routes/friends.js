@@ -65,7 +65,7 @@ module.exports = function (app) {
                 else if(res==undefined) {
                     var notify = new notification({
                         username: req.body.friend,
-                        type: 0,
+                        type: 1,
                         actionusername: req.body.username,
                         text: "is following you",
                         vist: false

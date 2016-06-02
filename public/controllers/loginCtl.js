@@ -97,7 +97,7 @@ angular.module('Flivess').controller('loginCtl', ['$scope', '$http', '$cookies',
                     console.log(data);
                 })
 
-                window.location.href = "#/home";
+                window.location.href = "#/profile/" +$scope.usuario.username;
             }).error(function (response) {
                 $scope.alertReg = true;
                 $scope.alert.message="Username already exists";
@@ -114,7 +114,7 @@ angular.module('Flivess').controller('loginCtl', ['$scope', '$http', '$cookies',
     };
 
 
-    $scope.closeAlert=function(){
+    $scope.closeAlert = function(){
         $scope.alertReg=false;
         $scope.alert.message="";
     }

@@ -2,8 +2,8 @@ module.exports = function (app) {
     var mongoose = require('mongoose');
     var User = require('../models/user.js');
 
-    var base_url = "http://147.83.7.157:8080";
-
+    //var base_url = "http://147.83.7.157:8080";
+    var base_url = "http://localhost:8080";
     //GET - GET All Users By Into DB
     AllUsers = function (req, res) {
         User.find(function (err, users) {
@@ -169,6 +169,26 @@ module.exports = function (app) {
         });
     };
 
+    //PUT - Update a register already exists
+    updateUserFacebook = function (req, res) {
+        User.findById(req.params.id, function (err, users) {
+            console.log('PUT');
+            console.log(req.params.id);
+            console.log(req.body);
+
+
+            users.username = req.body.username;
+            users.fullname = req.body.fullname;
+            users.email = req.body.email;
+            users.imgurl= req.body.imgurl;
+
+            users.save(function (err) {
+                if (err) return res.send(500, err.message);
+                res.status(200).json(users);
+            });
+        });
+    };
+
 
     //DELETE - Delete a User with specified ID
     deleteUser = function (req, res) {
@@ -209,6 +229,8 @@ module.exports = function (app) {
         var form = new formidable.IncomingForm();
 
         form.parse(req, function (err, fields, files) {
+            console.log("LOS FICHEROOOOOS");
+            console.log(files.file);
             var tmp_path = files.file.path; // file is the name html input that contain us route img
             var tipo = files.file.type; // type file
 
@@ -270,6 +292,7 @@ module.exports = function (app) {
     app.get('/users/user/:username',findbyName);
     app.get('/users/user/facebook/:facebook_id',findbyFacebookid);
     app.put('/user/:id', updateUser);
+    app.put('/user_facebook/:id', updateUserFacebook);
     //app.post('/data/',getJson);
     app.delete('/user/:username', deleteUser);
 }

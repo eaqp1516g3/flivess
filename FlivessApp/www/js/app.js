@@ -7,7 +7,7 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'starter.controllers','ngStorage','ngOpenFB','ngCordova','angularMoment'])
 
-.run(function($ionicPlatform,$state,$stateParams,ngFB) {
+.run(['$rootScope', 'SocketIoFactory', '$ionicPlatform', '$state', '$stateParams', 'ngFB', function($rootScope,socket, $ionicPlatform,$state,$stateParams,ngFB) {
   $ionicPlatform.ready(function() {
     ngFB.init({appId: '171606643237841'});
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -21,9 +21,35 @@ angular.module('starter', ['ionic', 'starter.controllers','ngStorage','ngOpenFB'
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
+
+    if(localStorage.getItem('userLogged')!= null || !angular.isUndefined(localStorage.getItem('userLogged'))) {
+      console.log(JSON.parse(localStorage.getItem('userLogged')));
+      $rootScope.userLogged = JSON.parse(localStorage.getItem('userLogged'));
+      console.log("Holiii" +$rootScope.userLogged.username);
+      socket.connect();
+      socket.on('connection', function(data){
+        console.log(data);
+        socket.emit('username',$rootScope.userLogged.username);
+        socket.emit('notification',$rootScope.userLogged.username);
+      });
+      socket.on('listaUsers', function(data){
+        console.log("LOS USUARIOS");
+        console.log(data);
+      });
+      console.log("3");
+      socket.on('new notification', function(data){
+        socket.emit('notification',$rootScope.userLogged.username, function(data){
+        } )
+      });
+      socket.on('notification', function(data){
+        $rootScope.notlength=data.numeros;
+        //$rootScope.notification=data.notifications;
+        console.log(data);
+      });
+    }
   });
 
-})
+}])
 
 .config(function($stateProvider, $urlRouterProvider) {
 
@@ -52,12 +78,20 @@ angular.module('starter', ['ionic', 'starter.controllers','ngStorage','ngOpenFB'
       controller: 'TrackingCtrl'
     })
 
+    .state('notifications',{
+      url: '/notifications',
+      cache:false,
+      templateUrl: 'templates/notifications.html',
+      controller: 'NotificationsCtrl'
+    })
+
     .state('search',{
       url: '/search',
       cache:false,
       templateUrl: 'templates/search.html',
       controller: 'SearchCtrl'
     })
+
     .state('editprofile',{
       url: '/editprofile',
       cache:false,
@@ -198,4 +232,47 @@ angular.module('starter', ['ionic', 'starter.controllers','ngStorage','ngOpenFB'
   $urlRouterProvider.otherwise('/login');
 
 
+})
+
+.factory("SocketIoFactory", function ($rootScope) {
+  var socket = null;
+  var nodePath = "http://localhost:3000/";
+
+  function listenerExists(eventName) {
+    return socket.hasOwnProperty("$events") && socket.$events.hasOwnProperty(eventName);
+  }
+
+  return {
+    connect: function () {
+      socket = io.connect(nodePath);
+    },
+    connected: function () {
+      return socket != null;
+    },
+    on: function (eventName, callback) {
+      console.log("INSIDE ON");
+      socket.on(eventName, function () {
+        console.log("INSIDE ON IN ON");
+        var args = arguments;
+        $rootScope.$apply(function () {
+          callback.apply(socket, args);
+        });
+      });
+    },
+    emit: function (eventName, data, callback) {
+      console.log("INSIDE EMIT");
+      socket.emit(eventName, data, function () {
+        console.log("INSIDE EMIT IN EMIT");
+        var args = arguments;
+        $rootScope.$apply(function () {
+          if (callback) {
+            callback.apply(socket, args);
+          }
+        });
+      })
+    },
+    disconnect: function () {
+      socket.disconnect();
+    }
+  };
 });

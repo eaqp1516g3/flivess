@@ -2,7 +2,7 @@
  * Created by irkalla on 14.04.16.
  */
 // configure our routes
-angular.module('Flivess', ['ngRoute', 'ngCookies','ui.bootstrap','angularModalService', 'ngAnimate', 'googlechart', 'ngMaterial'])
+angular.module('Flivess', ['ngRoute', 'ngCookies','ui.bootstrap','angularModalService', 'ngAnimate', 'googlechart', 'ngMaterial', 'ngImgCrop'])
     .config(function($routeProvider) {
         console.log("EN ROUTES.JS");
         $routeProvider
@@ -10,6 +10,11 @@ angular.module('Flivess', ['ngRoute', 'ngCookies','ui.bootstrap','angularModalSe
             .when('/', {
                 templateUrl : 'views/login.html',
                 controller  : 'loginCtl'
+            })
+
+            .when('/edit/:facebook_id', {
+                templateUrl : 'views/edit.html',
+                controller  : 'editCtl'
             })
 
             .when('/friends', {
@@ -25,6 +30,11 @@ angular.module('Flivess', ['ngRoute', 'ngCookies','ui.bootstrap','angularModalSe
             .when('/editprofile', {
                 templateUrl : 'views/profileEdit.html',
                 controller  : 'profileEditCtl'
+            })
+
+            .when('/edit_foto', {
+                templateUrl : 'views/edit_photo.html',
+                controller  : 'editPhotoCtl'
             })
 
             .when('/profile/:friend', {
@@ -48,11 +58,6 @@ angular.module('Flivess', ['ngRoute', 'ngCookies','ui.bootstrap','angularModalSe
 
             .when('/about', {
                 templateUrl : 'views/about.html'
-            })
-
-            .when('/details/:id', {
-                templateUrl : 'views/raceDetails.html',
-                controller  : 'raceDetailsCtl'
             })
 
             .when('/details/:id', {

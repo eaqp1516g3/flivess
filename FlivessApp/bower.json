@@ -8,7 +8,9 @@
     "ionic-material-design-lite": "^0.5.5",
     "ngstorage": "^0.3.10",
     "ngCordova": "^0.1.26-alpha",
-    "angular-moment": "^0.10.3"
+    "angular-moment": "^0.10.3",
+    "angular-socket-io": "^0.7.0",
+    "socket.io-client": "^1.4.6"
   },
   "resolutions": {
     "ionic": "1.1.0"

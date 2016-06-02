@@ -16,7 +16,7 @@
                 <br>
                 <a data-toggle="tooltip modal" type="button" class="btn btn-lg btn-primary" ng-click="showModel()">Send <i class="glyphicon glyphicon-envelope"></i></a>
                 <button data-toggle="tooltip" type="button" class="btn btn-lg btn-success" ng-click="addFriend()" ng-show="show">Follow <span class="fa fa-user-plus" aria-hidden="true"></span></button>
-                <button data-toggle="tooltip" type="button" class="btn btn-lg btn-danger"  ng-click="removeFriend()" confirm="Unfollow {{friend.username}}?" confirm-title="Please {{userlogged.fullname}}, verify" confirm-settings="{size:'sm'}" ng-show="!show">Unfollow <span class="glyphicon glyphicon-user"></span></button>
+                <button data-toggle="tooltip" type="button" class="btn btn-lg btn-danger"  ng-click="removeFriend()" confirm="Unfollow {{friend.username}}?" confirm-title="Please {{userlogged.fullname}}, verify" confirm-settings="{size:'sm'}" ng-show="!show">Unfollow <span class="fa fa-user-times" aria-hidden="true"></span></button>
             </div>
             <div class="col-md-3" ng-show="!myprofile">
                 <br>
@@ -72,10 +72,12 @@
         </div>
     </div>
 
-    <div class="col-md-2"><label ng-show="noTracks">You don't have tracks...</label></div>
+    <div  class="col-md-2"></div>
 
     <div id="tracks" class="panel-group  col-md-8">
-
+        <div style=" text-align: center;" ng-show="noTracks">
+            <label  >You don't have tracks...</label>
+        </div>
         <div ng-repeat="route in routes">
         <div class="panel panel-default">
             <a href="#/details/{{route._id}}">

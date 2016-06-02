@@ -40,16 +40,15 @@
             <ul class="nav navbar-nav navbar-right">
 
                 <li >
-                        <a id="dLabel" role="button" data-toggle="dropdown" data-target="#" ng-init="userloggedInfo" ng-click="clickNot(userlog.username)">
-                            <i class="glyphicon glyphicon-globe"></i>
-                            <span class="noti_bubble">{{notlength}}</span>
-                        </a>
+                    <a id="dLabel" role="button" data-toggle="dropdown" data-target="#" ng-init="userloggedInfo" ng-click="clickNot(userlog.username)">
+                        <i class="glyphicon glyphicon-globe"></i>
+                        <span class="noti_bubble">{{notlength}}</span>
+                    </a>
 
                         <ul class="dropdown-menu notifications" role="menu" aria-labelledby="dLabel">
 
                             <div class="notification-heading" >
                                 <h4 class="menu-title">Notifications</h4>
-                                <a class="btn menu-title pull-right" href="#/notifications">View all<i class="glyphicon glyphicon-circle-arrow-right"></i></a>
                             </div>
                             <li class="divider"></li>
                             <div class="notifications-wrapper" ng-repeat="notify in notification" >
@@ -71,7 +70,7 @@
                                 </a>
                             </div>
                             <li class="divider"></li>
-                            <div class="notification-footer">
+                            <div class="notification-footer" style="text-align: center;">
                                 <a class="btn menu-title" href="#/notifications">View all<i class="glyphicon glyphicon-circle-arrow-right"></i></a>
                             </div>
                         </ul>
@@ -111,10 +110,9 @@
     <script src="bower_components/angular-aria/angular-aria.js"></script>
     <script src="bower_components/angular-messages/angular-messages.js"></script>
     <script src="bower_components/angular-material/angular-material.min.js"></script>
-
     <script src="bower_components/angularjs-geolocation/dist/angularjs-geolocation.min.js"></script>
     <script src="bower_components/angular-confirm-modal/angular-confirm.min.js"></script>
-
+    <script src="bower_components/ng-img-crop/compile/unminified/ng-img-crop.js"></script>
     <script src="bower_components/socket.io-client/socket.io.js"></script>
     <script src="bower_components/angular-socket-io/socket.js"></script>
 
@@ -132,5 +130,6 @@
     <script src="controllers/raceDetailsCtl.js"></script>
     <script src="controllers/historicalCtl.js"></script>
     <script src="controllers/notificationsCtl.js"></script>
+    <script src="controllers/editPhotoCtl.js"></script>
 </body>
 </html>
