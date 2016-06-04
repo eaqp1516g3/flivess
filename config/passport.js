@@ -48,20 +48,23 @@ module.exports = function(passport) {
                     User.findOne({facebook_id: profile._json.id}, function (err, user) {
 
                         if (user==null) {
+                            User.findOne({username: profile._json.name}, function (err, user) {
 
-                            var newUser = new User();
+                                var newUser = new User();
 
-                            newUser.facebook_id = profile._json.id;
-                            newUser.username = profile._json.name;
-                            newUser.fullname = profile._json.name;
-                            newUser.email = profile.emails[0].value;
-                            newUser.imgurl = 'http://graph.facebook.com/'+ profile._json.id +'/picture?width=270&height=270';
+                                newUser.facebook_id = profile._json.id;
+                                if (user == null) newUser.username = profile._json.name;
+                                else newUser.username = profile._json.id;
+                                newUser.fullname = profile._json.name;
+                                newUser.email = profile.emails[0].value;
+                                newUser.imgurl = 'http://graph.facebook.com/' + profile._json.id + '/picture?width=270&height=270';
 
-                            newUser.save(function (err) {
-                                if (err)
-                                    return done(err);
+                                newUser.save(function (err) {
+                                    if (err)
+                                        return done(err);
 
-                                return done(null, newUser);
+                                    return done(null, newUser);
+                                });
                             });
                         }
                         else return done(null, user);

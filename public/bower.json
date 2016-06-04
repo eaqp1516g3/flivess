@@ -28,6 +28,7 @@
     "ng-confirm": "angular-confirm#^1.1.0",
     "angular-confirm-modal": "^1.2.3",
     "socket.io-client": "^1.4.6",
-    "angular-socket-io": "^0.7.0"
+    "angular-socket-io": "^0.7.0",
+    "ng-img-crop": "ngImgCrop#^0.3.2"
   }
 }

@@ -23,6 +23,13 @@ angular.module('Flivess').controller('messagesCtl', ['$scope', '$http','$cookies
     }
     refresh();
 
+    socket.on('chat', function () {
+        $http.get(base_url_prod+ '/messages/' + userLogged.username +'/' + $scope.usuarioC).success(function (response) {
+            $scope.msgs = response;
+        });
+    });
+
+
 
 
     $scope.conversacion = function (user) {
@@ -65,10 +72,10 @@ angular.module('Flivess').controller('messagesCtl', ['$scope', '$http','$cookies
             console.log("Response");
             console.log(response);
             $scope.message="";
+            socket.emit('message', receiver);
 
             $http.get(base_url_prod+ '/messages/' + userLogged.username +'/' + receiver).success(function (response) {
                 $scope.msgs = response;
-                socket.emit('message', receiver);
             });
         });
     };

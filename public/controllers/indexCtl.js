@@ -47,7 +47,7 @@ angular.module('Flivess').controller('indexCtl', ['$scope', '$http', '$cookies',
         if ($rootScope.notlength != 0) {
             $http.put(base_url_prod + '/notifications/saw/' + user);
             $rootScope.notlength = 0;
-        }
+        };
     };
 
 

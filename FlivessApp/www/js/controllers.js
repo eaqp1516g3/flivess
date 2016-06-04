@@ -1,6 +1,6 @@
 //var base_url_local="http://147.83.7.157:8080";
 
-var base_url_local="http://192.168.1.10:8080";
+var base_url_local="http://192.168.1.36:8080";
 
 
 angular.module('starter.controllers', ['ngOpenFB'])
@@ -63,6 +63,10 @@ angular.module('starter.controllers', ['ngOpenFB'])
     //$state.go('tracking');
   }
 
+  $scope.toNotifications= function(){
+    $state.go('notifications');
+  }
+
   $scope.toSearch= function(){
     $state.go('search');
   }
@@ -70,7 +74,16 @@ angular.module('starter.controllers', ['ngOpenFB'])
 
 })
 
-.controller('ProfileCtrl', function($scope,$http,$state,$ionicPopup,$ionicActionSheet,$stateParams,$anchorScroll,$location,$ionicLoading,$timeout,$ionicScrollDelegate,$ionicHistory) {
+
+.controller('NotificationsCtrl', function ($scope, $http) {
+  $http.get(base_url_local + '/notifications/user/' + $scope.userLogged.username).success(function (response) {
+    console.log(response);
+    $scope.notifications = response;
+  });
+})
+
+
+.controller('ProfileCtrl', ['$scope', '$http', '$state', '$ionicPopup', '$ionicActionSheet', '$stateParams', '$anchorScroll', '$location', '$ionicLoading' ,'$timeout', '$ionicScrollDelegate', '$ionicHistory', 'SocketIoFactory', function($scope,$http,$state,$ionicPopup,$ionicActionSheet,$stateParams,$anchorScroll,$location,$ionicLoading,$timeout,$ionicScrollDelegate,$ionicHistory, socket) {
 
   $scope.userLogged = JSON.parse(localStorage.getItem('userLogged'));
   $scope.showActionSheet = function() {// Show the action sheet
@@ -144,6 +157,7 @@ angular.module('starter.controllers', ['ngOpenFB'])
     console.log($stateParams.username);
     console.log("Lo que envio " + amigos)
     $http.post(base_url_local+'/addfriend', amigos).success(function(response) {
+      socket.emit('follow', amigos.friend);
       isFriend();
       refresh();
     });
@@ -264,7 +278,7 @@ angular.module('starter.controllers', ['ngOpenFB'])
   getTracks();
 
 
-})
+}])
 
 .controller('SearchCtrl', ['$scope', 'UsersDataService','$ionicHistory','$state','$ionicLoading','$timeout', function($scope, UsersDataService,$ionicHistory,$state,$ionicLoading,$timeout) {
 
@@ -1012,7 +1026,7 @@ angular.module('starter.controllers', ['ngOpenFB'])
 
 })
 
-.controller('LoginCtrl',function($scope,$http,$state,$localStorage,ngFB){
+.controller('LoginCtrl',['$scope', '$http', '$rootScope', 'SocketIoFactory', '$state', '$localStorage', 'ngFB', function($scope, $http, $rootScope, socket, $state, $localStorage, ngFB){
 
   $scope.redir = function() {
     $state.go('register');
@@ -1028,7 +1042,30 @@ angular.module('starter.controllers', ['ngOpenFB'])
       console.log("USUARIO: "+response.data.username);
       localStorage.setItem('userLogged', JSON.stringify(response.data));
       console.log("LOCAL: "+$localStorage.username);
-      //$cookies.putObject('user', response);
+      $rootScope.userLogged = JSON.parse(localStorage.getItem('userLogged'));
+      socket.connect();
+      socket.on('connection', function(data){
+        console.log(data);
+        socket.emit('username',$rootScope.userLogged.username);
+        socket.emit('notification',$rootScope.userLogged.username);
+      });
+      socket.on('listaUsers', function(data){
+        console.log("LOS USUARIOS");
+        console.log(data);
+      });
+      console.log("3");
+      socket.on('new notification', function(data){
+        socket.emit('notification',$rootScope.userLogged.username, function(data){
+        } )
+      });
+      socket.on('notification', function(data){
+
+        $rootScope.notlength=data.numeros;
+        //$rootScope.notification=data.notifications;
+        console.log(data);
+      });
+
+
       $state.go('tab.dash');
     },
     function(error){
@@ -1048,7 +1085,7 @@ angular.module('starter.controllers', ['ngOpenFB'])
             params: {fields: 'id,name,email'}
           }).then(
             function (res) {
-              console.log("COJO EL USUSARIO DE FB")
+              console.log("COJO EL USUSARIO DE FB");
               var user = {
                 username: res.name,
                 fullname:res.name,
@@ -1091,7 +1128,7 @@ angular.module('starter.controllers', ['ngOpenFB'])
   };
 
 
-})
+}])
 
 .controller('RegisterCtrl',function($scope,$http,$state,$ionicPopup,$localStorage){
 
@@ -1186,7 +1223,7 @@ angular.module('starter.controllers', ['ngOpenFB'])
 
 }])
 
-.controller('FriendsCtrl',function($scope,$http,$state,$ionicPopup,$stateParams,$ionicHistory,$timeout,$ionicLoading){
+.controller('FriendsCtrl', ['$scope', '$http', '$state', '$ionicPopup', '$stateParams', '$ionicHistory', '$timeout', '$ionicLoading', 'SocketIoFactory', function($scope, $http, $state, $ionicPopup, $stateParams, $ionicHistory, $timeout, $ionicLoading, socket){
 
   var userLogged = JSON.parse(localStorage.getItem('userLogged'));
   $scope.userLogged = userLogged;
@@ -1212,10 +1249,11 @@ angular.module('starter.controllers', ['ngOpenFB'])
     console.log(userLogged.username);
     amigos.friend = namee;
     console.log(namee);
-    console.log("Lo que envio " + amigos)
-    $http.post(base_url_local+'/addfriend', amigos).success(function(response) {
-      main();
+    console.log("Lo que envio " + amigos);
 
+    $http.post(base_url_local+'/addfriend', amigos).success(function() {
+      socket.emit('follow', amigos.friend);
+      main();
     });
   }
 
@@ -1325,7 +1363,7 @@ angular.module('starter.controllers', ['ngOpenFB'])
     $state.go('profile',{username:username});
   }
 
-  })
+  }])
 
 .controller('FollowersCtrl',function($scope,$http,$state,$ionicPopup,$stateParams,$ionicHistory,$timeout,$ionicLoading){
 
@@ -1354,6 +1392,7 @@ angular.module('starter.controllers', ['ngOpenFB'])
       console.log("Lo que envio " + amigos)
       $http.post(base_url_local+'/addfriend', amigos).success(function(response) {
         main();
+        socket.emit('follow', amigos.friend);
 
       });
     }
@@ -1440,11 +1479,12 @@ angular.module('starter.controllers', ['ngOpenFB'])
     }
   })
 
-.controller('MessageDetailCtrl',['$scope','$http','$stateParams','$localStorage','$ionicScrollDelegate', function($scope,$http,$stateParams,$localStorage,$ionicScrollDelegate) {
+.controller('MessageDetailCtrl',['$scope','$http','$stateParams','$localStorage','$ionicScrollDelegate', 'SocketIoFactory', function($scope, $http, $stateParams, $localStorage, $ionicScrollDelegate, socket) {
 
   $scope.$on('$ionicView.beforeEnter', function (event, viewData) {
     viewData.enableBack = true;
   });
+
 
   $scope.userC = $stateParams.name;
   $scope.userLogged = JSON.parse(localStorage.getItem('userLogged'));
@@ -1473,6 +1513,11 @@ angular.module('starter.controllers', ['ngOpenFB'])
 
   load();
 
+  socket.on('chat', function () {
+    $http.get(base_url_local+ '/messages/' + $scope.userLogged.username +'/' + $stateParams.name).success(function (response) {
+      $scope.messages = response;
+    });
+  });
 
   $scope.sendMessage = function(receiver) {
     console.log("Before sending")
@@ -1491,8 +1536,9 @@ angular.module('starter.controllers', ['ngOpenFB'])
       console.log("Response");
       console.log(response);
       $scope.message="";
+      socket.emit('message', receiver);
 
-      load()
+      load();
     });
   };
 

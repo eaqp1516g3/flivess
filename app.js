@@ -77,7 +77,6 @@ server.listen(8080, function() {
 
 
 
-
 //SERVIDOR PARA EL SOCKET
 var notification = require('./models/notification.js');
 var usuario = require('./models/user.js');
@@ -153,11 +152,27 @@ io.on('connection', function(conn){
                     console.log("ENVIO LA NOTIFICACION 2");
                     console.log("EL USUARIO AL Q SE LO ENVIA 2: " + data);
                     users[data].emit('new notification', res);
+                    users[data].emit('chat');
                 }
                 else console.log("IS NOT CONNECTED");
             }
         })
     });
+
+    conn.on('track', function(data){ 
+    usuario.findOne({username : data}), function(err, result) {
+        follow.find({friend: result._id}).exec(function (err, res) {
+            if (err) {
+            }
+            else {
+                for (var i = 0; i < res.length; i++) {
+                    if (res[i].username in users) {
+                        users[res[i].username].emit('new notification', res);
+                    }
+                }
+            }
+        })
+    }})
 
     conn.on('disconnect', function(data){
         console.log("INSIDE DISCONNECT");

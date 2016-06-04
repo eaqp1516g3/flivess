@@ -13,7 +13,8 @@ module.exports = function(app, passport) {
             console.log(req.user);
             // If this function gets called, authentication was successful.
             // `req.user` contains the authenticated user.
-            res.redirect('/#/home/' + req.user.facebook_id);
+            if (req.user.username!=req.user.facebook_id) res.redirect('/#/home/' + req.user.facebook_id);
+            else res.redirect('/#/edit/' + req.user.facebook_id);
         });
 
 

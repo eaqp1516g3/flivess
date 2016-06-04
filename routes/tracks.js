@@ -8,7 +8,7 @@ module.exports = function (app) {
     var Track = require('../models/track.js');
     var Friend = require('../models/friend.js');
     var User = require('../models/user.js');
-    var base_url = 'http://192.168.1.10:8080';
+    var base_url = 'http://192.168.1.36:8080';
     //var base_url="http://147.83.7.157:8080";
     var fs = require('fs');
     var geolib = require('geolib');
@@ -109,7 +109,7 @@ module.exports = function (app) {
             distance: req.body.distance,
             time: req.body.time,
             pointsurl:url,
-            id_comun:req.body.id_comun,
+            id_comun:req.body.id_comun
         })
         console.log(track);
 
@@ -122,6 +122,29 @@ module.exports = function (app) {
 
             res.status(200).json(track);
 
+            User.findOne({username : req.body.username}), function(err, result) {
+                follow.find({friend: result._id}).exec(function (err, res) {
+                    if (err) {
+                    }
+                    else {
+                        for (var i = 0; i < res.length; i++) {
+                            if (res[i].username in users) {
+                                console.log('CREO LA NOTIFICACION');
+                                var notify = new notification({
+                                    username: res[i].username,
+                                    type: 2,
+                                    actionusername: req.body.username,
+                                    text: "has been running",
+                                    vist: false
+                                });
+                                notify.save(function (err) {
+                                    if (err)res.status(500).send('Internal server error');
+                                })
+                            }
+                        }
+                    }
+                })
+            }
         });
     }
 
