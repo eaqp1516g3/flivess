@@ -7,7 +7,7 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'starter.controllers','ngStorage','ngOpenFB','ngCordova','angularMoment'])
 
-.run(['$rootScope', 'SocketIoFactory', '$ionicPlatform', '$state', '$stateParams', 'ngFB', function($rootScope,socket, $ionicPlatform,$state,$stateParams,ngFB) {
+.run(['$rootScope', 'SocketIoFactory', '$ionicPlatform', '$state', '$stateParams', 'ngFB', function($rootScope,socket, $ionicPlatform,$state,$stateParams,ngFB,$scope) {
   $ionicPlatform.ready(function() {
     ngFB.init({appId: '171606643237841'});
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -46,6 +46,18 @@ angular.module('starter', ['ionic', 'starter.controllers','ngStorage','ngOpenFB'
         //$rootScope.notification=data.notifications;
         console.log(data);
       });
+
+      socket.on('chat', function (data){
+
+        console.log("CHAT");
+        $rootScope.$emit('myEvent', function(event,viewData){
+          console.log("EN EL BROADCAST");
+        });
+       // $state.go($state.currentState, {}, {reload:true});
+        // $state.go($state.current, $state.$current.params, {reload: true});
+
+      });
+      $state.go('tab.dash');
     }
   });
 
@@ -61,12 +73,14 @@ angular.module('starter', ['ionic', 'starter.controllers','ngStorage','ngOpenFB'
 
     .state('login', {
       url: '/login',
+      cache:false,
       templateUrl: 'templates/login.html',
       controller: 'LoginCtrl'
     })
 
     .state('register', {
       url: '/register',
+      cache:false,
       templateUrl: 'templates/register.html',
       controller: 'RegisterCtrl'
     })
@@ -164,6 +178,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngStorage','ngOpenFB'
     .state('tab', {
     url: '/tab',
     abstract: true,
+      cache:false,
     templateUrl: 'templates/tabs.html',
     controller: 'TabCtrl'
   })
@@ -172,9 +187,9 @@ angular.module('starter', ['ionic', 'starter.controllers','ngStorage','ngOpenFB'
 
   .state('tab.dash', {
     url: '/dash',
+    cache:false,
     views: {
       'tab-dash': {
-        cache:false,
         templateUrl: 'templates/tab-dash.html',
         controller: 'DashCtrl'
       }
@@ -183,9 +198,9 @@ angular.module('starter', ['ionic', 'starter.controllers','ngStorage','ngOpenFB'
 
     .state('tab.account', {
       url: '/account',
+      cache:false,
       views: {
         'tab-account': {
-          cache:false,
           templateUrl: 'templates/tab-account.html',
           controller: 'AccountCtrl'
         }
@@ -210,6 +225,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngStorage','ngOpenFB'
           return {value: 'simple!'};
         }
       },
+    cache:false,
       views: {
         'tab-messages': {
           templateUrl: 'templates/tab-messages.html',
@@ -219,8 +235,9 @@ angular.module('starter', ['ionic', 'starter.controllers','ngStorage','ngOpenFB'
     })
     .state('tab.message-detail', {
       url: '/messages/:name',
+      cache:false,
       views: {
-        'tab-messages': {
+        'tab-messages':{
           templateUrl: 'templates/message-detail.html',
           controller: 'MessageDetailCtrl'
         }
@@ -236,7 +253,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngStorage','ngOpenFB'
 
 .factory("SocketIoFactory", function ($rootScope) {
   var socket = null;
-  var nodePath = "http://localhost:3000/";
+  var nodePath = "http://192.168.1.36:3000/";
 
   function listenerExists(eventName) {
     return socket.hasOwnProperty("$events") && socket.$events.hasOwnProperty(eventName);

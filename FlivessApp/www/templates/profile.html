@@ -45,7 +45,7 @@
           <h4 class="text-center">{{friend.email}}</h4>
           <i ng-show="userLogged.username!=friend.username" class="icon ion-android-more-vertical color-red bold" ng-click="showActionSheet()"></i>
           <p ng-if="friend.sex || friend.height || friend.weight" class="color-gray text-center">{{friend.sex}}, {{friend.height}} cm {{friend.weight}} kg</p>
-          <p class="color-gray text-center">Barcelona</p>
+          <p class="color-gray text-center">{{friend.city}}</p>
         </ion-item>
         <hr>
 

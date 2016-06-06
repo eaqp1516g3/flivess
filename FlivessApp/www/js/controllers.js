@@ -313,16 +313,32 @@ angular.module('starter.controllers', ['ngOpenFB'])
 
 }])
 
-.controller('EditProfileCtrl', ['$scope','$ionicHistory','$state','$http','$ionicLoading','$timeout','$rootScope', function($scope,$ionicHistory,$state,$http) {
+.controller('EditProfileCtrl', ['$scope','$ionicHistory','$state','$http','$ionicPopup','$ionicLoading','$timeout','$rootScope', function($scope,$ionicHistory,$state,$http,$ionicPopup) {
 
 
   var userLogged = JSON.parse(localStorage.getItem('userLogged'));
   console.log(userLogged);
+  $scope.range_weight = function(start,end) {
+    var result = [];
+    for (var i = start; i <= end; i++) {
+      result.push(i);
+    }
+    return result;
+  };
 
+  $scope.range_height = function(start,end) {
+    var result = [];
+    for (var i = start; i <= end; i++) {
+      result.push(i);
+    }
+    return result;
+  };
+  $scope.data={};
   $scope.user={};
   $http.get(base_url_local + '/users/user/' + userLogged.username).success(function(response){
    console.log(response);
     $scope.user = response[0];
+    $scope.data.confirma = $scope.user.password;
 
   });
 
@@ -331,10 +347,20 @@ angular.module('starter.controllers', ['ngOpenFB'])
     };
 
   $scope.updateUser = function() {
+    if($scope.user.password == $scope.data.confirma && !angular.isUndefined($scope.user.password)){
 
-    $http.put(base_url_local +'/user/' + userLogged._id, $scope.user).success(function (response) {
-      $ionicHistory.goBack();
-    })
+      $http.put(base_url_local +'/user/' + $scope.user._id, $scope.user).success(function (response) {
+        $ionicHistory.goBack();
+      })
+    }
+    else {
+      $ionicPopup.alert({
+        title: 'Error',
+        template: 'Password is empty or doesn\'t match'
+      });
+
+    }
+
 
   };
 
@@ -342,7 +368,7 @@ angular.module('starter.controllers', ['ngOpenFB'])
 
   }])
 
-.controller('AccountCtrl', function($scope,$ionicPopup,$state,$ionicLoading,$timeout) {
+.controller('AccountCtrl',['$scope','$ionicPopup','$state','$ionicLoading','$timeout','SocketIoFactory', function($scope,$ionicPopup,$state,$ionicLoading,$timeout,socket) {
 
   $scope.loading = function(){
     $ionicLoading.show();
@@ -392,6 +418,7 @@ angular.module('starter.controllers', ['ngOpenFB'])
       if(res) {
         localStorage.clear();
         console.log(localStorage.getItem('userLogged'));
+        socket.disconnect();
         $state.go('login');
       } else {
         $state.go('tab.account');
@@ -400,7 +427,7 @@ angular.module('starter.controllers', ['ngOpenFB'])
   }
 
 
-  })
+  }])
 
 .controller('TracksUserCtrl', function($http,$scope,$ionicPopup,$state,$stateParams,$ionicHistory) {
 
@@ -1064,6 +1091,16 @@ angular.module('starter.controllers', ['ngOpenFB'])
         //$rootScope.notification=data.notifications;
         console.log(data);
       });
+      socket.on('chat', function (data) {
+
+        console.log("CHAT");
+        $rootScope.$emit('myEvent', function (event, viewData) {
+          console.log("EN EL BROADCAST");
+        });
+        // $state.go($state.currentState, {}, {reload:true});
+        // $state.go($state.current, $state.$current.params, {reload: true});
+
+      });
 
 
       $state.go('tab.dash');
@@ -1131,6 +1168,22 @@ angular.module('starter.controllers', ['ngOpenFB'])
 }])
 
 .controller('RegisterCtrl',function($scope,$http,$state,$ionicPopup,$localStorage){
+
+  $scope.range_weight = function(start,end) {
+    var result = [];
+    for (var i = start; i <= end; i++) {
+      result.push(i);
+    }
+    return result;
+  };
+
+  $scope.range_height = function(start,end) {
+    var result = [];
+    for (var i = start; i <= end; i++) {
+      result.push(i);
+    }
+    return result;
+  };
 
 
   $scope.user={};
@@ -1479,7 +1532,7 @@ angular.module('starter.controllers', ['ngOpenFB'])
     }
   })
 
-.controller('MessageDetailCtrl',['$scope','$http','$stateParams','$localStorage','$ionicScrollDelegate', 'SocketIoFactory', function($scope, $http, $stateParams, $localStorage, $ionicScrollDelegate, socket) {
+.controller('MessageDetailCtrl',['$scope','$http','$stateParams','$localStorage','$ionicScrollDelegate', 'SocketIoFactory','$state','$ionicHistory','$ionicPlatform','$rootScope', function($scope, $http, $stateParams, $localStorage, $ionicScrollDelegate, socket,$state,$ionicHistory,$ionicPlatform,$rootScope) {
 
   $scope.$on('$ionicView.beforeEnter', function (event, viewData) {
     viewData.enableBack = true;
@@ -1513,11 +1566,14 @@ angular.module('starter.controllers', ['ngOpenFB'])
 
   load();
 
-  socket.on('chat', function () {
-    $http.get(base_url_local+ '/messages/' + $scope.userLogged.username +'/' + $stateParams.name).success(function (response) {
-      $scope.messages = response;
-    });
+
+  $rootScope.$on('myEvent', function (event, viewData) {
+    load();
   });
+
+
+
+
 
   $scope.sendMessage = function(receiver) {
     console.log("Before sending")
