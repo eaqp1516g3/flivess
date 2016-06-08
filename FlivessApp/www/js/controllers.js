@@ -1778,7 +1778,8 @@ console.log('Range: '+$stateParams.range);
   })
 
 
-.controller('TabCtrl', function($scope,$http,$localStorage,$ionicPopup,$state,$ionicLoading,$timeout){
+.controller('TabCtrl', function($scope,$http,$localStorage,$ionicPopup,$state,$ionicLoading,$timeout,$rootScope){
+  var userLogged = JSON.parse(localStorage.getItem('userLogged'));
 
   $scope.$on('$stateChangeStart',
     function(event, toState, toParams, fromState, fromParams){
@@ -1823,7 +1824,10 @@ console.log('Range: '+$stateParams.range);
   }
 
   $scope.notifications = function() {
-
+    if ($rootScope.notlength != 0) {
+      $http.put(base_url_local + '/notifications/saw/' + userLogged.username);
+      $rootScope.notlength = 0;
+    };
     $state.go('tab.notifications');
   }
 

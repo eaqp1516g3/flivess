@@ -203,10 +203,10 @@ angular.module('starter', ['ionic', 'starter.controllers','ngStorage','ngOpenFB'
     })
 
     .state('tab.notifications', {
-      url: '/account',
+      url: '/notifications',
       cache:false,
       views: {
-        'tab-account': {
+        'tab-notifications': {
           templateUrl: 'templates/tab-notifications.html',
           controller: 'NotificationsCtrl'
         }
