@@ -1,6 +1,6 @@
 //var base_url_local="http://147.83.7.157:8080";
 
-var base_url_local="http://192.168.1.36:8080";
+var base_url_local="http://10.83.43.135:8080";
 
 
 angular.module('starter.controllers', ['ngOpenFB'])
@@ -80,6 +80,15 @@ angular.module('starter.controllers', ['ngOpenFB'])
     console.log(response);
     $scope.notifications = response;
   });
+
+  $scope.toTrack = function(){
+    $state.go('selecter');
+    //$state.go('tracking');
+  }
+
+  $scope.toSearch= function(){
+    $state.go('search');
+  }
 })
 
 
@@ -517,10 +526,10 @@ angular.module('starter.controllers', ['ngOpenFB'])
   //Congfigure Plugin
   bgLocationServices.configure({
     //Both
-    desiredAccuracy: 0, // Desired Accuracy of the location updates (lower means more accurate but more battery consumption)
+    desiredAccuracy: 10, // Desired Accuracy of the location updates (lower means more accurate but more battery consumption)
     distanceFilter: 1, // (Meters) How far you must move from the last point to trigger a location update
-    debug: true, // <-- Enable to show visual indications when you receive a background location update
-    interval: 5000, // (Milliseconds) Requested Interval in between location updates.
+    debug: false, // <-- Enable to show visual indications when you receive a background location update
+    interval: 2000, // (Milliseconds) Requested Interval in between location updates.
     fastestInterval: 5000,
 
   });
@@ -1071,6 +1080,7 @@ angular.module('starter.controllers', ['ngOpenFB'])
       console.log("LOCAL: "+$localStorage.username);
       $rootScope.userLogged = JSON.parse(localStorage.getItem('userLogged'));
       socket.connect();
+      console.log("socket.connect()");
       socket.on('connection', function(data){
         console.log(data);
         socket.emit('username',$rootScope.userLogged.username);
@@ -1086,7 +1096,6 @@ angular.module('starter.controllers', ['ngOpenFB'])
         } )
       });
       socket.on('notification', function(data){
-
         $rootScope.notlength=data.numeros;
         //$rootScope.notification=data.notifications;
         console.log(data);
@@ -1798,7 +1807,6 @@ console.log('Range: '+$stateParams.range);
     $state.go('tab.dash');
   }
 
-
    $scope.messages = function() {
      var userLogged = JSON.parse(localStorage.getItem('userLogged'));
      console.log(userLogged);
@@ -1813,7 +1821,9 @@ console.log('Range: '+$stateParams.range);
      $state.go('tab.messages');
   }
 
+  $scope.notifications = function() {
 
-
+    $state.go('tab.notifications');
+  }
 
 });

@@ -259,6 +259,58 @@ module.exports = function (app) {
         });
     }
 
+    isSame = function(req,res){
+        var ruta_org = req.body.ruta_org;
+        var ruta2 = req.body.ruta2;
+        var dist_org = req.body.dist_org;
+        var dist_ruta2 = req.body.dist_ruta2;
+        var result=[];
+        var same=0;
+        var existe=false;
+        console.log("RUTA ORIGINAL: "+ruta_org.length);
+        console.log("RUTA TEST: "+ruta2.length);
+        console.log("DISTANCIA ORIGINAL: "+dist_org);
+        console.log("DISTANCIA TEST: "+dist_ruta2);
+        if(dist_ruta2 >= dist_org-0.5 && dist_ruta2 <= dist_org+0.5){
+            console.log("WUT");
+            for(var i=0;i<ruta2.length;i++) {
+                console.log("primer for");
+                existe = false;
+                for(j=0;j<ruta_org.length;j++) {
+                    console.log("segundo for");
+                    if (existe == false) {
+                        console.log("existe es falso!");
+                        existe = geolib.isPointInCircle(
+                            {latitude: ruta_org[j].latitude, longitude: ruta_org[j].longitude},
+                            {latitude: ruta2[i].latitude, longitude: ruta2[i].longitude},
+                            10);
+                        if (existe == true) {
+                            console.log("posicion: " + i);
+                            result.push('ok');
+                        }
+                    }
+                    else {
+                        console.log("NADA");
+                    }
+                }
+            }
+            console.log("WTF!?");
+            same =(result.length/ruta2.length);
+            console.log("SIMILITUD: "+same);
+            if(same>=0.8){
+                console.log("se parecen");
+                res.send(true);
+            }
+            else {
+                console.log('no se parecen');
+                res.send(false);
+            }
+            //res.send(result.length + " PUNTOS EN COMUN DE "+ruta2.length+" PUNTOS POSIBLES");
+        }
+        else res.send(false);
+
+    }
+
 
 
 
@@ -270,4 +322,5 @@ module.exports = function (app) {
     app.get('/tracks/friends/:username',getLastFriendsTracks);
     app.delete('/track/:id',deleteTrack);
     app.post('/addtrack',addTrack);
+    app.post('/tracks/compare/isSame',isSame);
 }

@@ -58,6 +58,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngStorage','ngOpenFB'
 
       });
       $state.go('tab.dash');
+
     }
   });
 
@@ -92,12 +93,6 @@ angular.module('starter', ['ionic', 'starter.controllers','ngStorage','ngOpenFB'
       controller: 'TrackingCtrl'
     })
 
-    .state('notifications',{
-      url: '/notifications',
-      cache:false,
-      templateUrl: 'templates/notifications.html',
-      controller: 'NotificationsCtrl'
-    })
 
     .state('search',{
       url: '/search',
@@ -207,6 +202,17 @@ angular.module('starter', ['ionic', 'starter.controllers','ngStorage','ngOpenFB'
       }
     })
 
+    .state('tab.notifications', {
+      url: '/account',
+      cache:false,
+      views: {
+        'tab-account': {
+          templateUrl: 'templates/tab-notifications.html',
+          controller: 'NotificationsCtrl'
+        }
+      }
+    })
+
     .state('tab.test',{
       url: '/test/:name',
       views: {
@@ -253,7 +259,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngStorage','ngOpenFB'
 
 .factory("SocketIoFactory", function ($rootScope) {
   var socket = null;
-  var nodePath = "http://192.168.1.36:3000/";
+  var nodePath = "http://10.83.41.212:3000/";
 
   function listenerExists(eventName) {
     return socket.hasOwnProperty("$events") && socket.$events.hasOwnProperty(eventName);
