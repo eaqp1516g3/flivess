@@ -211,26 +211,27 @@ io.on('connection', function(conn){
         console.log(users);
         for (var i = 0; i < users.length; i++) {
             console.log("8");
+            console.log(users);
             for (var a = 0; a < users[i].ws.length; a++) {
 
                 if (users[i].ws[a] == conn) {
-                    console.log("7");
-                    console.log(users[i].ws);
                     console.log("ESTA EN BORRAR EL WS EN POSICION:" + a);
                     console.log("LENGTH= " + users[i].ws.length);
-                    users[i].ws.splice(a,1);
+                    users[i].ws.splice(a, 1);
                     //delete users[i].ws[a];
                     console.log("LENGTH= " + users[i].ws.length);
-                    console.log(users[i].ws);
                     console.log(users);
-                    if(users[i].ws==""){
+                    if (users[i].ws == "") {
                         console.log("A BORRAR PAYOO");
-                        users.splice(i,1);
+                        users.splice(i, 1);
+
                     }
                     console.log(users);
+                    break;
                 }
             }
         }
+
     })
 
 });
