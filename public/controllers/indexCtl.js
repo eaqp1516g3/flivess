@@ -32,13 +32,7 @@ angular.module('Flivess').controller('indexCtl', ['$scope', '$http', '$cookies',
     $scope.logOut = function() {
         console.log("DENTRO DEL LOGOUT");
         socket.disconnect();
-        /*
-        socket.on('disconnect', function(data){
-            console.log(data);
-        });*/
         $cookies.remove('user');
-
-
     };
 
 

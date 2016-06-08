@@ -259,7 +259,8 @@ angular.module('starter', ['ionic', 'starter.controllers','ngStorage','ngOpenFB'
 
 .factory("SocketIoFactory", function ($rootScope) {
   var socket = null;
-  var nodePath = "http://10.83.41.212:3000/";
+  var nodePath = "http://10.83.43.138:3000/";
+
 
   function listenerExists(eventName) {
     return socket.hasOwnProperty("$events") && socket.$events.hasOwnProperty(eventName);
