@@ -22,10 +22,10 @@ angular.module('starter', ['ionic', 'starter.controllers','ngStorage','ngOpenFB'
       StatusBar.styleDefault();
     }
 
-    if(localStorage.getItem('userLogged')!= null || !angular.isUndefined(localStorage.getItem('userLogged'))) {
+    if((localStorage.getItem('userLogged')!== null)) {
       console.log(JSON.parse(localStorage.getItem('userLogged')));
+      console.log('entro en RUN');
       $rootScope.userLogged = JSON.parse(localStorage.getItem('userLogged'));
-      console.log("Holiii" +$rootScope.userLogged.username);
       socket.connect();
       socket.on('connection', function(data){
         console.log(data);
@@ -266,7 +266,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngStorage','ngOpenFB'
 
 .factory("SocketIoFactory", function ($rootScope) {
   var socket = null;
-  var nodePath = "http://10.83.43.138:3000/";
+  var nodePath = "http://localhost:3000/";
 
 
   function listenerExists(eventName) {

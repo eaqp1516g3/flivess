@@ -1,7 +1,7 @@
 //var base_url_local="http://147.83.7.157:8080";
 
 
-var base_url_local="http://10.83.43.138:8080";
+var base_url_local="http://localhost:8080";
 
 
 
