@@ -8,7 +8,7 @@
 </ion-header-bar>
 
   <ion-content ng-controller="EditProfileCtrl" class="bg-color-stable">
-    <div class="list">
+    <span class="list">
       <h3 class="padding gotham-medium color-darkgray text-center">Edit profile</h3>
       <h4 class="padding gotham-medium  text-center">{{user.username}}</h4>
       <div class="row">
@@ -34,20 +34,56 @@
       </label>
 
       <label class="item item-input">
+        <span class="input-label">Age</span>
+        <input type="text" ng-model="user.age">
+
+      </label>
+
+      <label class="item item-input">
+        <span class="input-label">City</span>
+        <input type="text" ng-model="user.city">
+
+      </label>
+
+      <label class="item item-input">
         <span class="input-label">Gender</span>
-        <input type="text" ng-model="user.sex">
 
+        <ion-radio ng-model="user.sex" ng-value="'Male'"><i class="icon ion-man"></i></ion-radio>
+       &nbsp
+
+        <ion-radio ng-model="user.sex" ng-value="'Female'"><i class="icon ion-woman"></i></ion-radio>
+
+      </label>
+
+      <label class="item item-input item-select">
+        <span class="input-label">
+          Height
+        </span>
+        <select  ng-name="n" ng-options="n for n in range_height(100,300)" class="form-control" ng-model="user.height">
+          <option value="">{{user.height}} cm</option>
+        </select>
+        </label>
+
+
+        <label class="item item-input item-select">
+          <span class="input-label">
+            Weight
+          </span>
+          <select text-indent="5px" ng-name="n" ng-options="n for n in range_weight(0,200)" class="form-control" ng-model="user.weight">
+            <option value="">{{user.weight}} Kg</option>
+          </select>
+          </label>
+
+      <label class="item item-input">
+        <span class="input-label">Password</span>
+        <input type="password" ng-model="user.password">
       </label>
 
       <label class="item item-input">
-        <span class="input-label">Weight (kg)</span>
-        <input type="text" ng-model="user.weight">
+        <span class="input-label">Confirm password</span>
+        <input type="password" ng-model="data.confirma">
       </label>
 
-      <label class="item item-input">
-        <span class="input-label">Height (m)</span>
-        <input type="text" ng-model="user.height">
-      </label>
 
       <h5 class="padding gotham-medium color-darkgray text-center">Since {{user.created|date:'medium'}}</h5>
 

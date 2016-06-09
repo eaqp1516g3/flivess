@@ -81,27 +81,51 @@ server.listen(8080, function() {
 var notification = require('./models/notification.js');
 var usuario = require('./models/user.js');
 var follow = require('./models/friend.js');
-var users={};
+var users=[];
 
 io.on('connection', function(conn){
     console.log("CONECTION!");
     conn.emit('connection', "Connexion creada");
-    conn.on('username', function(data, callback){
+
+    conn.on('username', function(data, callback) {
         console.log("INSIDE CONN:ON 'USERNAME'");
-        if(data in users){
-            console.log("1");
-            callback(false);
-        }else if(data==null) {
+        if (data == null) {
             console.log("2");
             callback(false);
         }
-        else{
-            console.log("3");
-            callback(true);
-            conn.username=data;
-            users[conn.username]=conn;
-            console.log("USUARIO QUE SE CONECTA " + conn.username);
-            conn.emit('listaUsers', Object.keys(users));
+
+        else {
+            var exit = false;
+            for (var i = 0; i < users.length; i++) {
+                if (users[i].username == data) {
+                    users[i].ws.push(conn);
+                    console.log("1");
+                    var usuarios = [];
+                    for (var i = 0; i < users.length; i++) {
+                        usuarios.push(users[i].username);
+                    }
+                    conn.emit('listaUsers', usuarios);
+                    callback(false);
+                    exit= true;
+                }
+            }
+
+            if(exit!=true) {
+                console.log("3");
+                callback(true);
+                var user = {};
+                user.username = data;
+                user.ws = [];
+                user.ws.push(conn);
+                users.push(user);
+                console.log(users[0].username);
+                console.log("USUARIO QUE SE CONECTA " + user.username);
+                var usuarios = [];
+                for (var i = 0; i < users.length; i++) {
+                    usuarios.push(users[i].username);
+                }
+                conn.emit('listaUsers', usuarios);
+            }
         }
     });
 
@@ -121,8 +145,14 @@ io.on('connection', function(conn){
             if(err) {}
             else if(res==[]){}
             else {
-                if(us in users)
-                    users[us].emit('notification', {numeros: length, notifications: res});}
+                for (var i = 0; i < users.length; i++) {
+                    if (users[i].username == data) {
+                        for (var a = 0; a < users[i].ws.length; a++) {
+                            users[i].ws[a].emit('notification', {numeros: length, notifications: res})
+                        }
+                    }
+                }
+            }
         })
     });
 
@@ -132,12 +162,13 @@ io.on('connection', function(conn){
             console.log(res.username);
             if(err) conn.emit('err', "Error");
             else{
-                if(data in users) {
-                    console.log("ENVIO LA NOTIFICACION");
-                    console.log("EL USUARIO AL Q SE LO ENVIA: " + data);
-                    users[data].emit('new notification', res);
+                for (var i = 0; i < users.length; i++) {
+                    if (users[i].username == data) {
+                        for (var a = 0; a < users[i].ws.length; a++) {
+                            users[i].ws[a].emit('new notification', res);
+                        }
+                    }
                 }
-                else console.log("IS NOT CONNECTED");
             }
         })
     });
@@ -148,18 +179,19 @@ io.on('connection', function(conn){
             console.log(res.username);
             if(err) conn.emit('err', "Error");
             else{
-                if(data in users) {
-                    console.log("ENVIO LA NOTIFICACION 2");
-                    console.log("EL USUARIO AL Q SE LO ENVIA 2: " + data);
-                    users[data].emit('new notification', res);
-                    users[data].emit('chat');
+                for (var i = 0; i < users.length; i++) {
+                    if (users[i].username == data) {
+                        for (var a = 0; a < users[i].ws.length; a++) {
+                            users[i].ws[a].emit('new notification', res);
+                            users[i].ws[a].emit('chat');
+                        }
+                    }
                 }
-                else console.log("IS NOT CONNECTED");
             }
         })
     });
 
-    conn.on('track', function(data){ 
+    /*conn.on('track', function(data){ 
     usuario.findOne({username : data}), function(err, result) {
         follow.find({friend: result._id}).exec(function (err, res) {
             if (err) {
@@ -172,20 +204,36 @@ io.on('connection', function(conn){
                 }
             }
         })
-    }})
+    }})*/
 
-    conn.on('disconnect', function(data){
+    conn.on('disconnect', function() {
         console.log("INSIDE DISCONNECT");
-        console.log(conn.username);
+        console.log(users);
+        for (var i = 0; i < users.length; i++) {
+            console.log("8");
+            console.log(users);
+            for (var a = 0; a < users[i].ws.length; a++) {
 
-        if(!conn.username) {
-            console.log("no esta el conn");
-            return;
+                if (users[i].ws[a] == conn) {
+                    console.log("ESTA EN BORRAR EL WS EN POSICION:" + a);
+                    console.log("LENGTH= " + users[i].ws.length);
+                    users[i].ws.splice(a, 1);
+                    //delete users[i].ws[a];
+                    console.log("LENGTH= " + users[i].ws.length);
+                    console.log(users);
+                    if (users[i].ws == "") {
+                        console.log("A BORRAR PAYOO");
+                        users.splice(i, 1);
+
+                    }
+                    console.log(users);
+                    break;
+                }
+            }
         }
-        delete users[conn.username];
-        console.log("BORRADO");
-        conn.emit('listaUsers', Object.keys(users));
+
     })
+
 });
 
 socket_server.listen(3000);

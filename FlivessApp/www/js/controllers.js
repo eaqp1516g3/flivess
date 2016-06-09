@@ -1,6 +1,8 @@
 //var base_url_local="http://147.83.7.157:8080";
 
-var base_url_local="http://localhost:8080";
+
+var base_url_local="http://10.83.43.138:8080";
+
 
 
 angular.module('starter.controllers', ['ngOpenFB'])
@@ -137,11 +139,6 @@ angular.module('starter.controllers', ['ngOpenFB'])
     $scope.notifications = response;
   });
 
-  $scope.goback = function(){
-
-    $state.go('tab.dash');
-
-  };
 
   $scope.profile = function(username){
     $state.go('profile',{username:username});
@@ -151,10 +148,14 @@ angular.module('starter.controllers', ['ngOpenFB'])
     $state.go('tab.message-detail',{name:username});
   };
 
+  $scope.toTrack = function(){
+    $state.go('selecter');
+    //$state.go('tracking');
+  }
 
-
-
-
+  $scope.toSearch= function(){
+    $state.go('search');
+  }
 
 })
 
@@ -389,16 +390,32 @@ angular.module('starter.controllers', ['ngOpenFB'])
 
 }])
 
-.controller('EditProfileCtrl', ['$scope','$ionicHistory','$state','$http','$ionicLoading','$timeout','$rootScope', function($scope,$ionicHistory,$state,$http) {
+.controller('EditProfileCtrl', ['$scope','$ionicHistory','$state','$http','$ionicPopup','$ionicLoading','$timeout','$rootScope', function($scope,$ionicHistory,$state,$http,$ionicPopup) {
 
 
   var userLogged = JSON.parse(localStorage.getItem('userLogged'));
   console.log(userLogged);
+  $scope.range_weight = function(start,end) {
+    var result = [];
+    for (var i = start; i <= end; i++) {
+      result.push(i);
+    }
+    return result;
+  };
 
+  $scope.range_height = function(start,end) {
+    var result = [];
+    for (var i = start; i <= end; i++) {
+      result.push(i);
+    }
+    return result;
+  };
+  $scope.data={};
   $scope.user={};
   $http.get(base_url_local + '/users/user/' + userLogged.username).success(function(response){
    console.log(response);
     $scope.user = response[0];
+    $scope.data.confirma = $scope.user.password;
 
   });
 
@@ -407,10 +424,20 @@ angular.module('starter.controllers', ['ngOpenFB'])
     };
 
   $scope.updateUser = function() {
+    if($scope.user.password == $scope.data.confirma && !angular.isUndefined($scope.user.password)){
 
-    $http.put(base_url_local +'/user/' + userLogged._id, $scope.user).success(function (response) {
-      $ionicHistory.goBack();
-    })
+      $http.put(base_url_local +'/user/' + $scope.user._id, $scope.user).success(function (response) {
+        $ionicHistory.goBack();
+      })
+    }
+    else {
+      $ionicPopup.alert({
+        title: 'Error',
+        template: 'Password is empty or doesn\'t match'
+      });
+
+    }
+
 
   };
 
@@ -418,7 +445,7 @@ angular.module('starter.controllers', ['ngOpenFB'])
 
   }])
 
-.controller('AccountCtrl', function($scope,$ionicPopup,$state,$ionicLoading,$timeout) {
+.controller('AccountCtrl',['$scope','$ionicPopup','$state','$ionicLoading','$timeout','SocketIoFactory', function($scope,$ionicPopup,$state,$ionicLoading,$timeout,socket) {
 
   $scope.loading = function(){
     $ionicLoading.show();
@@ -469,6 +496,7 @@ angular.module('starter.controllers', ['ngOpenFB'])
       if(res) {
         localStorage.clear();
         console.log(localStorage.getItem('userLogged'));
+        socket.disconnect();
         $state.go('login');
       } else {
         $state.go('tab.account');
@@ -477,7 +505,7 @@ angular.module('starter.controllers', ['ngOpenFB'])
   }
 
 
-  })
+  }])
 
 .controller('TracksUserCtrl', function($http,$scope,$ionicPopup,$state,$stateParams,$ionicHistory) {
 
@@ -568,11 +596,12 @@ angular.module('starter.controllers', ['ngOpenFB'])
   //Congfigure Plugin
   bgLocationServices.configure({
     //Both
-    desiredAccuracy: 0, // Desired Accuracy of the location updates (lower means more accurate but more battery consumption)
+    desiredAccuracy: 10, // Desired Accuracy of the location updates (lower means more accurate but more battery consumption)
     distanceFilter: 1, // (Meters) How far you must move from the last point to trigger a location update
     debug: false, // <-- Enable to show visual indications when you receive a background location update
-    interval: 3000, // (Milliseconds) Requested Interval in between location updates.
-    fastestInterval: 5000
+    interval: 2000, // (Milliseconds) Requested Interval in between location updates.
+    fastestInterval: 5000,
+
 
   });
 
@@ -1281,6 +1310,7 @@ angular.module('starter.controllers', ['ngOpenFB'])
       console.log("LOCAL: "+$localStorage.username);
       $rootScope.userLogged = JSON.parse(localStorage.getItem('userLogged'));
       socket.connect();
+      console.log("socket.connect()");
       socket.on('connection', function(data){
         console.log(data);
         socket.emit('username',$rootScope.userLogged.username);
@@ -1296,10 +1326,19 @@ angular.module('starter.controllers', ['ngOpenFB'])
         } )
       });
       socket.on('notification', function(data){
-
         $rootScope.notlength=data.numeros;
         //$rootScope.notification=data.notifications;
         console.log(data);
+      });
+      socket.on('chat', function (data) {
+
+        console.log("CHAT");
+        $rootScope.$emit('myEvent', function (event, viewData) {
+          console.log("EN EL BROADCAST");
+        });
+        // $state.go($state.currentState, {}, {reload:true});
+        // $state.go($state.current, $state.$current.params, {reload: true});
+
       });
 
 
@@ -1431,6 +1470,22 @@ angular.module('starter.controllers', ['ngOpenFB'])
 }])
 
 .controller('RegisterCtrl',function($scope,$http,$state,$ionicPopup,$localStorage){
+
+  $scope.range_weight = function(start,end) {
+    var result = [];
+    for (var i = start; i <= end; i++) {
+      result.push(i);
+    }
+    return result;
+  };
+
+  $scope.range_height = function(start,end) {
+    var result = [];
+    for (var i = start; i <= end; i++) {
+      result.push(i);
+    }
+    return result;
+  };
 
 
   $scope.user={};
@@ -1885,7 +1940,9 @@ angular.module('starter.controllers', ['ngOpenFB'])
     }
   })
 
-.controller('MessageDetailCtrl',['$scope','$http','$stateParams','$localStorage','$ionicScrollDelegate', 'SocketIoFactory','$state','$rootScope', function($scope, $http, $stateParams, $localStorage, $ionicScrollDelegate, socket,$state,$rootScope) {
+
+.controller('MessageDetailCtrl',['$scope','$http','$stateParams','$localStorage','$ionicScrollDelegate', 'SocketIoFactory','$state','$ionicHistory','$ionicPlatform','$rootScope', function($scope, $http, $stateParams, $localStorage, $ionicScrollDelegate, socket,$state,$ionicHistory,$ionicPlatform,$rootScope) {
+
 
   $scope.$on('$ionicView.beforeEnter', function (event, viewData) {
     viewData.enableBack = true;
@@ -1928,11 +1985,14 @@ angular.module('starter.controllers', ['ngOpenFB'])
 
   load();
 
-  socket.on('chat', function () {
-    $http.get(base_url_local+ '/messages/' + $scope.userLogged.username +'/' + $stateParams.name).success(function (response) {
-      $scope.messages = response;
-    });
+
+  $rootScope.$on('myEvent', function (event, viewData) {
+    load();
   });
+
+
+
+
 
   $scope.sendMessage = function(receiver) {
     console.log("Before sending")
@@ -2127,7 +2187,8 @@ console.log('Range: '+$stateParams.range);
   })
 
 
-.controller('TabCtrl', function($scope,$http,$localStorage,$ionicPopup,$state,$ionicLoading,$timeout){
+.controller('TabCtrl', function($scope,$http,$localStorage,$ionicPopup,$state,$ionicLoading,$timeout,$rootScope){
+  var userLogged = JSON.parse(localStorage.getItem('userLogged'));
 
   $scope.$on('$stateChangeStart',
     function(event, toState, toParams, fromState, fromParams){
@@ -2157,7 +2218,6 @@ console.log('Range: '+$stateParams.range);
     $state.go('tab.dash');
   }
 
-
    $scope.messages = function() {
      var userLogged = JSON.parse(localStorage.getItem('userLogged'));
      console.log(userLogged);
@@ -2172,7 +2232,12 @@ console.log('Range: '+$stateParams.range);
      $state.go('tab.messages');
   }
 
-
-
+  $scope.notifications = function() {
+    if ($rootScope.notlength != 0) {
+      $http.put(base_url_local + '/notifications/saw/' + userLogged.username);
+      $rootScope.notlength = 0;
+    };
+    $state.go('tab.notifications');
+  }
 
 });
