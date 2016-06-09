@@ -1,39 +1,46 @@
 
-<ion-view title="Register">
+<ion-view title="Welcome to Flivess">
   <ion-content overflow-scroll="false" padding="'true'" class="has-header" style="background:  center; background-size: cover;">
+    <div class="bar bar-header bar-stable">
+      <h1 class="title">New account</h1>
+    </div>
+    <br>
+    <br>
+
+
     <form class="list">
       <ion-list>
         <label class="item item-input" name="username" style="background-color: white; opacity: 0.35;">
-          <span class="input-label">Username</span>
+          <span class="input-label"><b>Username</b></span>
           <input type="text" ng-model="user.username">
         </label>
         <label class="item item-input" name="fullname" style="background-color: white; opacity: 0.35;">
-          <span class="input-label">Fullname</span>
+          <span class="input-label"><b>Fullname</b></span>
           <input type="text" ng-model="user.fullname">
         </label>
         <label class="item item-input" name="mail" style="background-color: white; opacity: 0.35;">
-          <span class="input-label">Email</span>
+          <span class="input-label"><b>Email</b></span>
           <input type="email" ng-model="user.email">
         </label>
         <label class="item item-input" name="password" style="background-color: white; opacity: 0.35;">
-          <span class="input-label">Password</span>
+          <span class="input-label"><b>Password</b></span>
           <input type="password" placeholder="Password" ng-model="user.password">
         </label>
         <label class="item item-input" name="confirm_password" style="background-color: white; opacity: 0.35;">
-          <span class="input-label">Confirm</span>
+          <span class="input-label"></span>
           <input type="password" placeholder="Confirmar Password" ng-model="data.confirma">
         </label>
         <label class="item item-input" name="sex" style="background-color: white; opacity: 0.35;">
-          <span class="input-label">Sex</span>
+          <span class="input-label">Gender</span>
           <input type="text" ng-model="user.sex">
         </label>
         <label class="item item-input" name="altura" style="background-color: white; opacity: 0.35;">
-          <span class="input-label">Height</span>
-          <input type="text" ng-model="user.height">
+          <span class="input-label">Height (cm)</span>
+          <input type="number" ng-model="user.height">
         </label>
         <label class="item item-input" name="weight" style="background-color: white; opacity: 0.35;">
-          <span class="input-label">Weight</span>
-          <input type="text" ng-model="user.weight">
+          <span class="input-label">Weight (kg)</span>
+          <input type="number" ng-model="user.weight">
         </label>
 
       </ion-list>

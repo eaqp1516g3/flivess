@@ -11,7 +11,7 @@
   <div class="list">
 
     <a class="item item-avatar"  ng-repeat="user in data.users" ng-click="profile(user.username)">
-      <img src="{{user.imgurl}}">
+      <img ng-src="{{user.imgurl}}">
       <h2>{{user.fullname}}</h2>
       <p>{{user.username}} &bull; {{user.email}}</p>
     </a>

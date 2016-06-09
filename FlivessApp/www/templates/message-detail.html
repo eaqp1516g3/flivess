@@ -8,7 +8,15 @@
 
 <ion-view id="userMessagesView" cache-view="false" view-title="<i class='icon ion-chatbubble user-messages-top-icon'></i> <div class='msg-header-username'>{{userC}}</div>">
 
+  <!--<ion-nav-buttons side="left">
 
+  hide-back-button="true"
+
+    <button class="button back-button buttons button-clear header-item" ng-click="back()">
+      <i class="icon ion-android-arrow-back"></i>
+      <span class="back-text"></span>
+    </button>
+  </ion-nav-buttons>-->
   <ion-content has-bouncing="true" class="has-header has-footer"  delegate-handle="userMessageScroll">
 
     <div  ng-repeat="message in messages" class="message-wrapper">

@@ -11,16 +11,16 @@
   <div class="list">
 
     <a ng-repeat="user in friends" class="item item-avatar" >
-      <img ng-click="profile(user.username)" src="{{user.imgurl}}">
+      <img ng-click="profile(user.username)" ng-src="{{user.imgurl}}">
 
       <div class="row">
         <div class="col col-80"><p>{{user.fullname}}</p><h2>&nbsp;{{user.username}}</h2></div>
 
-        <div ng-show="!buttons[$index].data && userLogged.username!=user.username" class="col col-20 text-right"><button ng-click="loading();follow(user.username)" class="button button-small button-balanced text-right">
+        <div ng-show="!buttons[$index] && userLogged.username!=user.username" class="col col-20 text-right"><button ng-click="loading();follow(user.username)" class="button button-small button-balanced text-right">
           Follow
         </button></div>
 
-        <div ng-show="buttons[$index].data && userLogged.username!=user.username" class="col col-20 text-right"><button ng-click="unfollow(user.username)" class="button button-small button-stable text-right">
+        <div ng-show="buttons[$index] && userLogged.username!=user.username" class="col col-20 text-right"><button ng-click="unfollow(user.username)" class="button button-small button-stable text-right">
           Unfollow
         </button></div>
 

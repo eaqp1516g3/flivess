@@ -1,5 +1,5 @@
 
-<ion-view title="Flivess">
+<ion-view>
   <ion-nav-buttons side="left">
     <button ng-click="toSearch()" menu-toggle="left" class="button button-icon icon ion-ios-search-strong"></button>
   </ion-nav-buttons>
@@ -8,13 +8,46 @@
     <button ng-click="toNotifications()" class="button icon ion-earth">{{notlength}}</button>
     <button ng-click="toTrack()" class="button button-dark icon ion-ios-plus-outline"></button>
   </ion-nav-buttons>
-    <ion-content class="padding">
-    <h1>Flivess</h1>
-    <p>Activity</p>
 
-      <img ng-src="http://mejores.top/wp-content/uploads/2015/12/running2.jpg" style="width: 200px; height: 200px" align="center">
 
-      <button class="button button-block button-calm" ng-click="toTrack()">Start tracking</button>
+
+   <ion-content>
+
+      <div class="bar bar-header bar-royal">
+        <h1 class="title">Activity</h1>
+
+      </div>
+
+      <br><br>
+     <div class="text-center" ng-show="noAct">
+       <br><br>
+       <label class="color-gray">Follow users to see their activities...</label>
+
+     </div>
+      <div class="list card" ng-repeat="route in routes| orderBy:'title':true">
+
+        <div class="item item-header">
+          <div>
+            <div class="text-center"><h2 style="float: inherit">{{route.username}} &nbsp;</h2></div>
+
+          </div>
+
+        </div>
+
+        <div ng-click="trackDetail(route._id)" class="item item-body">
+          <img class="full-image" ng-src="{{route.img}}">
+
+          <p>
+            <i class="icon ion-location"></i>&nbsp;<a href="#" class="subdued">{{route.distance}}</a>
+            <i class="icon ion-clock"></i>&nbsp;<a href="#" class="subdued">{{route.time}}</a>
+          <a style="float: right"><label class="color-gray" am-time-ago="route.title"></label></a>
+
+
+          </p>
+
+        </div>
+
+      </div>
 
 
     </ion-content>

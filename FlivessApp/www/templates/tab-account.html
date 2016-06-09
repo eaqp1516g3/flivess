@@ -1,4 +1,4 @@
-<ion-view title="Account">
+<ion-view>
   <ion-nav-buttons side="left">
     <button ng-click="toSearch()" menu-toggle="left" class="button button-icon icon ion-ios-search-strong"></button>
   </ion-nav-buttons>
@@ -9,6 +9,10 @@
 
   <ion-content class="padding">
     <div class="list">
+
+      <div class="item item-divider">
+        My activity
+      </div>
 
       <a ng-click="loading2();myprofile();" class="item item-icon-left" href="#">
         <i class="icon ion-ios-body"></i>
@@ -22,7 +26,7 @@
       </a>
 
 
-
+<!--
       <a class="item item-icon-left" href="#">
         <i class="icon ion-person-stalker"></i>
         Friends
@@ -33,9 +37,13 @@
         <i class="icon ion-ios-gear"></i>
         Settings
 
-      </a>
+      </a>-->
       <br>
       <br>
+      <br>
+      <div class="item item-divider">
+        Settings
+      </div>
 
       <a class="item item-icon-left" ng-click="logout()">
         <i style="color: red;" class="icon ion-ios-close"></i>

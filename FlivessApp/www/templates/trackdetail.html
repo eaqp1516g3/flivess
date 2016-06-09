@@ -16,7 +16,7 @@
   <div class="list card">
 
     <div class="item item-avatar">
-      <img src="http://images.enstarz.com/data/images/full/72756/rihanna.jpg?w=580">
+      <img ng-click="profile(track.username)" src="{{usuario.imgurl}}">
       <h2>{{track.username}}</h2>
       <p am-time-ago="track.created"></p><p><i class="icon ion-pinpoint"></i>{{addressTop}}</p>
     </div>
@@ -66,7 +66,7 @@
 
   <div ng-if="type=='near'" class="card">
     <div class="item item-text-wrap">
-      <button ng-click="toTracking(track._id,track.id_comun,track.distance)" class="button button-block button-royal">
+      <button ng-click="toTracking(track._id,track.id_comun,track.distance)" class="button button-block button-balanced">
         Try it now!
       </button>
     </div>
@@ -83,7 +83,7 @@
 
   <div class="list card">
     <div ng-if="position!=0" class="text-center"> <p class="color-gray"  >You are in the <label>{{position}} th</label> position</p> </div>
-    <div ng-if="position=0" class="text-center"> <p class="color-gray" >You are not in the ranking</p> </div>
+    <div ng-if="position==0" class="text-center"> <p class="color-gray" >You are not in the ranking</p> </div>
 
 
 

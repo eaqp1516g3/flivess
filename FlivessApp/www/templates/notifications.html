@@ -5,15 +5,13 @@
   <h5 class="font-130 text-center">{{user.username}}</h5>
 </ion-header-bar>
 <ion-content>
-  <ion-list class="list card" ng-repeat="notify in notifications">
+  <ion-list class="list card" ng-repeat="notify in notifications| orderBy:'date':true">
     <div class="item item-divider">
-      <span ng-bind="notify.date"></span>
+      <span am-time-ago="notify.date"></span>
     </div>
-    <div class="item item-body">
-      <strong><span ng-bind="notify.actionusername"></span></strong>
-      <p>
-        <span ng-bind="notify.text"></span>
-      </p>
+    <div class="item">
+      <i ng-if="notify.type==0" ng-click="messages(notify.actionusername)" class="icon user-messages-top-icon ion-ios-email-outline"></i> <i ng-if="notify.type==1"  ng-click="profile(notify.actionusername)"  class="icon user-messages-top-icon ion-ios-personadd-outline"></i><strong>&nbsp;&nbsp;{{notify.actionusername}} </strong>{{notify.text}}
+
     </div>
   </ion-list>
 </ion-content>

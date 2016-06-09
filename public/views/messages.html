@@ -23,15 +23,33 @@
 
         <div style="position: absolute; top: 70px; bottom: -430px; right: 12px; left: 12px; overflow-y: scroll; border: 1px solid grey; border-radius: 10px;" >
             <div  class="media msg" ng-repeat="msg in msgs">
-                <a class="pull-left" href="#/profile/{{msg.sender}}">
-                    <img  ng-src="{{getImage(msg.sender)}}"  class="media-object" alt="64x64" style="width: 32px; height: 32px;" >
-                </a>
-                <div class="media-body">
-                    <small class="pull-right time"><i class="fa fa-clock-o"></i> {{msg.createdAt|date:"dd/MM/yyyy 'at' h:mma"}}</small>
 
-                    <h5 class="media-heading">{{msg.sender}}</h5>
-                    <small class="col-lg-10">{{msg.text}}</small>
+
+                <div ng-if="msg.sender!=userLogged.username" style="background-color: rgba(137, 251, 242, 0.98)">
+                    <a class="pull-left" href="#/profile/{{msg.sender}}">
+                        <img  ng-src="{{getImage(msg.sender)}}"  class="media-object" alt="64x64" style="width: 32px; height: 32px;" >
+                    </a>
+                    <div class="media-body">
+                        <small class="pull-right "><i class="fa fa-clock-o"></i>&nbsp;<label am-time-ago="msg.createdAt"></label></small>
+
+                        <h5 class="media-heading">{{msg.sender}}</h5>
+                        <small class="col-lg-10" style=""><b>{{msg.text}}</b></small>
+                    </div>
                 </div>
+
+                <div ng-if="msg.sender==userLogged.username" style="background-color: rgba(126, 255, 102, 0.98)">
+                    <a class="pull-left" href="#/profile/{{msg.sender}}">
+                        <img  ng-src="{{getImage(msg.sender)}}"  class="media-object" alt="64x64" style="width: 32px; height: 32px;" >
+                    </a>
+                    <div class="media-body">
+                        <small class="pull-right "><i class="fa fa-clock-o"></i>&nbsp;<label am-time-ago="msg.createdAt"></label></small>
+
+                        <h5 class="media-heading">{{msg.sender}}</h5>
+                        <small class="col-lg-10" style=""><b>{{msg.text}}</b></small>
+                    </div>
+                </div>
+
+
             </div>
         </div>
         <br>

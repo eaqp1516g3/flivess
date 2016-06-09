@@ -1,6 +1,6 @@
 //var base_url_local="http://147.83.7.157:8080";
 
-var base_url_local="http://192.168.1.36:8080";
+var base_url_local="http://localhost:8080";
 
 
 angular.module('starter.controllers', ['ngOpenFB'])
@@ -57,11 +57,22 @@ angular.module('starter.controllers', ['ngOpenFB'])
     }
   })
 
-.controller('DashCtrl', function($scope,$state) {
+.controller('DashCtrl', function($scope,$state,$http,$ionicHistory) {
+
+
+  $ionicHistory.clearHistory();
+
+  var userLogged = JSON.parse(localStorage.getItem('userLogged'));
+
   $scope.toTrack = function(){
     $state.go('selecter');
     //$state.go('tracking');
-  }
+  };
+
+  $scope.trackDetail = function(trackid){
+    $state.go('trackdetail',{type:'profile',id:trackid});
+  };
+
 
   $scope.toNotifications= function(){
     $state.go('notifications');
@@ -71,15 +82,80 @@ angular.module('starter.controllers', ['ngOpenFB'])
     $state.go('search');
   }
 
+  $http.get(base_url_local+ '/tracks/friends/' + userLogged.username).success(function (data) {
+    console.log(data);
+    if(data=="") {
+      $scope.noAct = true;
+    }
+    else{
+
+      var int=0;
+      for (var i = 0; i < data.length; i++) {
+        var final_time_m = Math.floor(data[i].time / 60);
+        var final_time_s = Math.floor(data[i].time - (final_time_m * 60));
+        data[i].time =final_time_m+' min '+final_time_s+' s';
+
+        if(data[i].distance<1) data[i].distance=data[i].distance * 1000 + ' m';
+        else data[i].distance=data[i].distance + ' Km';
+
+        if (data[i].avg_speed>0) data[i].avg_speed= Math.floor(60/(data[i].avg_speed)).toFixed(2);
+
+        $http.get(data[i].pointsurl).success(function (datos) {
+          for (var i = 0; i < datos.length; i++) {
+            if (i == 0) data[int].path = datos[i].latitude + "," + datos[i].longitude;
+            else data[int].path += "|" + datos[i].latitude + "," + datos[i].longitude;
+          }
+          data[int].center = datos[1].latitude + "," + datos[1].longitude;
+          var marker1 = datos[0].latitude + "," + datos[0].longitude;
+          var marker2 = datos[datos.length -1].latitude + "," + datos[datos.length -1].longitude;
+
+          //strokeColor: "#FF0000",
+          //strokeOpacity: 0.7,
+          //strokeWeight: 3
+          data[int].img="http://maps.googleapis.com/maps/api/staticmap?center=" + data[int].center+"&zoom=17&size=470x180&maptype=roadmap&path=color:0xff0000ff|weight:3|"+data[int].path +"&sensor=false&markers=color:blue%7Clabel:S%7C"+marker1+"&markers=color:red%7Clabel:F%7C"+marker2;
+          //zoom:17
+          //mapTypeId: google.maps.MapTypeId.ROADMAP
+          int++;
+        });
+      }
+      console.log(data);
+      $scope.routes = data;
+    }
+  });
+
+
+
+
 
 })
 
 
-.controller('NotificationsCtrl', function ($scope, $http) {
+.controller('NotificationsCtrl', function ($scope, $http,$state) {
+  $scope.notifications = '';
   $http.get(base_url_local + '/notifications/user/' + $scope.userLogged.username).success(function (response) {
     console.log(response);
     $scope.notifications = response;
   });
+
+  $scope.goback = function(){
+
+    $state.go('tab.dash');
+
+  };
+
+  $scope.profile = function(username){
+    $state.go('profile',{username:username});
+  };
+
+  $scope.messages = function(username){
+    $state.go('tab.message-detail',{name:username});
+  };
+
+
+
+
+
+
 })
 
 
@@ -379,8 +455,9 @@ angular.module('starter.controllers', ['ngOpenFB'])
 
 
   $scope.toTrack = function(){
-    $state.go('tracking');
-  }
+    $state.go('selecter');
+    //$state.go('tracking');
+  };
 
   $scope.logout = function() {
     var confirmPopup = $ionicPopup.confirm({
@@ -466,7 +543,8 @@ angular.module('starter.controllers', ['ngOpenFB'])
 .controller('TrackingCtrl',['$scope','$http','$cordovaGeolocation','$ionicPlatform','$state','$ionicPopup','$ionicLoading','$timeout','$stateParams', function($scope,$http,$cordovaGeolocation,$ionicPlatform,$state,$ionicPopup,$ionicLoading,$timeout,$stateParams) {
 
   console.log("EN EL TRACKINGCTRL");
-  console.log('En tracking, tengo el id'+ $stateParams.id + 'y tipo'+$stateParams.type);
+  console.log('En tracking con este track:');
+  console.log(JSON.parse($stateParams.trackoriginal));
   $scope.distancia = '';
   $scope.velocidad = '';
   $scope.tiempo = '';
@@ -492,9 +570,9 @@ angular.module('starter.controllers', ['ngOpenFB'])
     //Both
     desiredAccuracy: 0, // Desired Accuracy of the location updates (lower means more accurate but more battery consumption)
     distanceFilter: 1, // (Meters) How far you must move from the last point to trigger a location update
-    debug: true, // <-- Enable to show visual indications when you receive a background location update
-    interval: 5000, // (Milliseconds) Requested Interval in between location updates.
-    fastestInterval: 5000,
+    debug: false, // <-- Enable to show visual indications when you receive a background location update
+    interval: 3000, // (Milliseconds) Requested Interval in between location updates.
+    fastestInterval: 5000
 
   });
 
@@ -647,17 +725,75 @@ angular.module('starter.controllers', ['ngOpenFB'])
           var trackSt;
 
           if($stateParams.type=='near'){
-            console.log('Nearrrrrrrr');
 
-            trackSt = {
-              title: track_id,
-              username: userLogged.username,
-              data: tracking_data,
-              avg_speed: avg_speed_rounded,
-              distance: total_km_rounded,
-              time: total_time_s,
-              id_comun: $stateParams.id_comun
+            console.log('TIPO NEAR')
+
+            var rutaOrg = JSON.parse($stateParams.trackoriginal);
+            console.log('rutaOrg:');
+            console.log(rutaOrg);
+
+            var compare = {
+              ruta_org: rutaOrg.pointsurl,
+              ruta2: tracking_data,
+              dist_org: rutaOrg.distance.toString(),
+              dist_ruta2: total_km_rounded
             };
+
+            console.log('El compare')
+            console.log(compare);
+
+
+            $http.post(base_url_local + '/tracks/compare/isSame',compare).success(function(response){
+              console.log('ENVIO Y COMPRUEBO');
+
+              if(response == true){
+                console.log('MATCH OK');
+
+                trackSt = {
+                  title: track_id,
+                  username: userLogged.username,
+                  data: tracking_data,
+                  avg_speed: avg_speed_rounded,
+                  distance: total_km_rounded,
+                  time: total_time_s,
+                  id_comun: rutaOrg.id_comun
+                };
+
+                window.localStorage.setItem('trackInfo', JSON.stringify(trackSt));
+                $state.go('trackingManager',{type:'near',originalID:rutaOrg._id});
+
+
+              }else{
+
+                trackSt = {
+                  title: track_id,
+                  username: userLogged.username,
+                  data: tracking_data,
+                  avg_speed: avg_speed_rounded,
+                  distance: total_km_rounded,
+                  time: total_time_s
+
+                };
+
+                var confirmPopup = $ionicPopup.confirm({
+                  title: 'Tracks are quite different!',
+                  template: 'Press OK and the track will be saved as a new route'
+                });
+
+                confirmPopup.then(function(res) {
+                  if(res) {
+                    window.localStorage.setItem('trackInfo', JSON.stringify(trackSt));
+                    $state.go('trackingManager');
+
+                  } else {
+                    $state.go('tab.dash');
+                  }
+                });
+
+              }
+
+            });
+
 
           }else {
 
@@ -668,14 +804,17 @@ angular.module('starter.controllers', ['ngOpenFB'])
               avg_speed: avg_speed_rounded,
               distance: total_km_rounded,
               time: total_time_s
-          //Me
+
             };
+            window.localStorage.setItem('trackInfo', JSON.stringify(trackSt));
+            $state.go('trackingManager');
 
           }
 
-          window.localStorage.setItem('trackInfo', JSON.stringify(trackSt));
+         // window.localStorage.setItem('trackInfo', JSON.stringify(trackSt));
 
           //Me
+          /*
           if($stateParams.type=='near'){
             console.log('entro en tipo near')
 
@@ -683,7 +822,7 @@ angular.module('starter.controllers', ['ngOpenFB'])
 
           }else{
             $state.go('trackingManager');
-          }
+          }*/
 
         }
 
@@ -757,7 +896,7 @@ angular.module('starter.controllers', ['ngOpenFB'])
     {
       zoom: 17,
       center: new google.maps.LatLng(info.data[1].latitude,info.data[1].longitude),
-      mapTypeId: google.maps.MapTypeId.ROADMAP,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
 
     });
 
@@ -774,6 +913,33 @@ angular.module('starter.controllers', ['ngOpenFB'])
       strokeWeight: 3
     });
   path.setMap(map);
+
+  $http.get(base_url_local + '/track/' + $stateParams.originalID).success(function (response) {
+
+      $http.get(response.track_pedido.pointsurl).success(function (data) {
+
+        var route2 = [];
+        for (var i = 0; i < data.length; i++){
+          console.log(data[i].latitude);
+          route2[i] = new google.maps.LatLng(data[i].latitude,data[i].longitude);
+        }
+        var path2 = new google.maps.Polyline(
+          {
+            path: route2,
+            strokeColor: "#5882FA",
+            strokeOpacity: 0.7,
+            strokeWeight: 3
+          });
+
+        path2.setMap(map);
+
+
+      });
+
+
+  });
+
+
 
   var marker=new google.maps.Marker({
     position:new google.maps.LatLng(info.data[0].latitude,info.data[0].longitude),
@@ -858,6 +1024,10 @@ angular.module('starter.controllers', ['ngOpenFB'])
     $scope.modal = modal;
   });
 
+  $scope.profile = function(username){
+    $state.go('profile',{username:username});
+  }
+
 
   $scope.onHold = function(url,name,time,created,speed,distance,pos){
 
@@ -903,12 +1073,10 @@ angular.module('starter.controllers', ['ngOpenFB'])
       $ionicLoading.hide();
     }, 1000);
 
-  }
-
-  $scope.toTracking = function(id,id_comun,distance){
-    console.log('En detail, paso el ID'+ id);
-    $state.go('tracking',{type:'near',id:id,id_comun:id_comun,distance:distance});
   };
+
+
+
 
   $scope.loading();
 
@@ -925,7 +1093,7 @@ angular.module('starter.controllers', ['ngOpenFB'])
 
   $http.get(base_url_local + '/track/' + $stateParams.id).success(function (response) {
 
-
+    $scope.original = response.track_pedido;
 
     var final_time_m = Math.floor(response.track_pedido.time / 60);
     var final_time_s = Math.floor(response.track_pedido.time - (final_time_m * 60));
@@ -989,6 +1157,10 @@ angular.module('starter.controllers', ['ngOpenFB'])
     });
 
     $scope.track = response.track_pedido;
+    $http.get(base_url_local + '/users/user/' + $scope.track.username).success(function (response) {
+      console.log(response);
+      $scope.usuario = response[0];
+    });
 
 
     console.log(response.ranking.length);
@@ -1005,6 +1177,11 @@ angular.module('starter.controllers', ['ngOpenFB'])
       console.log("2 TIEMPO: "+ response.ranking[i].time);
     }
 
+    response.ranking.sort(function(a, b) {
+      var s = parseFloat(a.time) - parseFloat(b.time);
+      console.log("EL A: " + s);
+      return s;
+    });
 
     $scope.ranking = response.ranking;
 
@@ -1014,23 +1191,83 @@ angular.module('starter.controllers', ['ngOpenFB'])
         $scope.position = pos+1;
         break;
       }
-      else pos++;
     }
 
-    console.log($scope.position);
     console.log('Rank:');
     console.log($scope.ranking);
+    console.log('Position:')
+    console.log($scope.position);
+
 
   });
 
+  $scope.toTracking = function(id){
+    $http.get(base_url_local + '/track/' + id).success(function (response) {
+      console.log('Lo que paso');
+      console.log(response.track_pedido);
+      $state.go('tracking',{type:'near',trackoriginal:JSON.stringify(response.track_pedido)});
+    });
+
+  };
 
 })
+
+
+.controller('RegisterFBCtrl', function($scope,$state,$http,$stateParams,$ionicPopup) {
+
+
+  $scope.userFB = JSON.parse($stateParams.userFB);
+
+  $scope.registerFB = function(usernameeFB){
+
+    if(!angular.isUndefined(usernameeFB)){
+
+      var user = {
+        username: usernameeFB,
+        fullname:$scope.userFB.fullname,
+        email: $scope.userFB.email,
+        imgurl: $scope.userFB.imgurl,
+        facebook_id: $scope.userFB.facebook_id
+
+      };
+
+      $http.post(base_url_local+'/user', user).success(function(response){
+        console.log(user);
+        console.log(response);
+        localStorage.setItem('userLogged', JSON.stringify(response));
+
+        $state.go('tab.dash');
+      }).error(function (response) {
+
+        $ionicPopup.alert({
+          title: 'Error',
+          template: 'Username already exists'
+        });
+
+      });
+
+    }else {
+      $ionicPopup.alert({
+        title: 'Error',
+        template: 'Username uncomplete'
+      });
+
+
+    }
+
+
+
+  };
+
+
+
+  })
 
 .controller('LoginCtrl',['$scope', '$http', '$rootScope', 'SocketIoFactory', '$state', '$localStorage', 'ngFB', function($scope, $http, $rootScope, socket, $state, $localStorage, ngFB){
 
   $scope.redir = function() {
     $state.go('register');
-  }
+  };
 
   console.log("DENTRO DE loginCtl");
   $scope.data={};
@@ -1071,9 +1308,72 @@ angular.module('starter.controllers', ['ngOpenFB'])
     function(error){
       alert("Username or password are incorrect");
     })
-  }
+  };
 
 
+
+  $scope.loginFB = function() {
+    ngFB.login({scope: 'email,publish_actions'}).then(
+      function (response) {
+        if (response.status === 'connected') {
+          console.log('Facebook login succeeded');
+          $localStorage.token=response.authResponse.accessToken;
+          ngFB.api({
+            path: '/me',
+            params: {fields: 'id,name,email'}
+          }).then(
+            function (res) {
+              console.log("COJO EL USUSARIO DE FB");
+              var user = {
+                username: res.name,
+                fullname:res.name,
+                email: res.email,
+                imgurl: 'http://graph.facebook.com/'+res.id +'/picture?width=270&height=270',
+                facebook_id: res.id
+
+              };
+              console.log("BUSCO FB ID")
+              $http.get(base_url_local+'/users/user/facebook/'+ user.facebook_id).success(function (response){
+
+                if(response == ''){
+                  console.log("NO EXISTE POR LO QUE LE PIDO QUE PONGA USERNAME")
+
+                  $state.go('registerFB',{userFB:JSON.stringify(user)});
+
+
+                }else {
+                  console.log("YA EXISTE, PASO A DASH Y GUARDO SESION")
+                  console.log(response);
+                  localStorage.setItem('userLogged', JSON.stringify(response[0]));
+                  $state.go('tab.dash');
+
+                }
+
+              }).error(function (data,err) {
+                console.log("NO EXISTE POR LO QUE LE PIDO QUE PONGA USERNAME")
+                console.log(err);
+
+                //$state.go("app.example2", {object: JSON.stringify(obj)});
+
+                  $state.go('registerFB',{userFB:JSON.stringify(user)});
+
+              });
+            },
+            function (error) {
+              alert('Facebook error');
+            });
+        } else {
+          alert('Facebook login failed');
+        }
+      });
+
+  };
+
+
+
+
+
+/*
   $scope.loginFB = function() {
     ngFB.login({scope: 'email,publish_actions'}).then(
       function (response) {
@@ -1127,7 +1427,7 @@ angular.module('starter.controllers', ['ngOpenFB'])
 
   };
 
-
+*/
 }])
 
 .controller('RegisterCtrl',function($scope,$http,$state,$ionicPopup,$localStorage){
@@ -1194,19 +1494,21 @@ angular.module('starter.controllers', ['ngOpenFB'])
 })
 
 .controller('MessagesCtrl',['$scope','$http','$localStorage','$state','$stateParams','$rootScope','simpleObj', function($scope,$http,$localStorage,$state,$stateParams,$rootScope, simpleObj) {
-  //$window.location.reload();
+
+
   $scope.toSearch= function(){
     $state.go('search');
-  }
+  };
 
 
   $scope.toTrack = function(){
-    $state.go('tracking');
-  }
+    $state.go('selecter');
+    //$state.go('tracking');
+  };
 
   $scope.detail=function(username){
     $state.go('tab.message-detail',{name:username});
-  }
+  };
 
   $scope.hello = function() {
     console.log(simpleObj);
@@ -1215,18 +1517,67 @@ angular.module('starter.controllers', ['ngOpenFB'])
 
 
 
-
-
-
-
-
-
 }])
 
-.controller('FriendsCtrl', ['$scope', '$http', '$state', '$ionicPopup', '$stateParams', '$ionicHistory', '$timeout', '$ionicLoading', 'SocketIoFactory', function($scope, $http, $state, $ionicPopup, $stateParams, $ionicHistory, $timeout, $ionicLoading, socket){
+.controller('FriendsCtrl', ['$scope', '$http', '$state', '$ionicPopup', '$stateParams', '$ionicHistory', '$timeout', '$ionicLoading', 'SocketIoFactory','$q', function($scope, $http, $state, $ionicPopup, $stateParams, $ionicHistory, $timeout, $ionicLoading, socket,$q){
 
   var userLogged = JSON.parse(localStorage.getItem('userLogged'));
   $scope.userLogged = userLogged;
+
+  var main = function(){
+    var promises = [];
+    $scope.buttons = [];
+
+    console.log('GETTING FOLLOWING de '+$stateParams.username);
+
+    $http.get(base_url_local + '/friends/' + $stateParams.username).success(function (data,callback) {
+      console.log("primer GET");
+      console.log(data);
+      $scope.friends = data;
+
+      angular.forEach(data, function(user, key) {
+        console.log("EN EL FOREACH");
+
+        var deffered  = $q.defer();
+
+        $http.get(base_url_local+ '/friends/' + userLogged.username + "/" + user.friend.username).success(function (response) {
+          deffered.resolve(response);
+
+        });
+
+        promises.push(deffered.promise);
+
+        console.log('Buttons:');
+        console.log($scope.buttons);
+
+      });
+      console.log("PROMISES");
+      console.log($q.all(promises));
+      $q.all(promises).then(function(results){
+        console.log("ALL");
+        console.log(results);
+        for(i=0;i<results.length;i++){
+          var obj = results[i];
+          //console.log($scope.buttons.length);
+          $scope.buttons.push(obj);
+          //return response;
+        }
+      });
+
+
+      if($scope.friends == '')
+        $scope.noFollowing = true;
+      else $scope.noFollowing = false;
+    }).error(function (data, status) {
+      alert('get data error!');
+    });
+
+
+    console.log('finish');
+
+  };
+
+  main();
 
   $scope.loading = function(){
     $ionicLoading.show();
@@ -1235,7 +1586,7 @@ angular.module('starter.controllers', ['ngOpenFB'])
       $ionicLoading.hide();
     }, 600);
 
-  }
+  };
 
 
   $scope.goback= function(){
@@ -1255,7 +1606,7 @@ angular.module('starter.controllers', ['ngOpenFB'])
       socket.emit('follow', amigos.friend);
       main();
     });
-  }
+  };
 
   $scope.unfollow = function (name) {
 
@@ -1276,7 +1627,7 @@ angular.module('starter.controllers', ['ngOpenFB'])
 
   };
 
-  $scope.buttons = [];
+
 
   $scope.isFriend = function (isfriend) {
 
@@ -1301,8 +1652,9 @@ angular.module('starter.controllers', ['ngOpenFB'])
 
     });
 
-  }
+  };
 
+/*
   var main = function(){
 
     $scope.buttons = [];
@@ -1354,9 +1706,7 @@ angular.module('starter.controllers', ['ngOpenFB'])
 
   };
 
-  main();
-
-
+  main();*/
 
 
   $scope.profile = function(username){
@@ -1365,7 +1715,7 @@ angular.module('starter.controllers', ['ngOpenFB'])
 
   }])
 
-.controller('FollowersCtrl',function($scope,$http,$state,$ionicPopup,$stateParams,$ionicHistory,$timeout,$ionicLoading){
+.controller('FollowersCtrl',function($scope,$http,$state,$ionicPopup,$stateParams,$ionicHistory,$timeout,$ionicLoading,$q,SocketIoFactory){
 
     var userLogged = JSON.parse(localStorage.getItem('userLogged'));
     $scope.userLogged = userLogged;
@@ -1377,10 +1727,66 @@ angular.module('starter.controllers', ['ngOpenFB'])
       $ionicLoading.hide();
     }, 600);
 
-  }
+  };
     $scope.goback= function(){
       $ionicHistory.goBack();
     };
+
+
+
+  var main = function(){
+    var promises = [];
+    $scope.buttons = [];
+
+    console.log('GETTING FOLLOWING de '+$stateParams.username);
+
+    $http.get(base_url_local + '/friends/friend/' + $stateParams.username+'/followers').success(function (data) {
+      console.log("primer GET");
+      console.log(data);
+      $scope.friends = data;
+
+      angular.forEach(data, function(user) {
+        console.log("EN EL FOREACH");
+
+        var deffered  = $q.defer();
+
+        $http.get(base_url_local+ '/friends/' + userLogged.username + "/" + user.username).success(function (response) {
+          deffered.resolve(response);
+
+        });
+
+        promises.push(deffered.promise);
+
+        console.log('Buttons:');
+        console.log($scope.buttons);
+
+      });
+      console.log("PROMISES");
+      console.log($q.all(promises));
+      $q.all(promises).then(function(results){
+        console.log("ALL");
+        console.log(results);
+        for(i=0;i<results.length;i++){
+          var obj = results[i];
+          $scope.buttons.push(obj);
+        }
+      });
+
+      if($scope.friends == '')
+        $scope.noFollowing = true;
+      else $scope.noFollowing = false;
+    }).error(function (data) {
+      alert('get data error!');
+    });
+
+    console.log('finish');
+
+  };
+
+  main();
+
+
+
 
     $scope.follow = function (namee) {
       console.log("Dentro de addFriend");
@@ -1392,7 +1798,7 @@ angular.module('starter.controllers', ['ngOpenFB'])
       console.log("Lo que envio " + amigos)
       $http.post(base_url_local+'/addfriend', amigos).success(function(response) {
         main();
-        socket.emit('follow', amigos.friend);
+        SocketIoFactory.emit('follow', amigos.friend);
 
       });
     }
@@ -1416,7 +1822,7 @@ angular.module('starter.controllers', ['ngOpenFB'])
 
     };
 
-    $scope.buttons = [];
+    /*
 
     $scope.isFriend = function (isfriend) {
 
@@ -1470,7 +1876,7 @@ angular.module('starter.controllers', ['ngOpenFB'])
         refresh();
     };
 
-    main();
+    main();*/
 
 
 
@@ -1479,11 +1885,20 @@ angular.module('starter.controllers', ['ngOpenFB'])
     }
   })
 
-.controller('MessageDetailCtrl',['$scope','$http','$stateParams','$localStorage','$ionicScrollDelegate', 'SocketIoFactory', function($scope, $http, $stateParams, $localStorage, $ionicScrollDelegate, socket) {
+.controller('MessageDetailCtrl',['$scope','$http','$stateParams','$localStorage','$ionicScrollDelegate', 'SocketIoFactory','$state','$rootScope', function($scope, $http, $stateParams, $localStorage, $ionicScrollDelegate, socket,$state,$rootScope) {
 
   $scope.$on('$ionicView.beforeEnter', function (event, viewData) {
     viewData.enableBack = true;
   });
+/*
+  $scope.back = function(){
+    $state.go('tab.account');
+  };
+*/
+
+  $rootScope.$ionicGoBack = function() {
+    $state.go('tab.messages');
+  };
 
 
   $scope.userC = $stateParams.name;

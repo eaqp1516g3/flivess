@@ -8,7 +8,7 @@ module.exports = function (app) {
     var Track = require('../models/track.js');
     var Friend = require('../models/friend.js');
     var User = require('../models/user.js');
-    var base_url = 'http://192.168.1.36:8080';
+    var base_url = 'http://10.183.40.108:8080';
     //var base_url="http://147.83.7.157:8080";
     var fs = require('fs');
     var geolib = require('geolib');
@@ -28,6 +28,7 @@ module.exports = function (app) {
         var longiude;
         console.log(req.body.latitude);
         console.log(req.body.longitude);
+        console.log(req.body.range);
 
         //console.log(req.body.range);
 
@@ -71,7 +72,7 @@ module.exports = function (app) {
                         if (geolib.isPointInCircle(
                                 {latitude: latitude_user, longitude: longitude_user},
                                 {latitude: latitude, longitude: longiude},
-                                30//range
+                                range
                             ) == true) {
                             console.log('esta cerca!');
                             tracks_cercanos.push(track_list[i]);
@@ -159,6 +160,67 @@ module.exports = function (app) {
         });
 
     }*/
+
+    isSame = function(req,res){
+        var path = './public/tracks/';
+        var url = req.body.ruta_org;
+        var files = url.split("/");
+        console.log(req.body.ruta_org);
+        var ruta_or = fs.readFileSync(path + files[4], 'utf8');
+        var ruta_org = JSON.parse(ruta_or);
+        console.log(ruta_org[0]);
+        var ruta2 = req.body.ruta2;
+        var dist_org = req.body.dist_org;
+        var dist_ruta2 = req.body.dist_ruta2;
+        var result=[];
+        var same=0;
+        var existe=false;
+        console.log("RUTA ORIGINAL: "+ruta_org.length);
+        console.log("RUTA TEST: "+ruta2.length);
+        console.log("DISTANCIA ORIGINAL: "+dist_org);
+        console.log("DISTANCIA TEST: "+dist_ruta2);
+        if(dist_ruta2 >= dist_org-0.5 && dist_ruta2 <= dist_org+0.5){
+            console.log("WUT");
+            for(var i=0;i<ruta2.length;i++) {
+                console.log("primer for");
+                existe = false;
+                for(j=0;j<ruta_org.length;j++) {
+                    console.log("segundo for");
+                    if (existe == false) {
+                        console.log("existe es falso!");
+                        existe = geolib.isPointInCircle(
+                            {latitude: ruta_org[j].latitude, longitude: ruta_org[j].longitude},
+                            {latitude: ruta2[i].latitude, longitude: ruta2[i].longitude},
+                            10);
+                        if (existe == true) {
+                            console.log("posicion: " + i);
+                            result.push('ok');
+                        }
+                    }
+                    else {
+                        console.log("NADA");
+                    }
+                }
+            }
+            console.log("WTF!?");
+            same =(result.length/ruta2.length);
+            console.log("SIMILITUD: "+same);
+            if(same>=0.8){
+                console.log("se parecen");
+                res.send(true);
+            }
+            else {
+                console.log('no se parecen');
+                res.send(false);
+            }
+            //res.send(result.length + " PUNTOS EN COMUN DE "+ruta2.length+" PUNTOS POSIBLES");
+        }
+        else res.send(false);
+    }
+
+
+
+
 
     //Obtiene un track mediante ID
     getTrack = function(req,res){
@@ -264,6 +326,7 @@ module.exports = function (app) {
 
     //endPoints
     app.post('/test',test);
+    app.post('/tracks/compare/isSame',isSame);
     app.get('/track/:id',getTrack);
     app.get('/tracks/:username',tracksByUserName);
     app.get('/tracks/num/:username',numtracksByUserName);

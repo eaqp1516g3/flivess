@@ -61,18 +61,27 @@ angular.module('starter', ['ionic', 'starter.controllers','ngStorage','ngOpenFB'
 
     .state('login', {
       url: '/login',
+      cache:false,
       templateUrl: 'templates/login.html',
       controller: 'LoginCtrl'
     })
 
     .state('register', {
       url: '/register',
+      cache:false,
       templateUrl: 'templates/register.html',
       controller: 'RegisterCtrl'
     })
 
+    .state('registerFB', {
+      url: '/registerFB/:userFB',
+      cache:false,
+      templateUrl: 'templates/registerFB.html',
+      controller: 'RegisterFBCtrl'
+    })
+
     .state('tracking',{
-      url: '/tracking/:type/:id_comun/:distance/:id',
+      url: '/tracking/:type/:trackoriginal',
       cache:false,
       templateUrl: 'templates/tracking.html',
       controller: 'TrackingCtrl'
@@ -152,7 +161,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngStorage','ngOpenFB'
 
 
     .state('trackingManager', {
-      url: '/tracking/manager',
+      url: '/tracking/manager/:originalID',
       cache:false,
       templateUrl: 'templates/track-manager.html',
       controller: 'TrackManagerCtrl'
@@ -172,6 +181,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngStorage','ngOpenFB'
 
   .state('tab.dash', {
     url: '/dash',
+    cache:false,
     views: {
       'tab-dash': {
         cache:false,
@@ -183,6 +193,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngStorage','ngOpenFB'
 
     .state('tab.account', {
       url: '/account',
+      cache:false,
       views: {
         'tab-account': {
           cache:false,

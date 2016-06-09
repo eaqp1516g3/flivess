@@ -13,11 +13,11 @@
     </a>
     <div class="list-group" ng-repeat="notify in notifications">
         <a class="list-group-item" href="#/profile/{{notify.actionusername}}" ng-if="notify.type==1">
-                <h4 class="item-title">{{notify.date|date:"dd/MM/yyyy 'at' h:mma"}}</h4>
+                <h4 class="item-title" am-time-ago="notify.date"></h4>
                 <p><i class="fa fa-user-plus" aria-hidden="true"></i> {{notify.actionusername}} {{notify.text}}</p>
         </a>
         <a class="list-group-item" href="#/messages" ng-if="notify.type==0">
-                <h4 class="item-title">{{notify.date|date:"dd/MM/yyyy 'at' h:mma"}}</h4>
+                <h4 class="item-title" am-time-ago="notify.date"></h4>
                 <p><i class="fa fa-envelope" aria-hidden="true"></i> {{notify.actionusername}} {{notify.text}}</p>
         </a>
     </div>

@@ -14,7 +14,7 @@
         ng-src="img/edit.png"
         class="profile-edit"
         width="50">
-      <h5 class="level">Level {{friend.level}}</h5>
+
     </div>
 
     <div class="card">
@@ -63,7 +63,7 @@
                 </p>
 
                 <div class="item item-body">
-                  <img ng-click="trackdetail(route._id)" class="full-image" src="{{route.img}}">
+                  <img ng-click="trackdetail(route._id)" class="full-image" ng-src="{{route.img}}">
 
                   <p class="text-center">
                     <a href="#" class="subdued text-left bold">{{route.distance}}  &nbsp; &#9679;</a>

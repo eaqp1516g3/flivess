@@ -2,7 +2,7 @@
  * Created by irkalla on 14.04.16.
  */
 // configure our routes
-angular.module('Flivess', ['ngRoute', 'ngCookies','ui.bootstrap','angularModalService', 'ngAnimate', 'googlechart', 'ngMaterial', 'ngImgCrop'])
+angular.module('Flivess', ['ngRoute', 'ngCookies','ui.bootstrap','angularModalService', 'ngAnimate', 'googlechart', 'ngMaterial', 'ngImgCrop','angularMoment'])
     .config(function($routeProvider) {
         console.log("EN ROUTES.JS");
         $routeProvider
@@ -20,6 +20,16 @@ angular.module('Flivess', ['ngRoute', 'ngCookies','ui.bootstrap','angularModalSe
             .when('/friends', {
                 templateUrl : 'views/following.html',
                 controller  : 'friendsCtl'
+            })
+
+            .when('/followerslist/:username', {
+                templateUrl : 'views/followerslist.html',
+                controller  : 'followersListCtl'
+            })
+
+            .when('/followinglist/:username', {
+                templateUrl : 'views/followinglist.html',
+                controller  : 'followingListCtl'
             })
 
             .when('/messages', {

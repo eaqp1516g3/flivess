@@ -1,0 +1,43 @@
+<ion-view title="Facebook register">
+  <ion-content overflow-scroll="false" padding="'true'" class="has-header" style="background:  center; background-size: cover;">
+    <div class="bar bar-header bar-stable">
+      <h1 class="title">New account</h1>
+    </div>
+    <br>
+    <br>
+    <div class="list">
+
+      <a class="item item-avatar" href="#">
+        <img src="{{userFB.imgurl}}">
+        <h2>{{userFB.fullname}}</h2>
+        <p>{{userFB.email}}</p>
+      </a>
+
+    </div>
+
+    <div class="text-center">
+      <h4>Hi {{userFB.fullname}}!
+      </h4>
+
+      <h4>Please select an <b>username</b> to complete the Facebook register process.</h4>
+    </div>
+    <br>
+
+    <form class="list">
+      <ion-list>
+        <label  class="item item-input-inset" name="username" style="background-color: white; opacity: 0.35;">
+          <span class="input-label"><b>Username</b></span>
+          <input type="text" ng-model="usernameFB">
+        </label>
+
+      </ion-list>
+      <div class="spacer" style="width: 300px; height: 5px;"></div>
+      <br>
+      <div class="text-center">
+
+        <button style="width: 80%" class="button  button-positive" ng-click="registerFB(usernameFB)"> <i class="icon ion-social-facebook"></i>&nbsp;Register with facebook</button>
+
+      </div>
+    </form>
+  </ion-content>
+</ion-view>

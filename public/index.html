@@ -51,11 +51,11 @@
                                 <h4 class="menu-title">Notifications</h4>
                             </div>
                             <li class="divider"></li>
-                            <div class="notifications-wrapper" ng-repeat="notify in notification" >
+                            <div class="notifications-wrapper" ng-repeat="notify in notification">
 
                                 <a class="content" href="#/profile/{{notify.actionusername}}" ng-if="notify.type==1">
                                     <div class="notification-item">
-                                        <h4 class="item-title">{{notify.date|date:"dd/MM/yyyy 'at' h:mma"}}</h4>
+                                        <h4 class="item-title" am-time-ago="notify.date"></h4>
                                         <p><i class="fa fa-user-plus" aria-hidden="true"></i> {{notify.actionusername}} {{notify.text}}</p>
                                     </div>
 
@@ -63,7 +63,7 @@
                                 <a class="content" href="#/messages" ng-if="notify.type==0">
 
                                     <div class="notification-item">
-                                        <h4 class="item-title">{{notify.date|date:"dd/MM/yyyy 'at' h:mma"}}</h4>
+                                        <h4 class="item-title" am-time-ago="notify.date"></h4>
                                         <p><i class="fa fa-envelope" aria-hidden="true"></i> {{notify.actionusername}} {{notify.text}}</p>
                                     </div>
 
@@ -115,6 +115,8 @@
     <script src="bower_components/ng-img-crop/compile/unminified/ng-img-crop.js"></script>
     <script src="bower_components/socket.io-client/socket.io.js"></script>
     <script src="bower_components/angular-socket-io/socket.js"></script>
+    <script src="bower_components/moment/min/moment.min.js"></script>
+    <script src="bower_components/angular-moment/angular-moment.min.js"></script>
 
 
     <script src="routes.js"></script>
@@ -131,5 +133,7 @@
     <script src="controllers/historicalCtl.js"></script>
     <script src="controllers/notificationsCtl.js"></script>
     <script src="controllers/editPhotoCtl.js"></script>
+    <script src="controllers/followingListCtl.js"></script>
+    <script src="controllers/followersCtl.js"></script>
 </body>
 </html>

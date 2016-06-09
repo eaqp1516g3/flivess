@@ -12,7 +12,8 @@
   "homepage": "https://github.com/eaqp1516g3/flivess",
   "moduleType": [],
   "resolutions": {
-    "angular": "^1.5.4"
+    "angular": ">=1.2.0 <1.5.0",
+    "moment": ">=2.8.0 <2.11.0"
   },
   "dependencies": {
     "angular": "^1.5.4",
@@ -29,6 +30,8 @@
     "angular-confirm-modal": "^1.2.3",
     "socket.io-client": "^1.4.6",
     "angular-socket-io": "^0.7.0",
-    "ng-img-crop": "ngImgCrop#^0.3.2"
+    "ng-img-crop": "ngImgCrop#^0.3.2",
+    "angular-moment": "^0.10.3",
+    "moment": "^2.13.0"
   }
 }
