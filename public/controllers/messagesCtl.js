@@ -3,7 +3,7 @@
  */
 
 
-angular.module('Flivess').controller('messagesCtl', ['$scope', '$http','$cookies', '$location', 'SocketIoFactory', function($scope, $http, $cookies, $location, socket) {
+angular.module('Flivess').controller('messagesCtl', ['$scope', '$http','$cookies', '$location', 'SocketIoFactory', '$timeout', function($scope, $http, $cookies, $location, socket, $timeout) {
 
     var base_url_prod="http://localhost:8080";
     //var base_url_prod = "http://147.83.7.157:8080";
@@ -19,6 +19,11 @@ angular.module('Flivess').controller('messagesCtl', ['$scope', '$http','$cookies
             if($scope.users == '')
                 $scope.noMessages= true;
             else $scope.noMessages = false;
+            $timeout(function(){
+                var scroller = document.getElementById('chatscroll');
+                scroller.scrollTop=scroller.scrollHeight;
+            }, 0, false);
+
         });
 
     }
@@ -27,6 +32,10 @@ angular.module('Flivess').controller('messagesCtl', ['$scope', '$http','$cookies
     socket.on('chat', function () {
         $http.get(base_url_prod+ '/messages/' + userLogged.username +'/' + $scope.usuarioC).success(function (response) {
             $scope.msgs = response;
+            $timeout(function(){
+                var scroller = document.getElementById('chatscroll');
+                scroller.scrollTop=scroller.scrollHeight;
+            }, 0, false);
         });
     });
 
@@ -46,6 +55,10 @@ angular.module('Flivess').controller('messagesCtl', ['$scope', '$http','$cookies
                 console.log("Entro");
                 console.log(response[0].username);
                 $scope.conversationWith = response[0];
+                $timeout(function(){
+                    var scroller = document.getElementById('chatscroll');
+                    scroller.scrollTop=scroller.scrollHeight;
+                }, 0, false);
 
             });
             $scope.msgs = response;
@@ -77,6 +90,10 @@ angular.module('Flivess').controller('messagesCtl', ['$scope', '$http','$cookies
 
             $http.get(base_url_prod+ '/messages/' + userLogged.username +'/' + receiver).success(function (response) {
                 $scope.msgs = response;
+                $timeout(function(){
+                    var scroller = document.getElementById('chatscroll');
+                    scroller.scrollTop=scroller.scrollHeight;
+                }, 0, false);
             });
         });
     };

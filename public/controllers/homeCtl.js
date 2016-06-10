@@ -2,6 +2,7 @@
  * Created by irkalla on 14.04.16.
  */
 
+
 angular.module('Flivess').controller('homeCtl', ['$scope', '$http', '$cookies', '$rootScope', function($scope, $http, $cookies, $rootScope) {
     var base_url_prod="http://localhost:8080";
     //var base_url_prod = "http://147.83.7.157:8080";
@@ -14,6 +15,7 @@ angular.module('Flivess').controller('homeCtl', ['$scope', '$http', '$cookies', 
     $http.get(base_url_prod + '/tracks/friends/' + userLogged.username).success(function (data) {
         console.log(data);
         if(data=="") {
+            console.log("DENTRO DEL NO FOLLOWING");
             $scope.noFollowing = true;
         }
         else{
