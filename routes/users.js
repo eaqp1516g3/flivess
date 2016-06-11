@@ -1,7 +1,7 @@
 module.exports = function (app) {
     var mongoose = require('mongoose');
     var User = require('../models/user.js');
-
+    var Hash = require('jshashes');
     //var base_url = "http://147.83.7.157:8080";
     var base_url = "http://localhost:8080";
     //GET - GET All Users By Into DB
@@ -111,12 +111,12 @@ module.exports = function (app) {
             }
             else imgurl =  request.body.imgurl;
 
-
+                var passhash = new Hash.SHA256(request.body.password).hex(request.body.password);
                 var users = new User({
                     username: request.body.username,
                     fullname: request.body.fullname,
                     email: request.body.email,
-                    password: request.body.password,
+                    password: passhash,
                     imgurl: imgurl,
                     age: request.body.age,
                     sex:request.body.sex,
@@ -145,28 +145,49 @@ module.exports = function (app) {
 
     //PUT - Update a register already exists
     updateUser = function (req, res) {
-        User.findById(req.params.id, function (err, users) {
-            console.log('PUT');
-            console.log(req.params.id);
-            console.log(req.body);
-        
+        var update = true;
+        console.log("PASS ORIGINAL: "+req.body.password);
+        console.log("PASS ANTIGUO: "+req.body.oldpassword);
+        console.log("PASS NUEVO: "+req.body.newpassword);
+        if(req.body.oldpassword){
+            console.log("TENEMOS PASS");
+            var oldhash = new Hash.SHA256(req.body.oldpassword).hex(req.body.oldpassword);
+            var newhash = new Hash.SHA256(req.body.newpassword).hex(req.body.newpassword);
+            if(oldhash == req.body.password){
+                console.log("COINCIDEN!");
+                req.body.password = newhash;
+            }
+            else update = false;
+        }
+        if(update == true){
 
-            users.username = req.body.username;
-            users.fullname = req.body.fullname;
-            users.email = req.body.email;
-            users.password = req.body.password;
-            users.age = req.body.age;
-            users.sex = req.body.sex;
-            users.city = req.body.city;
-            users.weight = req.body.weight;
-            users.height = req.body.height;
-            users.imgurl= req.body.imgurl;
+            User.findById(req.params.id, function (err, users) {
+                console.log('PUT');
+                console.log(req.params.id);
+                console.log(req.body);
+                var pass = req.body.password;
+                users.username = req.body.username;
+                users.fullname = req.body.fullname;
+                users.email = req.body.email;
+                users.password = req.body.password;
+                users.age = req.body.age;
+                users.sex = req.body.sex;
+                users.city = req.body.city;
+                users.weight = req.body.weight;
+                users.height = req.body.height;
+                users.imgurl = req.body.imgurl;
 
-            users.save(function (err) {
-                if (err) return res.send(500, err.message);
-                res.status(200).json(users);
+                users.save(function (err) {
+                    if (err) return res.send(500, err.message);
+                    res.status(200).json(users);
+                });
             });
-        });
+
+        }
+        else res.status(409).json("PASS DON'T MATCH");
+
+
+
     };
 
     //PUT - Update a register already exists

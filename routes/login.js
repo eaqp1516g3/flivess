@@ -4,11 +4,13 @@
 module.exports = function (app) {
     var mongoose = require('mongoose');
     var User = require('../models/user.js');
+    var Hash = require('jshashes');
 
     //POST
     login =function(req,res){
-
-        User.findOne({username: req.body.username, password: req.body.password}, function(err,user){
+        var pass = req.body.password;
+        var passhash = new Hash.SHA256(pass).hex(pass);
+        User.findOne({username: req.body.username, password: passhash}, function(err,user){
             console.log(user);
             if(user==null) return res.status(404).send("INCORRECTO");
             else {
