@@ -1,7 +1,7 @@
 /**
  * Created by aitor on 19/4/16.
  */
-angular.module('Flivess').controller('profileCtl', ['$scope', '$http', '$cookies', 'ModalService', '$routeParams', 'SocketIoFactory','$location', function($scope, $http, $cookies, ModalService, $routeParams, socket, $mdDialog,$location) {
+angular.module('Flivess').controller('profileCtl', ['$scope', '$http', '$cookies', 'ModalService', '$routeParams', 'SocketIoFactory','$location', function($scope, $http, $cookies, ModalService, $routeParams, socket, $location, $mdDialog) {
     var base_url_prod="http://localhost:8080";
     //var base_url_prod = "http://147.83.7.157:8080";
 
@@ -145,7 +145,13 @@ angular.module('Flivess').controller('profileCtl', ['$scope', '$http', '$cookies
         });
     };
 
+    $scope.followinglist = function (friend) {
+        $location.path('/followinglist/' + friend);
+    };
 
+    $scope.followerslist = function (friend) {
+        $location.path('/followerslist/' + friend);
+    };
 
 
     $scope.showConfirm = function(ev) {

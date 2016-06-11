@@ -30,8 +30,8 @@
                     <br>
                     <div class="row">
                         <div class="col-xs-6 col-md-4 well well-sm"><b>Tracks</b><br>{{ntracks}}</div>
-                        <div class="col-xs-6 col-md-4 well well-sm"><b >Following</b><br><a href="#/followinglist/{{friend.username}}"> {{nfollowing}}</a></div>
-                        <div  class="col-xs-6 col-md-4 well well-sm"><b>Followers</b><br><a href="#/followerslist/{{friend.username}}"> {{nfollowers}}</a></div>
+                        <div class="col-xs-6 col-md-4 well well-sm" ng-click="followinglist(friend.username)"><b >Following</b><br> {{nfollowing}}</div>
+                        <div  class="col-xs-6 col-md-4 well well-sm" ng-click="followerslist(friend.username)"><b>Followers</b><br> {{nfollowers}}</div>
                     </div>
 
                 </div>
@@ -84,7 +84,7 @@
 
     <div id="tracks" class="panel-group  col-md-8">
         <div style=" text-align: center;" ng-show="noTracks">
-            <label  >You don't have tracks...</label>
+            <label  >This user haven't any tracks...</label>
         </div>
         <div ng-repeat="route in routes">
         <div class="panel panel-default">
