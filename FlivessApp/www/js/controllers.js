@@ -518,8 +518,6 @@ angular.module('starter.controllers', ['ngOpenFB'])
 .controller('TracksUserCtrl', function($http,$scope,$ionicPopup,$state,$stateParams,$ionicHistory) {
 
   var getTracks = function(){
-    $scope.routes='';
-
 
       $http.get(base_url_local + '/tracks/' + $stateParams.username).success(function (data) {
         console.log(data);
@@ -536,7 +534,7 @@ angular.module('starter.controllers', ['ngOpenFB'])
             if(data[i].distance<1) data[i].distance=data[i].distance * 1000 + ' m';
             else data[i].distance=data[i].distance + ' Km';
 
-            if (data[i].avg_speed>0) (data[i].avg_speed= 1/data[i].avg_speed)*60;
+            if (data[i].avg_speed>0) data[i].avg_speed= Math.floor(60/(data[i].avg_speed)).toFixed(2);
 
             $http.get(data[i].pointsurl).success(function (datos) {
               for (var i = 0; i < datos.length; i++) {
@@ -1379,13 +1377,25 @@ angular.module('starter.controllers', ['ngOpenFB'])
                 facebook_id: res.id
 
               };
-              console.log("BUSCO FB ID")
+              console.log("BUSCO FB ID");
               $http.get(base_url_local+'/users/user/facebook/'+ user.facebook_id).success(function (response){
 
                 if(response == ''){
-                  console.log("NO EXISTE POR LO QUE LE PIDO QUE PONGA USERNAME")
+                  //console.log("NO EXISTE POR LO QUE LE PIDO QUE PONGA USERNAME");
+                  console.log("NO EXISTE POR LO QUE LO CREO");
+                  $http.post(base_url_local+'/user', user).success(function(response){
+                    console.log(user);
+                    console.log(response);
+                    localStorage.setItem('userLogged', JSON.stringify(response));
 
-                  $state.go('registerFB',{userFB:JSON.stringify(user)});
+                    $state.go('tab.dash');
+                  }).error(function (response) {
+
+                    console.log("YA EXISTE ESTE USERNAME AL HACER EL POST");
+                    $state.go('registerFB',{userFB:JSON.stringify(user)});
+
+                  });
+                  //$state.go('registerFB',{userFB:JSON.stringify(user)});
 
 
                 }else {
@@ -1397,12 +1407,12 @@ angular.module('starter.controllers', ['ngOpenFB'])
                 }
 
               }).error(function (data,err) {
-                console.log("NO EXISTE POR LO QUE LE PIDO QUE PONGA USERNAME")
+                console.log("Estoy en el error")
                 console.log(err);
-
+                //$state.go('registerFB',{userFB:JSON.stringify(user)});
                 //$state.go("app.example2", {object: JSON.stringify(obj)});
-
-                  $state.go('registerFB',{userFB:JSON.stringify(user)});
+                alert('Facebook error request');
+                  //$state.go('registerFB',{userFB:JSON.stringify(user)});
 
               });
             },
@@ -1577,6 +1587,17 @@ angular.module('starter.controllers', ['ngOpenFB'])
     console.log(simpleObj);
     console.log();
   }
+
+  var userLogged = JSON.parse(localStorage.getItem('userLogged'));
+  console.log(userLogged);
+  console.log(userLogged.username);
+  $scope.users="";
+  $http.get(base_url_local+ '/messages/'+userLogged.username).success(function (response) {
+    console.log(response);
+    $scope.users = response;
+    $scope.user="";
+
+  });
 
 
 

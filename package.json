@@ -9,6 +9,7 @@
     "formidable": "^1.0.17",
     "fs": "0.0.2",
     "geolib": "^2.0.21",
+    "jshashes": "^1.0.5",
     "method-override": "^2.3.5",
     "mongoose": "^4.4.7",
     "mongoose-middleware": "^0.2.17",
