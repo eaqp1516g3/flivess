@@ -2,7 +2,7 @@
  * Created by irkalla on 14.04.16.
  */
 
-angular.module('Flivess').controller('profileEditCtl', ['$scope', '$http', '$cookies', '$location','$mdDialog', function($scope, $http, $cookies, $location,$mdDialog) {
+angular.module('Flivess').controller('profileEditCtl', ['$scope', '$http', '$cookies', '$location','$mdDialog', function($scope, $http, $cookies, $location, $mdDialog) {
     var base_url_prod="http://localhost:8080";
     //var base_url_prod = "http://147.83.7.157:8080";
     $scope.data={};
@@ -41,7 +41,7 @@ angular.module('Flivess').controller('profileEditCtl', ['$scope', '$http', '$coo
         return result;
     };
 
-    $scope.updateUser = function() {
+    $scope.updateUser = function(ev) {
         console.log($scope.user._id);
         console.log($scope.user.oldpassword);
         console.log($scope.user.newpassword);
@@ -57,40 +57,38 @@ angular.module('Flivess').controller('profileEditCtl', ['$scope', '$http', '$coo
                  $location.path('/profile/' + userLogged.username);
                  }).error(function(data,err){
                     console.log("ERROR");
-                    alert("OLD PASSWORD DOESN'\t MATCH!")
-                    /*$mdDialog.show(
+                    $mdDialog.show(
                         $mdDialog.alert()
                             .clickOutsideToClose(true)
                             .title('ERROR')
                             .textContent('Old Passwords doesn\'t match')
                             .ariaLabel('error')
-                            .ok('Got it!')*/
-                    //);
+                            .ok('Got it!')
+                    );
                 });
             }
             else if(($scope.data.newpassword != $scope.user.newpassword) && (!angular.isUndefined($scope.user.oldpassword))){
                 console.log(" LOS NUEVOS PASS NO COINCIDEN");
-                alert("new passwords doesn'\t match");
-                /*$mdDialog.show(
+                $mdDialog.show(
                     $mdDialog.alert()
                         .clickOutsideToClose(true)
                         .title('ERROR')
                         .textContent('New Passwords doesn\'t match')
                         .ariaLabel('error')
                         .ok('Got it!')
-                );*/
+                );
             }
             else{
                 console.log("FALTA ALGUN PARAMETRO");
-                alert("Passwords fields uncomplete");
-                /*$mdDialog.show(
+                console.log(ev);
+                $mdDialog.show(
                     $mdDialog.alert()
                         .clickOutsideToClose(true)
                         .title('ERROR')
-                        .textContent('Some password parameter is empty')
+                        .textContent('Password fields incomplete')
                         .ariaLabel('error')
                         .ok('Got it!')
-                );*/
+                );
             }
         }
         else{
