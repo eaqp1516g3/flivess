@@ -191,6 +191,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngStorage','ngOpenFB'
     url: '/dash',
     cache:false,
     views: {
+      cache:false,
       'tab-dash': {
         templateUrl: 'templates/tab-dash.html',
         controller: 'DashCtrl'
@@ -266,7 +267,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngStorage','ngOpenFB'
 
 .factory("SocketIoFactory", function ($rootScope) {
   var socket = null;
-  var nodePath = "http://localhost:3000/";
+  var nodePath = "http://10.183.45.57:3000/";
 
 
   function listenerExists(eventName) {

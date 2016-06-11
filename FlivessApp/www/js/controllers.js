@@ -1,7 +1,7 @@
 //var base_url_local="http://147.83.7.157:8080";
 
 
-var base_url_local="http://localhost:8080";
+var base_url_local="http://10.183.45.57:8080";
 
 
 
@@ -59,10 +59,11 @@ angular.module('starter.controllers', ['ngOpenFB'])
     }
   })
 
-.controller('DashCtrl', function($scope,$state,$http,$ionicHistory) {
-
+.controller('DashCtrl', function($scope,$state,$http,$ionicHistory,$ionicLoading,$timeout) {
 
   $ionicHistory.clearHistory();
+
+
 
   var userLogged = JSON.parse(localStorage.getItem('userLogged'));
 
@@ -78,11 +79,12 @@ angular.module('starter.controllers', ['ngOpenFB'])
 
   $scope.toNotifications= function(){
     $state.go('notifications');
-  }
+  };
 
   $scope.toSearch= function(){
     $state.go('search');
-  }
+  };
+
 
   $http.get(base_url_local+ '/tracks/friends/' + userLogged.username).success(function (data) {
     console.log(data);
@@ -126,6 +128,11 @@ angular.module('starter.controllers', ['ngOpenFB'])
   });
 
 
+  $ionicLoading.show();
+
+  $timeout(function () {
+    $ionicLoading.hide();
+  }, 1500);
 
 
 
@@ -133,6 +140,15 @@ angular.module('starter.controllers', ['ngOpenFB'])
 
 
 .controller('NotificationsCtrl', function ($scope, $http,$state) {
+
+  $scope.toTrack = function(){
+    $state.go('selecter');
+  };
+
+  $scope.toSearch= function(){
+    $state.go('search');
+  }
+
   $scope.notifications = '';
   $http.get(base_url_local + '/notifications/user/' + $scope.userLogged.username).success(function (response) {
     console.log(response);
@@ -148,14 +164,7 @@ angular.module('starter.controllers', ['ngOpenFB'])
     $state.go('tab.message-detail',{name:username});
   };
 
-  $scope.toTrack = function(){
-    $state.go('selecter');
-    //$state.go('tracking');
-  }
 
-  $scope.toSearch= function(){
-    $state.go('search');
-  }
 
 })
 
@@ -572,7 +581,7 @@ angular.module('starter.controllers', ['ngOpenFB'])
 
   console.log("EN EL TRACKINGCTRL");
   console.log('En tracking con este track:');
-  console.log(JSON.parse($stateParams.trackoriginal));
+  //console.log(JSON.parse($stateParams.trackoriginal));
   $scope.distancia = '';
   $scope.velocidad = '';
   $scope.tiempo = '';
@@ -1959,6 +1968,7 @@ angular.module('starter.controllers', ['ngOpenFB'])
 
 
   $scope.userC = $stateParams.name;
+  console.log('Conv con: '+$scope.userC)
   $scope.userLogged = JSON.parse(localStorage.getItem('userLogged'));
   //$scope.logged = userLogged;
 
@@ -2067,7 +2077,7 @@ console.log("estoy dentro");
 
   $scope.goback = function(){
 
-    $ionicHistory.goBack();
+    $state.go('tab.dash');
 
   };
   $scope.toTrack = function(){
@@ -2195,14 +2205,7 @@ console.log('Range: '+$stateParams.range);
       console.log("STATE CHANGE START");
     });
 
-  $scope.loading = function(){
-    $ionicLoading.show();
 
-    $timeout(function () {
-      $ionicLoading.hide();
-    }, 700);
-
-  }
 
   $scope.loading2 = function(){
     $ionicLoading.show();
@@ -2230,14 +2233,17 @@ console.log('Range: '+$stateParams.range);
 
      });
      $state.go('tab.messages');
-  }
+  };
 
   $scope.notifications = function() {
     if ($rootScope.notlength != 0) {
       $http.put(base_url_local + '/notifications/saw/' + userLogged.username);
       $rootScope.notlength = 0;
-    };
+    }
     $state.go('tab.notifications');
-  }
+  };
+
+
+
 
 });
