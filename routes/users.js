@@ -2,8 +2,8 @@ module.exports = function (app) {
     var mongoose = require('mongoose');
     var User = require('../models/user.js');
     var Hash = require('jshashes');
-    //var base_url = "http://147.83.7.157:8080";
-    var base_url = "http://localhost:8080";
+    var base_url = "http://147.83.7.157:8080";
+    //var base_url = "http://localhost:8080";
     //GET - GET All Users By Into DB
     AllUsers = function (req, res) {
         User.find(function (err, users) {

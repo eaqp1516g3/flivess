@@ -3,8 +3,8 @@
  */
 
 angular.module('Flivess').controller('raceDetailsCtl', ['$scope', '$http', '$cookies', '$routeParams', '$location', '$mdDialog', function($scope, $http, $cookies, $routeParams, $location, $mdDialog) {
-    var base_url_prod="http://localhost:8080";
-    //var base_url_prod = "http://147.83.7.157:8080";
+    //var base_url_prod="http://localhost:8080";
+    var base_url_prod = "http://147.83.7.157:8080";
 
 
     var userLogged = $cookies.getObject('user');

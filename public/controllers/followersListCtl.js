@@ -5,8 +5,8 @@
 angular.module('Flivess').controller('followersListCtl',['$scope', '$http','$cookies', '$routeParams','SocketIoFactory','$mdDialog','$location','$q',function($scope, $http,$cookies,$routeParams,socket,$mdDialog,$location,$q) {
 
 
-    var base_url="http://localhost:8080";
-    //var base_url = "http://147.83.7.157:8080";
+    //var base_url="http://localhost:8080";
+    var base_url = "http://147.83.7.157:8080";
 
     var userLogged = $cookies.getObject('user');
     $scope.userLogged = userLogged;

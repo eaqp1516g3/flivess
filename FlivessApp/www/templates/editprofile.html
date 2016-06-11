@@ -33,10 +33,13 @@
         <input type="email" ng-model="user.email">
       </label>
 
-      <label class="item item-input">
-        <span class="input-label">Age</span>
-        <input type="text" ng-model="user.age">
-
+      <label class="item item-input item-select">
+          <span class="input-label">
+            Age
+          </span>
+        <select text-indent="5px" ng-name="n" ng-options="n for n in range_age(0,100)" class="form-control" ng-model="user.age">
+          <option value="">{{user.age}} Years</option>
+        </select>
       </label>
 
       <label class="item item-input">
@@ -73,15 +76,19 @@
             <option value="">{{user.weight}} Kg</option>
           </select>
           </label>
+      <label class="item item-input">
+        <span class="input-label">Old Password</span>
+        <input type="password" ng-model="user.oldpassword">
+      </label>
 
       <label class="item item-input">
-        <span class="input-label">Password</span>
-        <input type="password" ng-model="user.password">
+        <span class="input-label">New Password</span>
+        <input type="password" ng-model="user.newpassword">
       </label>
 
       <label class="item item-input">
         <span class="input-label">Confirm password</span>
-        <input type="password" ng-model="data.confirma">
+        <input type="password" ng-model="data.newpassword">
       </label>
 
 

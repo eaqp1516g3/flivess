@@ -130,7 +130,7 @@ angular.module('Flivess', ['ngRoute', 'ngCookies','ui.bootstrap','angularModalSe
 
 .factory("SocketIoFactory", function ($rootScope) {
     var socket = null;
-    var nodePath = "http://localhost:3000/";
+    var nodePath = "http://147.83.7.157:3000/";
 
     function listenerExists(eventName) {
         return socket.hasOwnProperty("$events") && socket.$events.hasOwnProperty(eventName);

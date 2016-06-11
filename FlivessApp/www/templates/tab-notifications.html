@@ -7,7 +7,17 @@
   <button ng-click="toTrack()" class="button icon ion-android-walk">Run!</button>
 </ion-nav-buttons>
 <ion-content>
-
+  <div ng-if="notifications == ''" class="text-center">
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <p class="color-gray"  >No Notifications...</p>
+  </div>
+  <div ng-show="notifications != ''" class="text-right">
+    <button class="button button-assertive"  ng-click="eliminarNotis()">CLEAR NOTIFICATIONS</button>
+  </div>
   <ion-list class="list card" ng-repeat="notify in notifications| orderBy:'date':true">
     <div class="item item-divider">
       <span am-time-ago="notify.date"></span>

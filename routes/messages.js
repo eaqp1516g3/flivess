@@ -68,7 +68,7 @@ module.exports = function (app) {
                     username: req.body.receiver,
                     type: 0,
                     actionusername: req.body.sender,
-                    text: "send you a message",
+                    text: "sent you a message",
                     vist: false
                 });
                 notify.save(function (err) {

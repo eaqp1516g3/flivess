@@ -5,8 +5,8 @@
 
 angular.module('Flivess').controller('messagesCtl', ['$scope', '$http','$cookies', '$location', 'SocketIoFactory', '$timeout', function($scope, $http, $cookies, $location, socket, $timeout) {
 
-    var base_url_prod="http://localhost:8080";
-    //var base_url_prod = "http://147.83.7.157:8080";
+    //var base_url_prod="http://localhost:8080";
+    var base_url_prod = "http://147.83.7.157:8080";
 
     var userLogged = $cookies.getObject('user');
     $scope.userLogged = userLogged;

@@ -1,7 +1,7 @@
 //var base_url_local="http://147.83.7.157:8080";
 
 
-var base_url_local="http://10.183.45.57:8080";
+var base_url_local="http://147.83.7.157:8080";
 
 
 
@@ -139,7 +139,7 @@ angular.module('starter.controllers', ['ngOpenFB'])
 })
 
 
-.controller('NotificationsCtrl', function ($scope, $http,$state) {
+.controller('NotificationsCtrl', function ($scope, $http,$state,$rootScope) {
 
   $scope.toTrack = function(){
     $state.go('selecter');
@@ -162,6 +162,14 @@ angular.module('starter.controllers', ['ngOpenFB'])
 
   $scope.messages = function(username){
     $state.go('tab.message-detail',{name:username});
+  };
+
+  $scope.eliminarNotis = function () {
+    $http.delete(base_url_local + '/notifications/' + $scope.userLogged.username + '/all').success(function () {
+      $state.go('tab.dash');
+      $rootScope.notlength=0;
+      $rootScope.notification="";
+    });
   };
 
 
@@ -419,20 +427,27 @@ angular.module('starter.controllers', ['ngOpenFB'])
     }
     return result;
   };
+  $scope.range_age = function(start,end) {
+    var result = [];
+    for (var i = start; i <= end; i++) {
+      result.push(i);
+    }
+    return result;
+  };
   $scope.data={};
   $scope.user={};
   $http.get(base_url_local + '/users/user/' + userLogged.username).success(function(response){
    console.log(response);
     $scope.user = response[0];
-    $scope.data.confirma = $scope.user.password;
+
 
   });
 
   $scope.goback= function(){
       $ionicHistory.goBack();
-    };
+  };
 
-  $scope.updateUser = function() {
+  /*$scope.updateUser = function() {
     if($scope.user.password == $scope.data.confirma && !angular.isUndefined($scope.user.password)){
 
       $http.put(base_url_local +'/user/' + $scope.user._id, $scope.user).success(function (response) {
@@ -445,6 +460,54 @@ angular.module('starter.controllers', ['ngOpenFB'])
         template: 'Password is empty or doesn\'t match'
       });
 
+    }
+  $scope.updateUser = function(){
+
+
+
+  };*/
+
+  $scope.updateUser = function(){
+    console.log($scope.user._id);
+    console.log($scope.user.oldpassword);
+    console.log($scope.user.newpassword);
+    console.log($scope.data.newpassword);
+    var oldpassword = $scope.user.oldpassword;
+    var newpassword = $scope.user.newpassword;
+    var confirm = $scope.data.newpassword;
+    if(newpassword  || confirm  || oldpassword){
+      if(($scope.data.newpassword == $scope.user.newpassword) && (!angular.isUndefined($scope.user.oldpassword)) && (!angular.isUndefined($scope.data.newpassword)) && (!angular.isUndefined($scope.user.newpassword)) ){
+        console.log("TODO CORRECTO, HAGO EL PUT");
+        $http.put(base_url_local + '/user/' + $scope.user._id, $scope.user).success(function (response) {
+          $ionicHistory.goBack();
+        }).error(function(data,err){
+          console.log("ERROR");
+          $ionicPopup.alert({
+            title: 'Error',
+            template: 'old passwords doesn\'t match'
+          });
+        });
+      }
+      else if(($scope.data.newpassword != $scope.user.newpassword) && (!angular.isUndefined($scope.user.oldpassword))){
+        console.log(" LOS NUEVOS PASS NO COINCIDEN");
+        $ionicPopup.alert({
+          title: 'Error',
+          template: 'new passwords doesn\'t match'
+        });
+      }
+      else{
+        console.log("FALTA ALGUN PARAMETRO");
+        $ionicPopup.alert({
+          title: 'Error',
+          template: 'Password fields uncomplete'
+        });
+      }
+    }
+    else{
+      console.log('normal');
+      $http.put(base_url_local + '/user/' + $scope.user._id, $scope.user).success(function (response) {
+        $ionicHistory.goBack();
+      });
     }
 
 
@@ -1249,7 +1312,7 @@ angular.module('starter.controllers', ['ngOpenFB'])
 })
 
 
-.controller('RegisterFBCtrl', function($scope,$state,$http,$stateParams,$ionicPopup) {
+.controller('RegisterFBCtrl',['$scope','$state','$http','$stateParams','$ionicPopup','$rootScope','SocketIoFactory', function($scope,$state,$http,$stateParams,$ionicPopup,$rootScope,socket) {
 
 
   $scope.userFB = JSON.parse($stateParams.userFB);
@@ -1271,6 +1334,38 @@ angular.module('starter.controllers', ['ngOpenFB'])
         console.log(user);
         console.log(response);
         localStorage.setItem('userLogged', JSON.stringify(response));
+        $rootScope.userLogged = JSON.parse(localStorage.getItem('userLogged'));
+        socket.connect();
+        console.log("socket.connect()");
+        socket.on('connection', function(data){
+          console.log(data);
+          socket.emit('username',$rootScope.userLogged.username);
+          socket.emit('notification',$rootScope.userLogged.username);
+        });
+        socket.on('listaUsers', function(data){
+          console.log("LOS USUARIOS");
+          console.log(data);
+        });
+        console.log("3");
+        socket.on('new notification', function(data){
+          socket.emit('notification',$rootScope.userLogged.username, function(data){
+          } )
+        });
+        socket.on('notification', function(data){
+          $rootScope.notlength=data.numeros;
+          //$rootScope.notification=data.notifications;
+          console.log(data);
+        });
+        socket.on('chat', function (data) {
+
+          console.log("CHAT");
+          $rootScope.$emit('myEvent', function (event, viewData) {
+            console.log("EN EL BROADCAST");
+          });
+          // $state.go($state.currentState, {}, {reload:true});
+          // $state.go($state.current, $state.$current.params, {reload: true});
+
+        });
 
         $state.go('tab.dash');
       }).error(function (response) {
@@ -1297,9 +1392,9 @@ angular.module('starter.controllers', ['ngOpenFB'])
 
 
 
-  })
+  }])
 
-.controller('LoginCtrl',['$scope', '$http', '$rootScope', 'SocketIoFactory', '$state', '$localStorage', 'ngFB', function($scope, $http, $rootScope, socket, $state, $localStorage, ngFB){
+.controller('LoginCtrl',['$scope', '$http', '$rootScope', 'SocketIoFactory', '$state', '$localStorage', 'ngFB','$ionicPopup', function($scope, $http, $rootScope, socket, $state, $localStorage, ngFB,$ionicPopup){
 
   $scope.redir = function() {
     $state.go('register');
@@ -1352,7 +1447,10 @@ angular.module('starter.controllers', ['ngOpenFB'])
       $state.go('tab.dash');
     },
     function(error){
-      alert("Username or password are incorrect");
+      $ionicPopup.alert({
+        title: 'Error',
+        template: 'incorrect username or password'
+      });
     })
   };
 
@@ -1388,7 +1486,38 @@ angular.module('starter.controllers', ['ngOpenFB'])
                     console.log(user);
                     console.log(response);
                     localStorage.setItem('userLogged', JSON.stringify(response));
+                    $rootScope.userLogged = JSON.parse(localStorage.getItem('userLogged'));
+                    socket.connect();
+                    console.log("socket.connect()");
+                    socket.on('connection', function(data){
+                      console.log(data);
+                      socket.emit('username',$rootScope.userLogged.username);
+                      socket.emit('notification',$rootScope.userLogged.username);
+                    });
+                    socket.on('listaUsers', function(data){
+                      console.log("LOS USUARIOS");
+                      console.log(data);
+                    });
+                    console.log("3");
+                    socket.on('new notification', function(data){
+                      socket.emit('notification',$rootScope.userLogged.username, function(data){
+                      } )
+                    });
+                    socket.on('notification', function(data){
+                      $rootScope.notlength=data.numeros;
+                      //$rootScope.notification=data.notifications;
+                      console.log(data);
+                    });
+                    socket.on('chat', function (data) {
 
+                      console.log("CHAT");
+                      $rootScope.$emit('myEvent', function (event, viewData) {
+                        console.log("EN EL BROADCAST");
+                      });
+                      // $state.go($state.currentState, {}, {reload:true});
+                      // $state.go($state.current, $state.$current.params, {reload: true});
+
+                    });
                     $state.go('tab.dash');
                   }).error(function (response) {
 
@@ -1403,6 +1532,38 @@ angular.module('starter.controllers', ['ngOpenFB'])
                   console.log("YA EXISTE, PASO A DASH Y GUARDO SESION")
                   console.log(response);
                   localStorage.setItem('userLogged', JSON.stringify(response[0]));
+                  $rootScope.userLogged = JSON.parse(localStorage.getItem('userLogged'));
+                  socket.connect();
+                  console.log("socket.connect()");
+                  socket.on('connection', function(data){
+                    console.log(data);
+                    socket.emit('username',$rootScope.userLogged.username);
+                    socket.emit('notification',$rootScope.userLogged.username);
+                  });
+                  socket.on('listaUsers', function(data){
+                    console.log("LOS USUARIOS");
+                    console.log(data);
+                  });
+                  console.log("3");
+                  socket.on('new notification', function(data){
+                    socket.emit('notification',$rootScope.userLogged.username, function(data){
+                    } )
+                  });
+                  socket.on('notification', function(data){
+                    $rootScope.notlength=data.numeros;
+                    //$rootScope.notification=data.notifications;
+                    console.log(data);
+                  });
+                  socket.on('chat', function (data) {
+
+                    console.log("CHAT");
+                    $rootScope.$emit('myEvent', function (event, viewData) {
+                      console.log("EN EL BROADCAST");
+                    });
+                    // $state.go($state.currentState, {}, {reload:true});
+                    // $state.go($state.current, $state.$current.params, {reload: true});
+
+                  });
                   $state.go('tab.dash');
 
                 }
@@ -1488,7 +1649,11 @@ angular.module('starter.controllers', ['ngOpenFB'])
 */
 }])
 
-.controller('RegisterCtrl',function($scope,$http,$state,$ionicPopup,$localStorage){
+.controller('RegisterCtrl',['$scope','$http','$state','$ionicPopup','$localStorage','$rootScope','SocketIoFactory',function($scope,$http,$state,$ionicPopup,$localStorage,$rootScope,socket){
+
+  $rootScope.$ionicGoBack = function() {
+    $state.go('login');
+  };
 
   $scope.range_weight = function(start,end) {
     var result = [];
@@ -1499,6 +1664,14 @@ angular.module('starter.controllers', ['ngOpenFB'])
   };
 
   $scope.range_height = function(start,end) {
+    var result = [];
+    for (var i = start; i <= end; i++) {
+      result.push(i);
+    }
+    return result;
+  };
+
+  $scope.range_age = function(start,end) {
     var result = [];
     for (var i = start; i <= end; i++) {
       result.push(i);
@@ -1524,6 +1697,38 @@ angular.module('starter.controllers', ['ngOpenFB'])
        // $scope.alert.message="";
         localStorage.setItem('userLogged', JSON.stringify($scope.user));
         $scope.user="";
+        $rootScope.userLogged = JSON.parse(localStorage.getItem('userLogged'));
+        socket.connect();
+        console.log("socket.connect()");
+        socket.on('connection', function(data){
+          console.log(data);
+          socket.emit('username',$rootScope.userLogged.username);
+          socket.emit('notification',$rootScope.userLogged.username);
+        });
+        socket.on('listaUsers', function(data){
+          console.log("LOS USUARIOS");
+          console.log(data);
+        });
+        console.log("3");
+        socket.on('new notification', function(data){
+          socket.emit('notification',$rootScope.userLogged.username, function(data){
+          } )
+        });
+        socket.on('notification', function(data){
+          $rootScope.notlength=data.numeros;
+          //$rootScope.notification=data.notifications;
+          console.log(data);
+        });
+        socket.on('chat', function (data) {
+
+          console.log("CHAT");
+          $rootScope.$emit('myEvent', function (event, viewData) {
+            console.log("EN EL BROADCAST");
+          });
+          // $state.go($state.currentState, {}, {reload:true});
+          // $state.go($state.current, $state.$current.params, {reload: true});
+
+        });
         $state.go('tab.dash');
       }).error(function (response) {
         //$scope.alertReg = true;
@@ -1565,7 +1770,7 @@ angular.module('starter.controllers', ['ngOpenFB'])
     $scope.alert.message="";
   }*/
 
-})
+}])
 
 .controller('MessagesCtrl',['$scope','$http','$localStorage','$state','$stateParams','$rootScope','simpleObj', function($scope,$http,$localStorage,$state,$stateParams,$rootScope, simpleObj) {
 
@@ -2221,10 +2426,10 @@ console.log('Range: '+$stateParams.range);
 .controller('TabCtrl', function($scope,$http,$localStorage,$ionicPopup,$state,$ionicLoading,$timeout,$rootScope){
   var userLogged = JSON.parse(localStorage.getItem('userLogged'));
 
-  $scope.$on('$stateChangeStart',
+ /* $scope.$on('$stateChangeStart',
     function(event, toState, toParams, fromState, fromParams){
       console.log("STATE CHANGE START");
-    });
+    });*/
 
 
 
@@ -2253,15 +2458,21 @@ console.log('Range: '+$stateParams.range);
        $scope.user="";
 
      });
-     $state.go('tab.messages');
+     $state.go('tab.messages',{},{reload:true});
   };
 
-  $scope.notifications = function() {
+  $scope.notifica = function() {
+    $http.get(base_url_local + '/notifications/user/' +userLogged.username).success(function (response) {
+      console.log(response);
+      $scope.notifications = response;
+    });
     if ($rootScope.notlength != 0) {
       $http.put(base_url_local + '/notifications/saw/' + userLogged.username);
       $rootScope.notlength = 0;
     }
-    $state.go('tab.notifications');
+    $state.go('tab.notifications',{},{reload:true});
+
+
   };
 
 

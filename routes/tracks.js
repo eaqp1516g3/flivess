@@ -8,8 +8,8 @@ module.exports = function (app) {
     var Track = require('../models/track.js');
     var Friend = require('../models/friend.js');
     var User = require('../models/user.js');
-    var base_url = 'http://10.183.45.57:8080';
-    //var base_url="http://147.83.7.157:8080";
+    //var base_url = 'http://10.183.45.57:8080';
+    var base_url="http://147.83.7.157:8080";
     var fs = require('fs');
     var geolib = require('geolib');
 

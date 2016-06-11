@@ -31,9 +31,13 @@
           <span class="input-label">Confirm(*)</span>
           <input type="password" placeholder="Confirmar Password" ng-model="data.confirma">
         </label>
-        <label class="item item-input" name="mail" style="background-color: white; opacity: 0.35;">
-          <span class="input-label">Age</span>
-          <input type="email" ng-model="user.age">
+        <label class="item item-input item-select" style="background-color: white; opacity: 0.35;">
+          <span class="input-label">
+            Age
+          </span>
+          <select text-indent="5px" ng-name="n" ng-options="n for n in range_age(0,100)" class="form-control" ng-model="user.age">
+            <option value="">{{user.age}} Years</option>
+          </select>
         </label>
         <label class="item item-input" style="background-color: white; opacity: 0.35;">
           <span class="input-label">Gender</span>

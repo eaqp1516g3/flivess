@@ -204,6 +204,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngStorage','ngOpenFB'
       cache:false,
       views: {
         'tab-account': {
+          cache:false,
           templateUrl: 'templates/tab-account.html',
           controller: 'AccountCtrl'
         }
@@ -267,7 +268,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngStorage','ngOpenFB'
 
 .factory("SocketIoFactory", function ($rootScope) {
   var socket = null;
-  var nodePath = "http://10.183.45.57:3000/";
+  var nodePath = "http://147.83.7.157:3000/";
 
 
   function listenerExists(eventName) {
