@@ -1,3 +1,12 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ProfileEdit</title>
+    <link rel="stylesheet" href="../css/profileEdit/style.css">
+    <link  rel="stylesheet" href="../bower_components/angular-material/angular-material.css">
+</head>
+<body>
 <div class="container">
     <div class="col-md-6">
     <h1 class="page-header">Edit Profile</h1>
@@ -99,10 +108,11 @@
 
                 <div class="form-group">
                     <label class="col-md-3 control-label"></label>
-                        <a ng-click="updateUser()" class="btn btn-primary"  type="button"> Save Changes</a>
+                        <button ng-click="updateUser($event)" class="btn btn-primary"> Save Changes</button>
                         <a href="#/home" class="btn btn-default" type="button"> Cancel</a>
                 </div>
             </form>
         </div>
     </div>
 </div>
+</body>

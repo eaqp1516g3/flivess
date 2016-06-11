@@ -8,6 +8,9 @@ angular.module('Flivess').controller('friendsCtl', ['$scope', '$http', '$cookies
 
 
     var userLogged = $cookies.getObject('user');
+
+    if(angular.isUndefined($cookies.getObject('user'))) $location.path('');
+
     $scope.userlogged = userLogged;
     $scope.noFollowing = false;
 

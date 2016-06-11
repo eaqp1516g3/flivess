@@ -270,7 +270,6 @@ angular.module('starter', ['ionic', 'starter.controllers','ngStorage','ngOpenFB'
   var socket = null;
   var nodePath = "http://147.83.7.157:3000/";
 
-
   function listenerExists(eventName) {
     return socket.hasOwnProperty("$events") && socket.$events.hasOwnProperty(eventName);
   }

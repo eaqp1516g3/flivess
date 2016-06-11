@@ -3,13 +3,13 @@
  */
 
 angular.module('Flivess').controller('editCtl', ['$scope', '$http', '$cookies', '$rootScope', '$location','$routeParams', 'SocketIoFactory', function($scope, $http, $cookies, $rootScope, $location, $routeParams, socket)  {
+
     //var base_url_prod="http://localhost:8080";
     var base_url_prod = "http://147.83.7.157:8080";
-    $scope.vlogin=true;
 
-
-    if(!angular.isUndefined($cookies.getObject('user'))){
-        $location.path('/home');
+    if(angular.isUndefined($cookies.getObject('user'))) $location.path('');
+    else {
+        $scope.vlogin=true;
     }
 
     $rootScope.isLogged=false;

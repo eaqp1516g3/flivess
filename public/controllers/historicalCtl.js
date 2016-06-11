@@ -9,6 +9,8 @@ angular.module('Flivess').controller('historicalCtl', ['$scope', '$http', '$cook
 
     $rootScope.isLogged=true;
     var userLogged = $cookies.getObject('user');
+    if(angular.isUndefined($cookies.getObject('user'))) $location.path('');
+
     $scope.noHistorical = false;
 
     var refresh = function() {

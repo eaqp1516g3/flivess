@@ -3,15 +3,17 @@
  */
 
 
-angular.module('Flivess').controller('homeCtl', ['$scope', '$http', '$cookies', '$rootScope', function($scope, $http, $cookies, $rootScope) {
+
+angular.module('Flivess').controller('homeCtl', ['$scope', '$http', '$cookies', '$rootScope', '$location', function($scope, $http, $cookies, $rootScope, $location) {
     //var base_url_prod="http://localhost:8080";
     var base_url_prod = "http://147.83.7.157:8080";
-
-    $rootScope.isLogged=true;
     var userLogged = $cookies.getObject('user');
-    console.log("EL USERNAME: "+ userLogged.username);
-    $scope.noFollowing = false;
-
+    if(angular.isUndefined($cookies.getObject('user'))) $location.path('');
+    else {
+        console.log("EL USERNAME: " + userLogged.username);
+        $rootScope.isLogged = true;
+        $scope.noFollowing = false;
+    }
     $http.get(base_url_prod + '/tracks/friends/' + userLogged.username).success(function (data) {
         console.log(data);
         if(data=="") {
