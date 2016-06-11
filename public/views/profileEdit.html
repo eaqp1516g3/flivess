@@ -36,9 +36,12 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-3 control-label">Age:</label>
-                    <div class="col-lg-8">
-                        <input class="form-control" ng-model="user.age" type="text">
+                    <label class="col-md-3 control-label">Age:</label>
+                    <div class="col-md-8">
+                        <select  ng-name="n" ng-options="n for n in range_age(0,100)" class="form-control" ng-model="user.age">
+                            <option value="">{{user.age}} years</option>
+                        </select>
+
                     </div>
                 </div>
                 <div class="form-group">
@@ -76,15 +79,21 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-md-3 control-label">Password:</label>
+                    <label class="col-md-3 control-label"> Old Password:</label>
                     <div class="col-md-8">
-                        <input class="form-control" ng-model="user.password" type="password">
+                        <input class="form-control" ng-model="user.oldpassword" type="password">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label"> New Password:</label>
+                    <div class="col-md-8">
+                        <input class="form-control" ng-model="user.newpassword" type="password">
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-md-3 control-label">Confirm password:</label>
                     <div class="col-md-8">
-                        <input class="form-control" ng-model="user.password" type="password">
+                        <input class="form-control" ng-model="data.newpassword" type="password">
                     </div>
                 </div>
 

@@ -96,12 +96,14 @@ module.exports = function (app) {
         User.findOne({username: req.params.username},function (err,user){
             if (err) return res.send(500, err.message);
             console.log(user);
-            Friend.find({friend:user._id},function (err,followers){
-                if (err) return res.send(500, err.message);
-                console.log(followers);
-                res.send(followers);
+            Friend.find({friend:user._id}).distinct("username",function (err,users){
+                console.log(users);
+                User.find({username: {$in: users}}, function (err, followers) {
+                    if (err) return res.send(500, err.message);
+                    console.log(followers);
+                    res.send(followers);
+                });
             });
-
         });
 
     }
