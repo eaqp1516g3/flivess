@@ -6,20 +6,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
+<div class="container" >
+    <div class="text-center" ng-show="noNotifications">
+        <label>You haven't any notification...</label>
+    </div>
+    <div ng-show="!noNotifications">
+        <div class="row list-group-item active">
+            <h4 class="list-group-item-heading">
+                NOTIFICATIONS
+                <button class="btn btn-danger pull-right" ng-click="eliminarNotis()">DELETE ALL NOTIFICATIONS</button>
+            </h4>
+        </div>
 
-<div class="container">
-    <a class="list-group-item active">
-        <h4 class="list-group-item-heading">NOTIFICATIONS</h4>
-    </a>
-    <div class="list-group" ng-repeat="notify in notifications">
-        <a class="list-group-item" href="#/profile/{{notify.actionusername}}" ng-if="notify.type==1">
-                <h4 class="item-title" am-time-ago="notify.date"></h4>
-                <p><i class="fa fa-user-plus" aria-hidden="true"></i> {{notify.actionusername}} {{notify.text}}</p>
-        </a>
-        <a class="list-group-item" href="#/messages" ng-if="notify.type==0">
-                <h4 class="item-title" am-time-ago="notify.date"></h4>
-                <p><i class="fa fa-envelope" aria-hidden="true"></i> {{notify.actionusername}} {{notify.text}}</p>
-        </a>
+        <br>
+        <div class="list-group" ng-repeat="notify in notifications">
+            <a class="list-group-item" href="#/profile/{{notify.actionusername}}" ng-if="notify.type==1">
+                    <h4 class="item-title" am-time-ago="notify.date"></h4>
+                    <p><i class="fa fa-user-plus" aria-hidden="true"></i> {{notify.actionusername}} {{notify.text}}</p>
+            </a>
+            <a class="list-group-item" href="#/messages" ng-if="notify.type==0">
+                    <h4 class="item-title" am-time-ago="notify.date"></h4>
+                    <p><i class="fa fa-envelope" aria-hidden="true"></i> {{notify.actionusername}} {{notify.text}}</p>
+            </a>
+        </div>
     </div>
 </div>
 
