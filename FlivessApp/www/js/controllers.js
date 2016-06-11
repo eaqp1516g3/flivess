@@ -519,8 +519,6 @@ angular.module('starter.controllers', ['ngOpenFB'])
 .controller('TracksUserCtrl', function($http,$scope,$ionicPopup,$state,$stateParams,$ionicHistory) {
 
   var getTracks = function(){
-    $scope.routes='';
-
 
       $http.get(base_url_local + '/tracks/' + $stateParams.username).success(function (data) {
         console.log(data);
@@ -537,7 +535,7 @@ angular.module('starter.controllers', ['ngOpenFB'])
             if(data[i].distance<1) data[i].distance=data[i].distance * 1000 + ' m';
             else data[i].distance=data[i].distance + ' Km';
 
-            if (data[i].avg_speed>0) (data[i].avg_speed= 1/data[i].avg_speed)*60;
+            if (data[i].avg_speed>0) data[i].avg_speed= Math.floor(60/(data[i].avg_speed)).toFixed(2);
 
             $http.get(data[i].pointsurl).success(function (datos) {
               for (var i = 0; i < datos.length; i++) {

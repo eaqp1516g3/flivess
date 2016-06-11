@@ -17,8 +17,8 @@
     </button>
   </ion-nav-buttons>-->
 
-  <ion-header-bar class="bar bar-subheader"><br><br><br>
-    <div class="text-center">
+  <ion-header-bar class="bar bar-subheader">
+    <div style="background-color: white" class="text-center">
 
       <i class='icon ion-chatbubble'></i> <label class="color-gray">{{userC}}</label>
 
@@ -27,7 +27,7 @@
   </ion-header-bar>
 
 
-  <ion-content has-bouncing="true" class="has-header has-footer"  delegate-handle="userMessageScroll">
+  <ion-content has-bouncing="true"  delegate-handle="userMessageScroll">
 
     <div  ng-repeat="message in messages" class="message-wrapper">
 
