@@ -28,6 +28,12 @@ angular.module('Flivess').controller('indexCtl', ['$scope', '$http', '$cookies',
         $location.path('/profile/' + username);
     };
 
+    $scope.eliminarNotis = function () {
+        $http.delete(base_url_prod + '/notifications/' + userLogged.username + '/all').success(function () {
+            $rootScope.notlength=0;
+            $rootScope.notification="";
+        });
+    };
 
     $scope.logOut = function() {
         console.log("DENTRO DEL LOGOUT");

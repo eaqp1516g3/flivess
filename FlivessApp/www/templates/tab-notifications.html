@@ -1,27 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>notifications</title>
-</head>
-<body>
+<ion-view>
 <ion-nav-buttons side="left">
   <button ng-click="toSearch()" menu-toggle="left" class="button button-icon icon ion-ios-search-strong"></button>
 </ion-nav-buttons>
 
 <ion-nav-buttons side="right">
-  <button ng-click="toTrack()" class="button button-dark icon ion-ios-plus-outline"></button>
+  <button ng-click="toTrack()" class="button icon ion-android-walk">Run!</button>
 </ion-nav-buttons>
 <ion-content>
+
   <ion-list class="list card" ng-repeat="notify in notifications| orderBy:'date':true">
     <div class="item item-divider">
       <span am-time-ago="notify.date"></span>
     </div>
-    <div class="item">
-      <i ng-if="notify.type==0" ng-click="messages(notify.actionusername)" class="icon user-messages-top-icon ion-ios-email-outline"></i> <i ng-if="notify.type==1"  ng-click="profile(notify.actionusername)"  class="icon user-messages-top-icon ion-ios-personadd-outline"></i><strong>&nbsp;&nbsp;{{notify.actionusername}} </strong>{{notify.text}}
+    <div ng-if="notify.type==0" ng-click="messages(notify.actionusername)" class="item">
+      <i class="icon user-messages-top-icon ion-ios-email-outline"></i><strong>&nbsp;&nbsp;{{notify.actionusername}} </strong>{{notify.text}}
 
     </div>
+    <div ng-if="notify.type==1"  ng-click="profile(notify.actionusername)"  class="item">
+       <i class="icon user-messages-top-icon ion-ios-personadd-outline"></i><strong>&nbsp;&nbsp;{{notify.actionusername}} </strong>{{notify.text}}
+
+    </div>
+    <br>
   </ion-list>
 </ion-content>
-</body>
-</html>
+</ion-view>

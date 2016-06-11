@@ -5,8 +5,7 @@
   The Friends service returns an array of friend data
 -->
 
-
-<ion-view id="userMessagesView" cache-view="false" view-title="<i class='icon ion-chatbubble user-messages-top-icon'></i> <div class='msg-header-username'>{{userC}}</div>">
+<ion-view>
 
   <!--<ion-nav-buttons side="left">
 
@@ -17,6 +16,17 @@
       <span class="back-text"></span>
     </button>
   </ion-nav-buttons>-->
+
+  <ion-header-bar class="bar bar-subheader"><br><br><br>
+    <div class="text-center">
+
+      <i class='icon ion-chatbubble'></i> <label class="color-gray">{{userC}}</label>
+
+    </div>
+
+  </ion-header-bar>
+
+
   <ion-content has-bouncing="true" class="has-header has-footer"  delegate-handle="userMessageScroll">
 
     <div  ng-repeat="message in messages" class="message-wrapper">
@@ -82,27 +92,3 @@
     </a>
   </ion-footer-bar>
 </form>
-
-
-
-
-
-
-
-
-
-<!--
-<ion-view view-title="Mensajes">
-  <ion-content class="padding">
-    <ion-list ng-repeat="msg in msgs">
-        <img ng-src="https://pbs.twimg.com/profile_images/452381666649313280/1Y_pVkyh.jpeg" style="width: 64px; height: 64px">
-      <p ng-repeat="sender in msg">
-      <strong>{{sender.username}}</strong>
-    </p>
-      {{msg.text}}
-    </p>
-      <input type="text" placeholder="Text" ng-model="message.text">
-    </ion-list>
-  </ion-content>
-</ion-view>
--->

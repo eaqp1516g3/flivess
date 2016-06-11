@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Messages</title>
-</head>
+    <link rel="stylesheet" href="../css/chat/style.css">
 <body>
 
 
@@ -12,7 +12,16 @@
     </div>
     <div class="col-md-3">
         <div class="list-group">
-            <a href="" ng-click="conversacion(user.username)" class="list-group-item"  ng-repeat="user in users"> {{user.fullname}}</a>
+            <a href="" ng-click="conversacion(user.username)" class="list-group-item"  ng-repeat="user in users">
+                <div class="row">
+                    <div class="col-md-6">
+                        <img  ng-src="{{user.imgurl}}"  class="media-object" alt="64x64" style="width: 32px; height: 32px;" >
+                    </div>
+                    <div class="col-md-6">
+                        <strong>{{user.username}}</strong>
+                    </div>
+                </div>
+            </a>
         </div>
     </div>
     <div class="col-md-1"></div>
@@ -21,31 +30,29 @@
         <a style="border: 1px solid grey; border-radius: 10px;" href=""  ng-click="profile(usuarioC)" class="list-group-item text-center "><h4>{{usuarioC}}</h4></a>
 
 
-        <div style="position: absolute; top: 70px; bottom: -430px; right: 12px; left: 12px; overflow-y: scroll; border: 1px solid grey; border-radius: 10px;" >
+        <div id="chatscroll" style="position: absolute; top: 70px; bottom: -400px; right: 12px; left: 12px; overflow-y: scroll; border: 1px solid grey; border-radius: 10px;" >
             <div  class="media msg" ng-repeat="msg in msgs">
 
 
-                <div ng-if="msg.sender!=userLogged.username" style="background-color: rgba(137, 251, 242, 0.98)">
+                <div  ng-if="msg.sender!=userLogged.username" >
                     <a class="pull-left" href="#/profile/{{msg.sender}}">
                         <img  ng-src="{{getImage(msg.sender)}}"  class="media-object" alt="64x64" style="width: 32px; height: 32px;" >
                     </a>
-                    <div class="media-body">
-                        <small class="pull-right "><i class="fa fa-clock-o"></i>&nbsp;<label am-time-ago="msg.createdAt"></label></small>
-
-                        <h5 class="media-heading">{{msg.sender}}</h5>
-                        <small class="col-lg-10" style=""><b>{{msg.text}}</b></small>
+                    <div class="bubble me">
+                        {{msg.text}}
+                        <br>
+                        <i class="fa fa-clock-o"></i>&nbsp;<label am-time-ago="msg.createdAt"></label>
                     </div>
                 </div>
 
-                <div ng-if="msg.sender==userLogged.username" style="background-color: rgba(126, 255, 102, 0.98)">
-                    <a class="pull-left" href="#/profile/{{msg.sender}}">
+                <div ng-if="msg.sender==userLogged.username">
+                    <a class="pull-right" href="#/profile/{{msg.sender}}">
                         <img  ng-src="{{getImage(msg.sender)}}"  class="media-object" alt="64x64" style="width: 32px; height: 32px;" >
                     </a>
-                    <div class="media-body">
-                        <small class="pull-right "><i class="fa fa-clock-o"></i>&nbsp;<label am-time-ago="msg.createdAt"></label></small>
-
-                        <h5 class="media-heading">{{msg.sender}}</h5>
-                        <small class="col-lg-10" style=""><b>{{msg.text}}</b></small>
+                    <div class="bubble you">
+                        {{msg.text}}
+                        <br>
+                        <i class="fa fa-clock-o"></i>&nbsp;<label am-time-ago="msg.createdAt"></label>
                     </div>
                 </div>
 
