@@ -6,10 +6,10 @@ angular.module('Flivess').controller('profileCtl', ['$scope', '$http', '$cookies
     //var base_url_prod = "http://147.83.7.157:8080";
 
 
-
-
     console.log("DENTRO DE CONTROLOADOR de profile.html");
     var userLogged = $cookies.getObject('user');
+    if(angular.isUndefined($cookies.getObject('user'))) $location.path('');
+
     $scope.userlogged = userLogged;
     console.log(userLogged.username);
     var friend= new Object();

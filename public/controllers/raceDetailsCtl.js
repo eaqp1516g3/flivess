@@ -8,6 +8,8 @@ angular.module('Flivess').controller('raceDetailsCtl', ['$scope', '$http', '$coo
 
 
     var userLogged = $cookies.getObject('user');
+    if(angular.isUndefined($cookies.getObject('user'))) $location.path('');
+
     console.log("LA ID: "+ $routeParams.id);
     $scope.myTrack = false;
     $http.get(base_url_prod + '/track/' + $routeParams.id).success(function (response) {

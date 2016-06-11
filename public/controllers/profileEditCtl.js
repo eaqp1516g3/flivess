@@ -7,6 +7,8 @@ angular.module('Flivess').controller('profileEditCtl', ['$scope', '$http', '$coo
     //var base_url_prod = "http://147.83.7.157:8080";
 
     var userLogged = $cookies.getObject('user');
+    if(angular.isUndefined($cookies.getObject('user'))) $location.path('');
+
     console.log(userLogged.username);
 
     $http.get(base_url_prod + '/user/' + userLogged._id).success(function(response){

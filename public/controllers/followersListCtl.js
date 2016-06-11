@@ -9,6 +9,8 @@ angular.module('Flivess').controller('followersListCtl',['$scope', '$http','$coo
     //var base_url = "http://147.83.7.157:8080";
 
     var userLogged = $cookies.getObject('user');
+    if(angular.isUndefined($cookies.getObject('user'))) $location.path('');
+
     $scope.userLogged = userLogged;
     console.log(userLogged);
     $scope.followingsof = $routeParams.username;
