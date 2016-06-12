@@ -34,13 +34,13 @@ angular.module('Flivess').controller('editCtl', ['$scope', '$http', '$cookies', 
             $scope.usuario.username = $scope.user.username;
             $http.put(base_url_prod + '/user_facebook/' + $scope.usuario._id,  $scope.usuario).success(function (response) {
                 $cookies.putObject('user', response);
-                $rootScope.userlog = $cookies.getObject('user');
+                $rootScope.userLogged = $cookies.getObject('user');
 
                 socket.connect();
                 socket.on('connection', function(data){
                     console.log(data);
-                    socket.emit('username',$rootScope.userlog.username);
-                    socket.emit('notification',$rootScope.userlog.username);
+                    socket.emit('username',$rootScope.userLogged.username);
+                    socket.emit('notification',$rootScope.userLogged.username);
                 });
                 socket.on('listaUsers', function(data){
                     console.log("LOS USUARIOS");
@@ -48,7 +48,7 @@ angular.module('Flivess').controller('editCtl', ['$scope', '$http', '$cookies', 
                 });
                 console.log("3");
                 socket.on('new notification', function(data){
-                    socket.emit('notification',$rootScope.userlog.username, function(data){
+                    socket.emit('notification',$rootScope.userLogged.username, function(data){
                     } )
                 });
                 socket.on('notification', function(data){

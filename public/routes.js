@@ -90,14 +90,14 @@ angular.module('Flivess', ['ngRoute', 'ngCookies','ui.bootstrap','angularModalSe
             $rootScope.isLogged=false;
         }
         else{
-            $rootScope.userlog = $cookies.getObject('user');
+            $rootScope.userLogged = $cookies.getObject('user');
             $rootScope.isLogged=true;
-            console.log("Holiii" +$rootScope.userlog.username);
+            console.log("Holiii" +$rootScope.userLogged.username);
             socket.connect();
             socket.on('connection', function(data){
                 console.log(data);
-                socket.emit('username',$rootScope.userlog.username);
-                socket.emit('notification',$rootScope.userlog.username);
+                socket.emit('username',$rootScope.userLogged.username);
+                socket.emit('notification',$rootScope.userLogged.username);
             });
             socket.on('listaUsers', function(data){
                 console.log("LOS USUARIOS");
@@ -105,7 +105,7 @@ angular.module('Flivess', ['ngRoute', 'ngCookies','ui.bootstrap','angularModalSe
             });
             console.log("3");
             socket.on('new notification', function(data){
-                socket.emit('notification',$rootScope.userlog.username, function(data){
+                socket.emit('notification',$rootScope.userLogged.username, function(data){
                 } )
             });
             socket.on('notification', function(data){
