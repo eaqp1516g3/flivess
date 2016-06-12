@@ -174,8 +174,8 @@ module.exports = function (app) {
         var ruta_org = JSON.parse(ruta_or);
         console.log(ruta_org[0]);
         var ruta2 = req.body.ruta2;
-        var dist_org = req.body.dist_org;
-        var dist_ruta2 = req.body.dist_ruta2;
+        var dist_org = parseFloat(req.body.dist_org);
+        var dist_ruta2 = parseFloat(req.body.dist_ruta2);
         var result=[];
         var same=0;
         var existe=false;
