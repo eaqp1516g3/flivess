@@ -487,10 +487,11 @@ textarea.about-me{
   opacity: 1;
   z-index: 2050;
 }
-.platform-android .bar-subheader.has-tabs-top{
-  top:100px !important;
+
+.pepino{
+  top:90px !important;
 }
 
-.platform-android .has-subheader.has-tabs-top{
-  top:137px;
+.pepino2{
+  top:134px;
 }

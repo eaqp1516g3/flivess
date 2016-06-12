@@ -253,11 +253,16 @@ angular.module('starter', ['ionic', 'starter.controllers','ngStorage','ngOpenFB'
       cache:false,
       views: {
         'tab-messages':{
-          templateUrl: 'templates/message-detail.html',
+          templateUrl: function(){
+            if(ionic.Platform.isAndroid()){
+              return "templates/message-detail.html"
+            }
+            return "templates/message-detail-ios.html"
+          } ,
           controller: 'MessageDetailCtrl'
         }
       }
-    })
+    });
 
 
   // if none of the above states are matched, use this as the fallback

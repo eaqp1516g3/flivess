@@ -1,22 +1,17 @@
-<!--
-  This template loads for the 'tab.friend-detail' state (app.js)
-  'friend' is a $scope variable created in the FriendsCtrl controller (controllers.js)
-  The FriendsCtrl pulls data from the Friends service (service.js)
-  The Friends service returns an array of friend data
--->
 <ion-view>
 
-<ion-header-bar  class="bar pepino pepino2 bar-subheader">
-  <div style="background-color: white" class="text-center">
 
-    <i class='icon ion-chatbubble'></i> <label class="color-gray">{{userC}}</label>
+  <ion-header-bar class="bar bar-subheader">
+    <div style="background-color: white" class="text-center">
 
-  </div>
+      <i class='icon ion-chatbubble'></i> <label class="color-gray">{{userC}}</label>
 
-</ion-header-bar>
+    </div>
+
+  </ion-header-bar>
 
 
-  <ion-content has-bouncing="true" class="has-header" delegate-handle="userMessageScroll">
+  <ion-content has-bouncing="true"  delegate-handle="userMessageScroll">
 
     <div  ng-repeat="message in messages" class="message-wrapper">
 
@@ -67,7 +62,7 @@
     </div>
   </ion-content>
 
-
+</ion-view>
 
 
 <form id="footer-input">
@@ -81,4 +76,3 @@
     </a>
   </ion-footer-bar>
 </form>
-</ion-view>
