@@ -40,7 +40,7 @@
             <ul class="nav navbar-nav navbar-right">
 
                 <li >
-                    <a id="dLabel" role="button" data-toggle="dropdown" data-target="#" ng-init="userloggedInfo" ng-click="clickNot(userlog.username)">
+                    <a id="dLabel" role="button" data-toggle="dropdown" data-target="#" ng-init="userloggedInfo" ng-click="clickNot(userLogged.username)">
                         <i class="glyphicon glyphicon-globe"></i>
                         <span class="noti_bubble">{{notlength}}</span>
                     </a>
@@ -81,7 +81,7 @@
                         </ul>
                 </li>
 
-                <li><a href="" ng-init="userloggedInfo" ng-click="perfil(userlog.username)"><span class="fa fa-cogs"></span> {{userlog.username}}</a></li>
+                <li><a href="" ng-init="userloggedInfo" ng-click="perfil(userLogged.username)"><span class="fa fa-cogs"></span> {{userLogged.username}}</a></li>
                 <li><a href="#/" ng-click="logOut()"><span class="glyphicon glyphicon-log-in"></span> Log Out</a></li>
             </ul>
         </div>
