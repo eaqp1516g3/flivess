@@ -6,6 +6,7 @@ angular.module('Flivess').controller('indexCtl', ['$scope', '$http', '$cookies',
     //var base_url_prod="http://localhost:8080";
     var base_url_prod = "http://147.83.7.157:8080";
     var userLogged = $cookies.getObject('user');
+    $rootScope.userLogged = $cookies.getObject('user');
 
     if(angular.isUndefined(socket)==true || socket==null){
         console.log("EN LA MIERDA");
@@ -29,6 +30,7 @@ angular.module('Flivess').controller('indexCtl', ['$scope', '$http', '$cookies',
     };
 
     $scope.eliminarNotis = function () {
+        var userLogged = $cookies.getObject('user');
         $http.delete(base_url_prod + '/notifications/' + userLogged.username + '/all').success(function () {
             $rootScope.notlength=0;
             $rootScope.notification="";
