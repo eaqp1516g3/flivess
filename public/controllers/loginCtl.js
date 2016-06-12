@@ -19,13 +19,13 @@ angular.module('Flivess').controller('loginCtl', ['$scope', '$http', '$cookies',
         $http.post(base_url_prod+'/login', $scope.user).success(function (response) {
             console.log(response);
             $cookies.putObject('user',response);
-            $rootScope.userlog = $cookies.getObject('user');
+            $rootScope.userLogged = $cookies.getObject('user');
 
             socket.connect();
             socket.on('connection', function(data){
                 console.log(data);
-                socket.emit('username',$rootScope.userlog.username);
-                socket.emit('notification',$rootScope.userlog.username);
+                socket.emit('username',$rootScope.userLogged.username);
+                socket.emit('notification',$rootScope.userLogged.username);
             });
             socket.on('listaUsers', function(data){
                 console.log("LOS USUARIOS");
@@ -33,7 +33,7 @@ angular.module('Flivess').controller('loginCtl', ['$scope', '$http', '$cookies',
             });
             console.log("3");
             socket.on('new notification', function(data){
-                socket.emit('notification',$rootScope.userlog.username, function(data){
+                socket.emit('notification',$rootScope.userLogged.username, function(data){
                 } )
             });
             socket.on('notification', function(data){
@@ -73,14 +73,14 @@ angular.module('Flivess').controller('loginCtl', ['$scope', '$http', '$cookies',
             $http.post(base_url_prod+'/user', $scope.usuario).success(function(response){
                 console.log($scope.usuario.fullname);
                 $cookies.putObject('user',response);
-                $rootScope.userlog = $cookies.getObject('user');
+                $rootScope.userLogged = $cookies.getObject('user');
                 $rootScope.isLogged=true;
-                console.log("Holiii" +$rootScope.userlog.username);
+                console.log("Holiii" +$rootScope.userLogged.username);
                 socket.connect();
                 socket.on('connection', function(data){
                     console.log(data);
-                    socket.emit('username',$rootScope.userlog.username);
-                    socket.emit('notification',$rootScope.userlog.username);
+                    socket.emit('username',$rootScope.userLogged.username);
+                    socket.emit('notification',$rootScope.userLogged.username);
                 });
                 socket.on('listaUsers', function(data){
                     console.log("LOS USUARIOS");
@@ -88,7 +88,7 @@ angular.module('Flivess').controller('loginCtl', ['$scope', '$http', '$cookies',
                 });
                 console.log("3");
                 socket.on('new notification', function(data){
-                    socket.emit('notification',$rootScope.userlog.username, function(data){
+                    socket.emit('notification',$rootScope.userLogged.username, function(data){
                     } )
                 });
                 socket.on('notification', function(data){
