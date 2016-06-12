@@ -54,7 +54,8 @@ angular.module('starter.controllers', ['ngOpenFB'])
 
     return {
 
-      searchUsers : searchUsers
+      searchUsers : searchUsers,
+      getUsers : getUsers
 
     }
   })
@@ -560,6 +561,8 @@ angular.module('starter.controllers', ['ngOpenFB'])
 
       }
       loading();
+
+      UsersDataService.getUsers();
 
       UsersDataService.searchUsers($scope.data.search).then(
         function(matches) {
