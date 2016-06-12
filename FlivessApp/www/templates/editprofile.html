@@ -28,7 +28,7 @@
           </div>
         </div>
       </div>
-
+    </span>
 
 
 
@@ -85,6 +85,8 @@
             <option value="">{{user.weight}} Kg</option>
           </select>
           </label>
+    <div ng-if="!user.facebook_id">
+
       <label class="item item-input">
         <span class="input-label">Old Password</span>
         <input type="password" ng-model="user.oldpassword">
@@ -99,7 +101,7 @@
         <span class="input-label">Confirm password</span>
         <input type="password" ng-model="data.newpassword">
       </label>
-
+    </div>
 
       <h5 class="padding gotham-medium color-darkgray text-center">Since {{user.created|date:'medium'}}</h5>
 
