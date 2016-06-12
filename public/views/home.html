@@ -10,13 +10,13 @@
     <div class="text-center">
         <label  ng-show="noFollowing">Follow users to see their activities...</label>
     </div>
-    <div ng-repeat="route in routes">
+    <div ng-repeat="route in routes|orderBy:'title':true">
     <div class="panel panel-default">
         <div class="panel-heading"><strong>{{route.username}}</strong><p am-time-ago="route.title"></p></div>
         <div class="panel-body">
             <div class="row">
                 <div class="col-md-7">
-                    <img border="0" ng-src={{route.img}}>
+                    <img border="0" src={{route.img}}>
                 </div>
                 <div class="col-md-5">
                     <table class="table table-striped col-md-5">

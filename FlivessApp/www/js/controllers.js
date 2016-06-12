@@ -59,7 +59,7 @@ angular.module('starter.controllers', ['ngOpenFB'])
     }
   })
 
-.controller('DashCtrl', function($scope,$state,$http,$ionicHistory,$ionicLoading,$timeout) {
+.controller('DashCtrl', function($scope,$state,$http,$ionicHistory,$ionicLoading,$timeout,$q) {
 
   $ionicHistory.clearHistory();
 
@@ -86,7 +86,77 @@ angular.module('starter.controllers', ['ngOpenFB'])
   };
 
 
-  $http.get(base_url_local+ '/tracks/friends/' + userLogged.username).success(function (data) {
+  var main = function(){
+    var promises=[];
+    console.log("estoy en el main");
+    $http.get(base_url_local + '/tracks/friends/' + userLogged.username).success(function(data){
+      console.log("PRIMER GET");
+
+      console.log(data);
+      if(data=="") {
+        console.log("DENTRO DEL NO FOLLOWING");
+        $scope.noFollowing = true;
+      }
+      angular.forEach(data,function(d){
+        //console.log("EN EL FOREACH");
+        //console.log(d.pointsurl);
+        var deffered  = $q.defer();
+        $http.get(d.pointsurl).success(function(datos){
+          //console.log("GET");
+          deffered.resolve(datos);
+          console.log(deffered.promise);
+
+        });
+        //console.log("PUSH");
+        promises.push(deffered.promise);
+        console.log(promises);
+      });
+      console.log("PROMISES");
+      console.log($q.all(promises));
+      $q.all(promises).then(function(results){
+        console.log("ALL");
+        console.log(results);
+        console.log(data);
+        var int=0;
+        for (var i = 0; i < data.length; i++) {
+
+          var final_time_m = Math.floor(data[i].time / 60);
+          var final_time_s = Math.floor(data[i].time - (final_time_m * 60));
+          data[i].time =final_time_m+' min '+final_time_s+' s';
+
+          if(data[i].distance<1) data[i].distance=data[i].distance * 1000 + ' m';
+          else data[i].distance=data[i].distance + ' Km';
+
+          if (data[i].avg_speed>0) data[i].avg_speed= Math.floor(60/(data[i].avg_speed)).toFixed(2);
+
+          for (var a = 0; a < results[i].length; a++) {
+            if (a == 0) data[int].path = results[i][a].latitude + "," + results[i][a].longitude;
+            else data[int].path += "|" + results[i][a].latitude + "," + results[i][a].longitude;
+          }
+          data[int].center = results[i][1].latitude + "," + results[i][1].longitude;
+          var marker1 = results[i][0].latitude + "," + results[i][0].longitude;
+          var marker2 = results[i][results[i].length -1].latitude + "," + results[i][results[i].length -1].longitude;
+
+          //strokeColor: "#FF0000",
+          //strokeOpacity: 0.7,
+          //strokeWeight: 3
+          data[int].img="http://maps.googleapis.com/maps/api/staticmap?center="+data[int].center+"&zoom=17scale=1&size=470x180&maptype=roadmap&path=color:0xff0000ff|weight:3|"+data[int].path +"&sensor=false&markers=color:blue%7Clabel:S%7C"+marker1+"&markers=color:red%7Clabel:F%7C"+marker2;
+          //zoom:17
+          //mapTypeId: google.maps.MapTypeId.ROADMAP
+          int++;
+
+
+        }
+        console.log("FINSIH");
+        $scope.routes = data;
+        console.log(data);
+      });
+    });
+
+
+  };
+  main();
+  /*$http.get(base_url_local+ '/tracks/friends/' + userLogged.username).success(function (data) {
     console.log('ME LLEGA: ');
     console.log(data);
     if(data=="") {
@@ -122,7 +192,7 @@ angular.module('starter.controllers', ['ngOpenFB'])
       console.log(data);
       $scope.routes = data;
     }
-  });
+  });*/
 
 
   $ionicLoading.show();
@@ -172,7 +242,7 @@ angular.module('starter.controllers', ['ngOpenFB'])
 
 })
 
-.controller('ProfileCtrl', ['$scope', '$http', '$state', '$ionicPopup', '$ionicActionSheet', '$stateParams', '$anchorScroll', '$location', '$ionicLoading' ,'$timeout', '$ionicScrollDelegate', '$ionicHistory', 'SocketIoFactory', function($scope,$http,$state,$ionicPopup,$ionicActionSheet,$stateParams,$anchorScroll,$location,$ionicLoading,$timeout,$ionicScrollDelegate,$ionicHistory, socket) {
+.controller('ProfileCtrl', ['$scope','$q', '$http', '$state', '$ionicPopup', '$ionicActionSheet', '$stateParams', '$anchorScroll', '$location', '$ionicLoading' ,'$timeout', '$ionicScrollDelegate', '$ionicHistory', 'SocketIoFactory', function($scope,$q,$http,$state,$ionicPopup,$ionicActionSheet,$stateParams,$anchorScroll,$location,$ionicLoading,$timeout,$ionicScrollDelegate,$ionicHistory, socket) {
 
   $scope.userLogged = JSON.parse(localStorage.getItem('userLogged'));
   $scope.showActionSheet = function() {// Show the action sheet
@@ -328,7 +398,99 @@ angular.module('starter.controllers', ['ngOpenFB'])
 
   }
 
-  var getTracks = function(){
+  var main = function(){
+    $scope.routes='';
+    var promises=[];
+
+    if($scope.userLogged.username != $stateParams.username) {
+      $http.get(base_url_local + '/tracks/' + $stateParams.username).success(function (data) {
+        console.log(data);
+        if (data == "") {
+          $scope.noTracks = true;
+        }
+        else {
+
+            console.log("estoy en el main");
+            console.log("PRIMER GET");
+
+            console.log(data);
+            if (data == "") {
+              console.log("DENTRO DEL NO FOLLOWING");
+              $scope.noFollowing = true;
+            }
+            angular.forEach(data, function (d) {
+              //console.log("EN EL FOREACH");
+              //console.log(d.pointsurl);
+              var deffered = $q.defer();
+              $http.get(d.pointsurl).success(function (datos) {
+                //console.log("GET");
+                deffered.resolve(datos);
+                console.log(deffered.promise);
+
+              });
+              //console.log("PUSH");
+              promises.push(deffered.promise);
+              console.log(promises);
+            });
+            console.log("PROMISES");
+            console.log($q.all(promises));
+            $q.all(promises).then(function (results) {
+              console.log("ALL");
+              console.log(results);
+              console.log(data);
+              var int = 0;
+              for (var i = 0; i < data.length; i++) {
+
+                var final_time_m = Math.floor(data[i].time / 60);
+                var final_time_s = Math.floor(data[i].time - (final_time_m * 60));
+                data[i].time = final_time_m + ' min ' + final_time_s + ' s';
+
+                if (data[i].distance < 1) data[i].distance = data[i].distance * 1000 + ' m';
+                else data[i].distance = data[i].distance + ' Km';
+
+                if (data[i].avg_speed > 0) data[i].avg_speed = Math.floor(60 / (data[i].avg_speed)).toFixed(2);
+
+                for (var a = 0; a < results[i].length; a++) {
+                  if (a == 0) data[int].path = results[i][a].latitude + "," + results[i][a].longitude;
+                  else data[int].path += "|" + results[i][a].latitude + "," + results[i][a].longitude;
+                }
+                data[int].center = results[i][1].latitude + "," + results[i][1].longitude;
+                var marker1 = results[i][0].latitude + "," + results[i][0].longitude;
+                var marker2 = results[i][results[i].length - 1].latitude + "," + results[i][results[i].length - 1].longitude;
+
+                //strokeColor: "#FF0000",
+                //strokeOpacity: 0.7,
+                //strokeWeight: 3
+                data[int].img = "http://maps.googleapis.com/maps/api/staticmap?center=" + data[int].center + "&zoom=17scale=1&size=470x180&maptype=roadmap&path=color:0xff0000ff|weight:3|" + data[int].path + "&sensor=false&markers=color:blue%7Clabel:S%7C" + marker1 + "&markers=color:red%7Clabel:F%7C" + marker2;
+                //zoom:17
+                //mapTypeId: google.maps.MapTypeId.ROADMAP
+                int++;
+
+
+              }
+              console.log("FINSIH");
+              $scope.routes = data;
+              console.log(data);
+            });
+          }
+
+        });
+    }
+
+
+
+
+
+  };
+
+
+
+
+
+
+  main();
+
+ /* var getTracks = function(){
     $scope.routes='';
 
     if($scope.userLogged.username != $stateParams.username){
@@ -358,12 +520,8 @@ angular.module('starter.controllers', ['ngOpenFB'])
               var marker1 = datos[0].latitude + "," + datos[0].longitude;
               var marker2 = datos[datos.length -1].latitude + "," + datos[datos.length -1].longitude;
 
-              //strokeColor: "#FF0000",
-              //strokeOpacity: 0.7,
-              //strokeWeight: 3
+
               data[int].img="http://maps.googleapis.com/maps/api/staticmap?center=" + data[int].center+"&zoom=17&size=425x180&maptype=roadmap&path=color:0xff0000ff|weight:3|"+data[int].path +"&sensor=false&markers=color:blue%7Clabel:S%7C"+marker1+"&markers=color:red%7Clabel:F%7C"+marker2;
-              //zoom:17
-              //mapTypeId: google.maps.MapTypeId.ROADMAP
               int++;
             });
           }
@@ -374,7 +532,7 @@ angular.module('starter.controllers', ['ngOpenFB'])
     }
   };
 
-  getTracks();
+  getTracks();*/
 
 
 }])
@@ -593,9 +751,81 @@ angular.module('starter.controllers', ['ngOpenFB'])
 
   }])
 
-.controller('TracksUserCtrl', function($http,$scope,$ionicPopup,$state,$stateParams,$ionicHistory) {
+.controller('TracksUserCtrl', function($http,$scope,$ionicPopup,$state,$stateParams,$ionicHistory,$q) {
 
-  var getTracks = function(){
+
+  var main = function(){
+    var promises=[];
+    console.log("estoy en el main");
+    $http.get(base_url_local + '/tracks/' + $stateParams.username).success(function(data){
+      console.log("PRIMER GET");
+
+      console.log(data);
+      if(data=="") {
+        console.log("DENTRO DEL NO FOLLOWING");
+        $scope.noFollowing = true;
+      }
+      angular.forEach(data,function(d){
+        //console.log("EN EL FOREACH");
+        //console.log(d.pointsurl);
+        var deffered  = $q.defer();
+        $http.get(d.pointsurl).success(function(datos){
+          //console.log("GET");
+          deffered.resolve(datos);
+          console.log(deffered.promise);
+
+        });
+        //console.log("PUSH");
+        promises.push(deffered.promise);
+        console.log(promises);
+      });
+      console.log("PROMISES");
+      console.log($q.all(promises));
+      $q.all(promises).then(function(results){
+        console.log("ALL");
+        console.log(results);
+        console.log(data);
+        var int=0;
+        for (var i = 0; i < data.length; i++) {
+
+          var final_time_m = Math.floor(data[i].time / 60);
+          var final_time_s = Math.floor(data[i].time - (final_time_m * 60));
+          data[i].time =final_time_m+' min '+final_time_s+' s';
+
+          if(data[i].distance<1) data[i].distance=data[i].distance * 1000 + ' m';
+          else data[i].distance=data[i].distance + ' Km';
+
+          if (data[i].avg_speed>0) data[i].avg_speed= Math.floor(60/(data[i].avg_speed)).toFixed(2);
+
+          for (var a = 0; a < results[i].length; a++) {
+            if (a == 0) data[int].path = results[i][a].latitude + "," + results[i][a].longitude;
+            else data[int].path += "|" + results[i][a].latitude + "," + results[i][a].longitude;
+          }
+          data[int].center = results[i][1].latitude + "," + results[i][1].longitude;
+          var marker1 = results[i][0].latitude + "," + results[i][0].longitude;
+          var marker2 = results[i][results[i].length -1].latitude + "," + results[i][results[i].length -1].longitude;
+
+          //strokeColor: "#FF0000",
+          //strokeOpacity: 0.7,
+          //strokeWeight: 3
+          data[int].img="http://maps.googleapis.com/maps/api/staticmap?center="+data[int].center+"&zoom=17scale=1&size=470x180&maptype=roadmap&path=color:0xff0000ff|weight:3|"+data[int].path +"&sensor=false&markers=color:blue%7Clabel:S%7C"+marker1+"&markers=color:red%7Clabel:F%7C"+marker2;
+          //zoom:17
+          //mapTypeId: google.maps.MapTypeId.ROADMAP
+          int++;
+
+
+        }
+        console.log("FINSIH");
+        $scope.routes = data;
+        console.log(data);
+      });
+    });
+
+
+  };
+  main();
+
+  /*var getTracks = function(){
 
       $http.get(base_url_local + '/tracks/' + $stateParams.username).success(function (data) {
         console.log(data);
@@ -639,7 +869,7 @@ angular.module('starter.controllers', ['ngOpenFB'])
 
   };
 
-  getTracks();
+  getTracks();*/
 
   $scope.trackdetail= function(trackid){
     $state.go('trackdetail',{type:'profile',id:trackid});
@@ -692,7 +922,7 @@ angular.module('starter.controllers', ['ngOpenFB'])
     desiredAccuracy: 10, // Desired Accuracy of the location updates (lower means more accurate but more battery consumption)
     distanceFilter: 1, // (Meters) How far you must move from the last point to trigger a location update
     debug: false, // <-- Enable to show visual indications when you receive a background location update
-    interval: 2000, // (Milliseconds) Requested Interval in between location updates.
+    interval: 5000, // (Milliseconds) Requested Interval in between location updates.
     fastestInterval: 5000,
 
 
@@ -2329,7 +2559,7 @@ console.log("estoy dentro");
 
 })
 
-.controller('NearRoutesCtrl', function($scope,$http,$cordovaGeolocation,$ionicPopup,$state,$ionicLoading,$timeout,$stateParams,$rootScope){
+.controller('NearRoutesCtrl', function($scope,$http,$cordovaGeolocation,$ionicPopup,$state,$ionicLoading,$timeout,$stateParams,$rootScope,$q){
 
   $scope.range = $stateParams.range;
 
@@ -2362,6 +2592,79 @@ console.log('Range: '+$stateParams.range);
     };
     console.log(cord);
 
+    var main = function(){
+      var promises=[];
+      console.log("estoy en el main");
+      $http.post(base_url_local +'/test', cord).success(function(data){
+        console.log("PRIMER GET");
+
+        console.log(data);
+        if(data=="") {
+          console.log("DENTRO DEL NO FOLLOWING");
+          $scope.noFollowing = true;
+        }
+        angular.forEach(data,function(d){
+          //console.log("EN EL FOREACH");
+          //console.log(d.pointsurl);
+          var deffered  = $q.defer();
+          $http.get(d.pointsurl).success(function(datos){
+            //console.log("GET");
+            deffered.resolve(datos);
+            console.log(deffered.promise);
+
+          });
+          //console.log("PUSH");
+          promises.push(deffered.promise);
+          console.log(promises);
+        });
+        console.log("PROMISES");
+        console.log($q.all(promises));
+        $q.all(promises).then(function(results){
+          console.log("ALL");
+          console.log(results);
+          console.log(data);
+          var int=0;
+          for (var i = 0; i < data.length; i++) {
+
+            var final_time_m = Math.floor(data[i].time / 60);
+            var final_time_s = Math.floor(data[i].time - (final_time_m * 60));
+            data[i].time =final_time_m+' min '+final_time_s+' s';
+
+            if(data[i].distance<1) data[i].distance=data[i].distance * 1000 + ' m';
+            else data[i].distance=data[i].distance + ' Km';
+
+            if (data[i].avg_speed>0) data[i].avg_speed= Math.floor(60/(data[i].avg_speed)).toFixed(2);
+
+            for (var a = 0; a < results[i].length; a++) {
+              if (a == 0) data[int].path = results[i][a].latitude + "," + results[i][a].longitude;
+              else data[int].path += "|" + results[i][a].latitude + "," + results[i][a].longitude;
+            }
+            data[int].center = results[i][1].latitude + "," + results[i][1].longitude;
+            var marker1 = results[i][0].latitude + "," + results[i][0].longitude;
+            var marker2 = results[i][results[i].length -1].latitude + "," + results[i][results[i].length -1].longitude;
+
+            //strokeColor: "#FF0000",
+            //strokeOpacity: 0.7,
+            //strokeWeight: 3
+            data[int].img="http://maps.googleapis.com/maps/api/staticmap?center="+data[int].center+"&zoom=17scale=1&size=470x180&maptype=roadmap&path=color:0xff0000ff|weight:3|"+data[int].path +"&sensor=false&markers=color:blue%7Clabel:S%7C"+marker1+"&markers=color:red%7Clabel:F%7C"+marker2;
+            //zoom:17
+            //mapTypeId: google.maps.MapTypeId.ROADMAP
+            int++;
+
+
+          }
+          console.log("FINSIH");
+          $scope.routes = data;
+          console.log(data);
+        });
+      });
+
+
+    };
+    main();
+
+
+/*
     $http.post(base_url_local+'/test', cord).success(function (data) {
       console.log('Near routes: ')
         console.log(data);
@@ -2386,22 +2689,8 @@ console.log('Range: '+$stateParams.range);
               var marker1 = datos[0].latitude + "," + datos[0].longitude;
               var marker2 = datos[datos.length -1].latitude + "," + datos[datos.length -1].longitude;
 
-              //CITY AÑADIR/////////////////////////////////
-             /* var url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=41.164224,1.581452&&sensor=true";
-              //var url = "http://maps.googleapis.com/maps/api/geocode/json?latlng=" + datos[0].latitude + "," + datos[1].longitude + "&&sensor=true";
-              console.log(url);
-              $http.get(url).success(function (response) {
-                console.log('entro');
-                console.log(response);
-              });
-              //CITY/////////////////////////////////////////
-              */
-              //strokeColor: "#FF0000",
-              //strokeOpacity: 0.7,
-              //strokeWeight: 3
+
               data[int].img="http://maps.googleapis.com/maps/api/staticmap?center=" + data[int].center+"&zoom=17&size=425x180&maptype=roadmap&path=color:0xff0000ff|weight:3|"+data[int].path +"&sensor=false&markers=color:blue%7Clabel:S%7C"+marker1+"&markers=color:red%7Clabel:F%7C"+marker2;
-              //zoom:17
-              //mapTypeId: google.maps.MapTypeId.ROADMAP
               int++;
             });
           }
@@ -2415,7 +2704,7 @@ console.log('Range: '+$stateParams.range);
       },
       function(error){
         alert("ERROR");
-      })
+      })*/
 
     });
 

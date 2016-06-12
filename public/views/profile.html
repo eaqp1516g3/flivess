@@ -88,7 +88,7 @@
         <div style=" text-align: center;" ng-show="noTracks">
             <label  >This user haven't any tracks...</label>
         </div>
-        <div ng-repeat="route in routes">
+        <div ng-repeat="route in routes|orderBy:'title':true">
         <div class="panel panel-default">
             <a href="#/details/{{route._id}}">
             <div class="panel-body">
