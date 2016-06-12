@@ -1311,6 +1311,20 @@ angular.module('starter.controllers', ['ngOpenFB'])
 
   marker2.setMap(map);
 
+ /* var marker3=new google.maps.Marker({
+    position:new google.maps.LatLng(data[data.length-1].latitude,data[data.length-1].longitude),
+    icon: icon
+  });
+
+  marker3.setMap(map);
+
+  var marker4=new google.maps.Marker({
+    position:new google.maps.LatLng(data[data.length-1].latitude,data[data.length-1].longitude),
+    icon: 'START'
+  });
+
+  marker4.setMap(map);*/
+
   $scope.cancel= function() {
 
     //FUNCTIONS
