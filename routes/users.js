@@ -124,6 +124,7 @@ module.exports = function (app) {
                     weight:request.body.weight,
                     height:request.body.height,
                     facebook_id:request.body.facebook_id,
+                    km_cycled:0,
 
                 })
             console.log(users);

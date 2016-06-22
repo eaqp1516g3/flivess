@@ -101,7 +101,8 @@ module.exports = function (app) {
         })
         console.log('FICHERO GENERADO');
         var url = base_url+'/tracks/'+req.body.title+'.json';
-
+        var recorrido = parseFloat(req.body.distance);
+        console.log("RECORRIDO: "+recorrido);
 
         var track = new Track({
             title: req.body.title,
@@ -113,6 +114,7 @@ module.exports = function (app) {
             id_comun:req.body.id_comun
         })
         console.log(track);
+        console.log("YOU");
 
         track.save(function (err, track) {
             if (err) {
@@ -121,10 +123,15 @@ module.exports = function (app) {
                 return res.send(500, err.message);
             }
 
-            res.status(200).json(track);
+            User.findOne({username : req.body.username}, function(err, result) {
+                console.log("KM ANTES: "+result.km_cycled);
+                result.km_cycled = result.km_cycled + recorrido;
+                console.log("KM DESPUES: "+result.km_cycled);
+                result.save(function(err) {
+                    if (err)res.status(500).send('Internal server error');
+                })
 
-            User.findOne({username : req.body.username}), function(err, result) {
-                follow.find({friend: result._id}).exec(function (err, res) {
+                Friend.find({friend: result._id}).exec(function (err, res) {
                     if (err) {
                     }
                     else {
@@ -145,7 +152,12 @@ module.exports = function (app) {
                         }
                     }
                 })
-            }
+            });
+
+            res.status(200).json(track);
+            console.log("YOU2");
+
+
         });
     }
 

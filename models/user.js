@@ -15,6 +15,7 @@ var userSchema = new Schema({
     sex:                { type: String},
     weight:             { type: String},
     height:             { type: String},
+    km_cycled:          { type: Number},
     created:            { type: Date, default: Date.now}
     },
     {
