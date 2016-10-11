@@ -191,7 +191,6 @@ angular.module('starter', ['ionic', 'starter.controllers','ngStorage','ngOpenFB'
     url: '/dash',
     cache:false,
     views: {
-      cache:false,
       'tab-dash': {
         templateUrl: 'templates/tab-dash.html',
         controller: 'DashCtrl'
