@@ -13,7 +13,7 @@ io = require('socket.io')(socket_server);
 require('./config/passport')(passport); // pass passport for configuration
 
 require('mongoose-middleware').initialize(mongoose);
-mongoose.connect('mongodb://localhost/flivess', function(err) {
+mongoose.connect('mongodb://172.17.0.2:27017/flivess', function(err) {
     if(err) throw err;
     console.log('Conectados con éxito a la Base de Datos');
 });
@@ -68,7 +68,7 @@ routes = require('./routes/notifications')(app);
 var server = require('http').Server(app);
 
 // Start server
-server.listen(8080, function() {
+server.listen(3001, function() {
     console.log("Node server running on http://localhost:8080");
 });
 
@@ -238,3 +238,4 @@ io.on('connection', function(conn){
 
 socket_server.listen(3000);
 console.log("Conectados a traves de sockets por el puerto 3000");
+console.log("CAMBIOS EN DOCKER");
